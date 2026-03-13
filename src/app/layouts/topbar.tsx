@@ -17,25 +17,26 @@ export function Topbar() {
   };
 
   return (
-    <header className="flex h-16 items-center justify-between border-b bg-background px-4">
+    <header className="flex h-16 items-center justify-between border-b bg-background px-3 sm:px-4">
       <Button variant="ghost" size="icon" onClick={toggleSidebar}>
         <Menu className="h-5 w-5" />
       </Button>
 
-      <div className="flex items-center gap-3">
-        <div className="text-right">
+      <div className="flex items-center gap-2 sm:gap-3">
+        <div className="hidden text-right sm:block">
           <p className="text-sm font-medium">{user?.name ?? "-"}</p>
           <p className="text-xs text-muted-foreground">{user?.email ?? "-"}</p>
         </div>
 
         <Button
           variant="outline"
-          size="sm"
+          size="icon-sm"
           onClick={handleLogout}
           disabled={isPending}
+          className="sm:h-9 sm:w-auto sm:px-3"
         >
-          <LogOut className="mr-2 h-4 w-4" />
-          Logout
+          <LogOut className="h-4 w-4 sm:mr-2" />
+          <span className="hidden sm:inline">Logout</span>
         </Button>
       </div>
     </header>

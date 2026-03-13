@@ -1,6 +1,6 @@
 import { useAuthStore } from "@/app/store/auth.store";
 import { getMe } from "@/features/auth/api/me";
-// import { login } from "@/features/auth/api/login";
+import { login } from "@/features/auth/api/login";
 import { logout } from "@/features/auth/api/logout";
 import { refreshToken } from "@/features/auth/api/refresh";
 import type { AuthUser, LoginPayload } from "../types/auth.type";
@@ -10,6 +10,7 @@ import {
   setStoredAccessToken,
 } from "@/shared/lib/auth-token";
 
+const isMockAuthEnabled = import.meta.env.VITE_MOCK_AUTH === "true";
 
 const MOCK_USER: AuthUser = {
   id: "u1",
@@ -35,6 +36,14 @@ export const sessionService = {
 
     if (!storedToken) {
       authStore.clearSession();
+      return;
+    }
+
+    if (isMockAuthEnabled) {
+      authStore.setSession({
+        accessToken: storedToken,
+        user: MOCK_USER,
+      });
       return;
     }
 
@@ -91,7 +100,7 @@ export const sessionService = {
   async login(payload: LoginPayload) {
     const authStore = useAuthStore.getState();
 
-    if (import.meta.env.VITE_MOCK_AUTH === "true") {
+    if (isMockAuthEnabled) {
       // simulasi delay network
       await new Promise((r) => setTimeout(r, 700));
 
@@ -116,6 +125,19 @@ export const sessionService = {
         user: MOCK_USER,
       };
     }
+
+    const result = await login(payload);
+    setStoredAccessToken(result.accessToken);
+    authStore.setAccessToken(result.accessToken);
+
+    const user = await getMe();
+
+    authStore.setSession({
+      accessToken: result.accessToken,
+      user,
+    });
+
+    return { accessToken: result.accessToken, user };
   },
 
   async refresh() {

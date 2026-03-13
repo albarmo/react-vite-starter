@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ProtectedRoute } from "./protected-route";
 import { PublicRoute } from "./public-route";
-import { AppShell } from "@/app/layouts/app-shell";
+import { ProtectedLayout } from "@/app/layouts/protected-layout";
 import { AuthLayout } from "@/app/layouts/auth-layout";
 import { LoginPage } from "@/features/auth/pages/login-page";
 import { DashboardPage } from "@/features/dashboard/pages/dashboard-page";
@@ -33,7 +33,7 @@ const router = createBrowserRouter([
     element: <ProtectedRoute permission={PERMISSIONS.DASHBOARD_VIEW} />,
     children: [
       {
-        element: <AppShell />,
+        element: <ProtectedLayout />,
         children: [
           {
             path: "/",
