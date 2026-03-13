@@ -1,14 +1,32 @@
 import { useAuthStore } from "@/app/store/auth.store";
 import { getMe } from "@/features/auth/api/me";
-import { login } from "@/features/auth/api/login";
+// import { login } from "@/features/auth/api/login";
 import { logout } from "@/features/auth/api/logout";
 import { refreshToken } from "@/features/auth/api/refresh";
-import type { LoginPayload } from "../types/auth.type";
+import type { AuthUser, LoginPayload } from "../types/auth.type";
 import {
   getStoredAccessToken,
   removeStoredAccessToken,
   setStoredAccessToken,
 } from "@/shared/lib/auth-token";
+
+
+const MOCK_USER: AuthUser = {
+  id: "u1",
+  name: "Admin Perpustakaan",
+  email: "admin@library.id",
+  roles: ["ADMIN"],
+  permissions: [
+    "dashboard.view",
+    "bibliographic.read",
+    "membership.read",
+    "membership.create",
+    "circulation.read",
+    "reporting.read",
+    "masterfile.read",
+    "stocktake.read",
+  ],
+};
 
 export const sessionService = {
   async bootstrap() {
@@ -53,21 +71,51 @@ export const sessionService = {
     }
   },
 
+  // async login(payload: LoginPayload) {
+  //   const authStore = useAuthStore.getState();
+
+  //   const result = await login(payload);
+  //   setStoredAccessToken(result.accessToken);
+  //   authStore.setAccessToken(result.accessToken);
+
+  //   const user = await getMe();
+
+  //   authStore.setSession({
+  //     accessToken: result.accessToken,
+  //     user,
+  //   });
+
+  //   return { accessToken: result.accessToken, user };
+  // },
+
   async login(payload: LoginPayload) {
     const authStore = useAuthStore.getState();
 
-    const result = await login(payload);
-    setStoredAccessToken(result.accessToken);
-    authStore.setAccessToken(result.accessToken);
+    if (import.meta.env.VITE_MOCK_AUTH === "true") {
+      // simulasi delay network
+      await new Promise((r) => setTimeout(r, 700));
 
-    const user = await getMe();
+      // validasi dummy sederhana
+      if (
+        payload.username !== "admin@library.id" ||
+        payload.password !== "admin123"
+      ) {
+        throw new Error("Email atau password salah");
+      }
 
-    authStore.setSession({
-      accessToken: result.accessToken,
-      user,
-    });
+      const fakeToken = "mock_access_token_123";
 
-    return { accessToken: result.accessToken, user };
+      setStoredAccessToken(fakeToken);
+      authStore.setSession({
+        accessToken: fakeToken,
+        user: MOCK_USER,
+      });
+
+      return {
+        accessToken: fakeToken,
+        user: MOCK_USER,
+      };
+    }
   },
 
   async refresh() {

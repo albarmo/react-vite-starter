@@ -11,6 +11,7 @@ import { CirculationPage } from "@/features/circulation/pages/circulation-page";
 import { ReportingPage } from "@/features/reporting/pages/reporting-page";
 import { MasterFilePage } from "@/features/master-file/pages/master-file-page";
 import { UnauthorizedPage } from "@/shared/components/common/unauthorized-page";
+import { NotFoundPage } from "@/shared/components/common/not-found-page";
 import { PERMISSIONS } from "../config/permissions";
 
 const router = createBrowserRouter([
@@ -59,12 +60,20 @@ const router = createBrowserRouter([
             element: <MasterFilePage />,
           },
           {
-            path: "/403",
-            element: <UnauthorizedPage />,
+            path: "*",
+            element: <NotFoundPage />,
           },
         ],
       },
     ],
+  },
+  {
+    path: "/403",
+    element: <UnauthorizedPage />,
+  },
+  {
+    path: "*",
+    element: <NotFoundPage />,
   },
 ]);
 
