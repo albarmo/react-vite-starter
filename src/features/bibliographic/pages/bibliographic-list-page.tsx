@@ -1,24 +1,13 @@
 "use client";
 
-import type { CSSProperties } from "react";
-import { useDeferredValue, useMemo, useState } from "react";
-import { type ColumnDef } from "@tanstack/react-table";
-import {
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-  Pencil,
-  Plus,
-  Trash2,
-} from "lucide-react";
+import { PageContainer } from "@/shared/components/common/app-page-container";
 import { AppPageHeader } from "@/shared/components/common/app-page-header";
 import { DataTable } from "@/shared/components/common/data-table";
 import { MdUpwardCard } from "@/shared/components/common/md-upward-card";
-import { PageContainer } from "@/shared/components/common/app-page-container";
 import { SearchInput } from "@/shared/components/common/search-input";
+import { SelectionCheckbox } from "@/shared/components/common/selection-checkbox";
 import { Spinner } from "@/shared/components/common/spinner";
 import { Button } from "@/shared/components/ui/button";
-import { Checkbox } from "@/shared/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,6 +22,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
+import { type ColumnDef } from "@tanstack/react-table";
+import {
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Pencil,
+  Plus,
+  Trash2,
+} from "lucide-react";
+import type { CSSProperties } from "react";
+import { useDeferredValue, useMemo, useState } from "react";
 
 type BibliographicBook = {
   id: string;
@@ -258,37 +258,16 @@ function BookCover({
 }) {
   return (
     <div
-      className="flex h-14 w-10 shrink-0 flex-col justify-between overflow-hidden rounded-[8px] px-1.5 py-1 shadow-sm"
+      className="flex h-14 w-10 shrink-0 flex-col justify-between overflow-hidden rounded-xs px-1.5 py-1 shadow-sm"
       style={style}
     >
-      <span className="text-[0.36rem] font-semibold uppercase leading-tight opacity-80">
+      <span className="text-[5px] line-clamp-4 font-medium uppercase opacity-80">
         {accent}
       </span>
-      <span className="text-[0.52rem] font-bold uppercase leading-[1.05] tracking-[0.04em]">
+      <span className="text-[4px] font-light uppercase leading-[1.05] tracking-[0.04em]">
         {title}
       </span>
     </div>
-  );
-}
-
-function SelectionCheckbox({
-  checked,
-  indeterminate = false,
-  onCheckedChange,
-  ariaLabel,
-}: {
-  checked: boolean;
-  indeterminate?: boolean;
-  onCheckedChange: (checked: boolean) => void;
-  ariaLabel: string;
-}) {
-  return (
-    <Checkbox
-      checked={indeterminate ? "indeterminate" : checked}
-      onCheckedChange={(value) => onCheckedChange(value === true)}
-      aria-label={ariaLabel}
-      className="size-5 rounded-[6px] border-grey-80 data-[state=checked]:border-blue-50 data-[state=checked]:bg-blue-50"
-    />
   );
 }
 
@@ -307,7 +286,6 @@ function BibliographicToolbar({
           allowClear
           onChange={(event) => onSearchChange(event.target.value)}
           onClear={onClearSearch}
-          className="h-12 rounded-xl"
         />
       </div>
 
@@ -317,7 +295,6 @@ function BibliographicToolbar({
             <Button
               type="button"
               variant="outline"
-              className="h-12 rounded-xl px-5 text-sm font-semibold text-grey-100 shadow-none"
             >
               Action
               <ChevronDown className="size-4" />
@@ -342,7 +319,6 @@ function BibliographicToolbar({
 
         <Button
           type="button"
-          className="h-12 rounded-xl bg-blue-50 px-5 text-sm font-semibold text-white hover:bg-blue-70"
         >
           <Plus className="size-4" />
           Create
@@ -515,7 +491,7 @@ export function BibliographicListPage() {
       {
         accessorKey: "title",
         meta: {
-          headClassName: "min-w-[420px]",
+          headClassName: "min-w-[320px]",
           cellClassName: "px-3 py-4",
         },
         header: "Title",
@@ -523,14 +499,14 @@ export function BibliographicListPage() {
           const book = row.original;
 
           return (
-            <div className="flex min-w-[340px] items-center gap-3">
+            <div className="flex min-w-[320px] items-center gap-3">
               <BookCover
-                accent={book.coverAccent}
+                accent={book.title}
                 title={book.coverTitle}
                 style={book.coverStyle}
               />
               <div className="min-w-0">
-                <p className="truncate text-[1.02rem] font-semibold text-grey-100">
+                <p className="truncate text-sm font-semibold text-grey-100">
                   {book.title}
                 </p>
                 <p className="mt-1 truncate text-sm italic text-grey-90">{book.author}</p>
@@ -570,7 +546,7 @@ export function BibliographicListPage() {
       {
         id: "actions",
         meta: {
-          headClassName: "w-28 text-right",
+          headClassName: "w-max text-center",
           cellClassName: "px-3 py-4 text-right",
         },
         header: () => <div className="text-right">Action</div>,
@@ -611,10 +587,10 @@ export function BibliographicListPage() {
   const to = totalItems === 0 ? 0 : offset + pageBooks.length;
 
   return (
-    <PageContainer className="space-y-8 px-4 py-6 sm:px-8 md:px-12">
+    <PageContainer className="bg-white pb-10 md:bg-transparent">
       <AppPageHeader title="Bibliography List" />
 
-      <MdUpwardCard className="rounded-[28px] border border-grey-40 p-5 shadow-[0_12px_40px_rgba(16,27,40,0.05)] md:p-6">
+      <MdUpwardCard className="mt-5">
         <BibliographicToolbar
           search={search}
           selectedCount={selectedCount}
@@ -633,7 +609,6 @@ export function BibliographicListPage() {
             columns={columns}
             data={pageBooks}
             emptyMessage="No bibliography data found."
-            className="overflow-hidden rounded-[18px] border border-grey-40 [&_[data-slot=table]]:mb-0 [&_[data-slot=table]]:min-w-[980px] [&_[data-slot=table-head]]:h-11 [&_[data-slot=table-head]]:border-b [&_[data-slot=table-head]]:border-grey-40 [&_[data-slot=table-head]]:px-3 [&_[data-slot=table-head]]:text-sm [&_[data-slot=table-head]]:font-semibold [&_[data-slot=table-head]]:text-grey-100 [&_[data-slot=table-header]_[data-slot=table-row]]:border-b-0 [&_[data-slot=table-header]_[data-slot=table-row]]:bg-grey-20 [&_[data-slot=table-header]_[data-slot=table-row]]:hover:bg-grey-20 [&_[data-slot=table-body]_[data-slot=table-row]]:border-grey-40 [&_[data-slot=table-body]_[data-slot=table-row]]:hover:bg-blue-10/40 [&_[data-slot=table-cell]]:text-sm [&_[data-slot=table-cell]]:text-grey-90"
           />
         </Spinner>
 

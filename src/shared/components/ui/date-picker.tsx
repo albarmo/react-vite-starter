@@ -6,8 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils';
 import { add, format } from 'date-fns';
 import { type Locale, id } from 'date-fns/locale';
-import { Calendar as CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react';
-import { Clock } from 'lucide-react';
+import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Clock } from 'lucide-react';
 import * as React from 'react';
 import { useImperativeHandle, useRef } from 'react';
 
@@ -516,7 +515,7 @@ const TimePickerInput = React.forwardRef<HTMLInputElement, TimePickerInputProps>
         id={id || picker}
         name={name || picker}
         className={cn(
-          'focus:bg-accent focus:text-accent-foreground w-[48px] text-center font-mono text-base tabular-nums caret-transparent [&::-webkit-inner-spin-button]:appearance-none',
+          'focus:bg-accent focus:text-accent-foreground w-[48px] text-center font-mono text-sm tabular-nums caret-transparent [&::-webkit-inner-spin-button]:appearance-none',
           className,
         )}
         value={value || calculatedValue}
@@ -778,7 +777,7 @@ const DateTimePicker = React.forwardRef<Partial<DateTimePickerRef>, DateTimePick
           <Button
             variant="outline"
             className={cn(
-              'pointer-events-auto! h-10.5 w-full justify-between text-left font-normal text-base hover:bg-transparent',
+              'pointer-events-auto! h-10.5 w-full justify-between text-left font-normal text-sm hover:bg-transparent',
               !displayDate && 'text-muted-foreground hover:text-muted-foreground',
               disabled && 'bg-grey-20 text-grey-70! opacity-100! cursor-not-allowed!',
               className,
@@ -843,5 +842,6 @@ const DateTimePicker = React.forwardRef<Partial<DateTimePickerRef>, DateTimePick
 
 DateTimePicker.displayName = 'DateTimePicker';
 
-export { DateTimePicker, TimePickerInput, TimePicker };
-export type { TimePickerType, DateTimePickerProps, DateTimePickerRef };
+export { DateTimePicker, TimePicker, TimePickerInput };
+export type { DateTimePickerProps, DateTimePickerRef, TimePickerType };
+

@@ -7,8 +7,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import React from "react";
 import { cn } from "@/shared/lib/cn";
+import React from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 
 type DataTableColumnMeta = {
@@ -83,6 +83,7 @@ export function DataTable<TData, TValue>({
                   <TableHead
                     key={header.id}
                     className={cn(
+                      "text-sm font-medium",
                       (header.column.columnDef.meta as DataTableColumnMeta | undefined)
                         ?.headClassName,
                       (isPinnedLeft || isPinnedRight) &&
@@ -106,6 +107,7 @@ export function DataTable<TData, TValue>({
             </TableRow>
           ))}
         </TableHeader>
+
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
@@ -159,6 +161,7 @@ export function DataTable<TData, TValue>({
             </TableRow>
           )}
         </TableBody>
+        
       </Table>
     </div>
   );

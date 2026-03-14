@@ -1,9 +1,9 @@
-import { Outlet } from "react-router-dom";
-import { Bell, ChevronsLeftRight, CircleUserRound, Menu } from "lucide-react";
-import { Sidebar } from "./sidebar";
 import { useUiStore } from "@/app/store/ui.store";
-import { cn } from "@/shared/lib/cn";
 import { Button } from "@/shared/components/ui/button";
+import { cn } from "@/shared/lib/cn";
+import { Bell, ChevronsLeftRight, CircleUserRound, Menu } from "lucide-react";
+import { Outlet } from "react-router-dom";
+import { Sidebar } from "./sidebar";
 
 export function ProtectedLayout() {
   const sidebarOpen = useUiStore((state) => state.sidebarOpen);
@@ -39,7 +39,7 @@ export function ProtectedLayout() {
             alt="Logo Perpustakaan Imigrasi"
             className="hidden size-8 md:block"
           />
-          <p className="ml-1 text-base font-medium tracking-wide text-blue-50 sm:text-lg md:text-xl">
+          <p className="ml-1 text-sm font-medium tracking-wide text-blue-50 sm:text-lg md:text-xl">
             SLIMS
           </p>
         </section>

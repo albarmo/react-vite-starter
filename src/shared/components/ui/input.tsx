@@ -34,7 +34,7 @@ function Input({
         type={type}
         data-slot="input"
         className={cn(
-          "file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-10.5 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 pr-5 text-base transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:bg-grey-20",
+          "file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-10.5 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 pr-5 text-sm transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:bg-grey-20",
           "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
           "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
           className,
@@ -42,7 +42,7 @@ function Input({
         {...props}
       />
       {suffix && (
-        <div className="absolute right-0 top-0 border flex h-full flex-shrink-0 items-center justify-center self-center rounded-r-md bg-muted px-3 text-gray-500">
+        <div className="absolute right-0 top-0 border flex h-full shrink-0 items-center justify-center self-center rounded-r-md bg-muted px-3 text-gray-500">
           {suffix}
         </div>
       )}
