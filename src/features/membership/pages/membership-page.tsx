@@ -2,7 +2,6 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { AppPageHeader } from "@/shared/components/common/app-page-header";
 import { DataTable } from "@/shared/components/common/data-table";
 import { DataTableToolbar } from "@/shared/components/common/data-table-toolbar";
-import { DataTablePagination } from "@/shared/components/common/data-table-pagination";
 import { useTableParams } from "@/shared/hooks/use-table-params";
 import { useMembers } from "../hooks/use-members";
 import type { Member } from "../types/member.type";
@@ -28,13 +27,13 @@ const columns: ColumnDef<Member>[] = [
 ];
 
 export function MembershipPage() {
-  const { params, setPage, setSearch } = useTableParams({
+  const { params, setSearch } = useTableParams({
     page: 1,
     perPage: 10,
     search: "",
   });
 
-  const { data, isLoading, isError, error } = useMembers(params);
+  const { data, isError, error } = useMembers(params);
 
   if (isError) {
     const normalized = normalizeApiError(error);
@@ -68,16 +67,7 @@ export function MembershipPage() {
       <DataTable
         columns={columns}
         data={data?.data ?? []}
-        emptyMessage={isLoading ? "Loading..." : "Tidak ada data"}
       />
-
-      {data?.meta ? (
-        <DataTablePagination
-          meta={data.meta}
-          onPrevious={() => setPage(Math.max(1, data.meta.page - 1))}
-          onNext={() => setPage(Math.min(data.meta.totalPages, data.meta.page + 1))}
-        />
-      ) : null}
     </div>
   );
 }

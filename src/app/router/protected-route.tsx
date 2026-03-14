@@ -5,7 +5,7 @@ import { usePermission } from "@/shared/hooks/use-permission";
 import type { AppPermission } from "../config/permissions";
 
 type ProtectedRouteProps = {
-  permission: AppPermission;
+  permission?: AppPermission;
 };
 
 export function ProtectedRoute({ permission }: ProtectedRouteProps) {
