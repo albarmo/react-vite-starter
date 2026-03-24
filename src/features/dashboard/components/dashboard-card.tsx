@@ -1,4 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/shared/components/ui/card";
 import type { DashboardCardItem } from "../types/dashboard.type";
 
 type DashboardCardProps = DashboardCardItem;
@@ -11,7 +16,7 @@ export function DashboardCard({
   return (
     <Card>
       <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-medium text-muted-foreground">
+        <CardTitle className="text-base font-medium text-muted-foreground">
           {title}
         </CardTitle>
       </CardHeader>

@@ -25,7 +25,7 @@ export function SearchInput({
       <Input
         value={value}
         className={cn(
-          "h-11 w-full rounded-md border-grey-50 px-10 text-sm text-grey-100 shadow-none placeholder:text-grey-70",
+          "h-11 w-full rounded-md border-grey-50 px-10 text-base text-grey-100 shadow-none placeholder:text-grey-70",
           allowClear && hasValue && "pr-10",
           className,
         )}

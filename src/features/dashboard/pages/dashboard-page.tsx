@@ -1,9 +1,9 @@
-import { AppPageHeader } from "@/shared/components/common/app-page-header";
-import { DashboardCardsSection } from "../components/dashboard-cards-section";
-import { useDashboardSummary } from "../hooks/use-dashboard-summary";
-import { normalizeApiError } from "@/shared/lib/api-error";
 import { PERMISSIONS } from "@/app/config/permissions";
 import { PermissionGuard } from "@/app/router/permission-guard";
+import { AppPageHeader } from "@/shared/components/common/app-page-header";
+import { normalizeApiError } from "@/shared/lib/api-error";
+import { DashboardCardsSection } from "../components/dashboard-cards-section";
+import { useDashboardSummary } from "../hooks/use-dashboard-summary";
 
 export function DashboardPage() {
   const { data, isLoading, isError, error } = useDashboardSummary();
@@ -17,7 +17,7 @@ export function DashboardPage() {
           title="Dashboard"
           description="Ringkasan statistik dan insight perpustakaan"
         />
-        <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-600">
+        <div className="border-red-200 text-red-600 rounded-xl border bg-red-50 p-4 text-base">
           {normalized.message}
         </div>
       </div>

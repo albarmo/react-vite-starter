@@ -1,12 +1,7 @@
-import type React from "react";
-import {
-  memo,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { PERMISSIONS, type AppPermission } from "@/app/config/permissions";
+import { useAuthStore } from "@/app/store/auth.store";
+import { useUiStore } from "@/app/store/ui.store";
+import { cn } from "@/shared/lib/cn";
 import {
   ArrowUpDown,
   BookOpen,
@@ -14,11 +9,9 @@ import {
   ChevronDown,
   ChevronRight,
 } from "lucide-react";
+import type React from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { PERMISSIONS, type AppPermission } from "@/app/config/permissions";
-import { useAuthStore } from "@/app/store/auth.store";
-import { useUiStore } from "@/app/store/ui.store";
-import { cn } from "@/shared/lib/cn";
 
 type SidebarSubItem = {
   id: string;
@@ -131,7 +124,9 @@ function getItemActiveSubKey(item: SidebarItem, pathname: string) {
 
   if (!normalizedPath.startsWith(normalizedBase)) return null;
 
-  const remainder = normalizedPath.slice(normalizedBase.length).replace(/^\/+/, "");
+  const remainder = normalizedPath
+    .slice(normalizedBase.length)
+    .replace(/^\/+/, "");
   if (!remainder) return getDefaultSubKey(item);
 
   const segments = remainder.split("/").filter(Boolean);
@@ -142,7 +137,11 @@ function getItemActiveSubKey(item: SidebarItem, pathname: string) {
   return getDefaultSubKey(item);
 }
 
-function isGroupRouteActive(item: SidebarItem, group: SidebarGroup, pathname: string) {
+function isGroupRouteActive(
+  item: SidebarItem,
+  group: SidebarGroup,
+  pathname: string,
+) {
   const normalizedPath = normalizePath(pathname);
   const groupBasePath = `${normalizePath(item.to)}/${group.id}`;
 
@@ -166,13 +165,15 @@ function isSubItemRouteActive(
 
 function getMainItemClass(isActive: boolean) {
   return cn(
-    "flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm transition-colors",
+    "flex items-center gap-3 rounded-xl px-3.5 py-3 text-base transition-colors",
     isActive ? "bg-white/70 text-blue-70" : "text-grey-90 hover:bg-white/70",
   );
 }
 
 function getSubItemClass(isActive: boolean) {
-  return isActive ? "bg-blue-20 text-primary" : "text-grey-90 hover:bg-white/70";
+  return isActive
+    ? "bg-blue-20 text-primary"
+    : "text-grey-90 hover:bg-white/70";
 }
 
 function getFlyoutTop(anchorRect: DOMRect, flyoutHeight: number) {
@@ -189,10 +190,15 @@ export function Sidebar() {
     (state) => state.user?.permissions ?? EMPTY_PERMISSIONS,
   );
 
-  const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({});
-  const [expandedGroups, setExpandedGroups] =
-    useState<Record<string, boolean>>(DEFAULT_EXPANDED_GROUPS);
-  const [hoveredFlyoutItemId, setHoveredFlyoutItemId] = useState<string | null>(null);
+  const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>(
+    {},
+  );
+  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>(
+    DEFAULT_EXPANDED_GROUPS,
+  );
+  const [hoveredFlyoutItemId, setHoveredFlyoutItemId] = useState<string | null>(
+    null,
+  );
   const [flyoutAnchorPath, setFlyoutAnchorPath] = useState<string>("");
 
   const closeTimeoutRef = useRef<number | null>(null);
@@ -233,19 +239,25 @@ export function Sidebar() {
     setFlyoutAnchorPath("");
   }, [clearCloseTimeout]);
 
-  const toggleExpandedMenu = useCallback((itemId: string, fallback: boolean) => {
-    setExpandedMenus((prev) => ({
-      ...prev,
-      [itemId]: !(prev[itemId] ?? fallback),
-    }));
-  }, []);
+  const toggleExpandedMenu = useCallback(
+    (itemId: string, fallback: boolean) => {
+      setExpandedMenus((prev) => ({
+        ...prev,
+        [itemId]: !(prev[itemId] ?? fallback),
+      }));
+    },
+    [],
+  );
 
-  const toggleExpandedGroup = useCallback((groupKey: string, fallback: boolean) => {
-    setExpandedGroups((prev) => ({
-      ...prev,
-      [groupKey]: !(prev[groupKey] ?? fallback),
-    }));
-  }, []);
+  const toggleExpandedGroup = useCallback(
+    (groupKey: string, fallback: boolean) => {
+      setExpandedGroups((prev) => ({
+        ...prev,
+        [groupKey]: !(prev[groupKey] ?? fallback),
+      }));
+    },
+    [],
+  );
 
   useEffect(() => clearCloseTimeout, [clearCloseTimeout]);
 
@@ -256,7 +268,12 @@ export function Sidebar() {
         sidebarOpen ? "w-screen md:w-68" : "w-screen md:w-20",
       )}
     >
-      <nav className={cn("space-y-1.5 pb-6", sidebarOpen ? "px-3 py-6" : "px-2 py-5")}>
+      <nav
+        className={cn(
+          "space-y-1.5 pb-6",
+          sidebarOpen ? "px-3 py-6" : "px-2 py-5",
+        )}
+      >
         {visibleItems.map((item) => {
           const groups = item.groups ?? [];
           const hasGroups = groups.length > 0;
@@ -375,157 +392,167 @@ type CollapsedSidebarFlyoutTriggerProps = {
   onToggleGroup: (groupKey: string, fallback: boolean) => void;
 };
 
-const CollapsedSidebarFlyoutTrigger = memo(function CollapsedSidebarFlyoutTrigger({
-  item,
-  groups,
-  pathname,
-  activeSubKey,
-  isOpen,
-  expandedGroups,
-  onOpenFlyout,
-  onScheduleCloseFlyout,
-  onCloseFlyout,
-  onToggleGroup,
-}: CollapsedSidebarFlyoutTriggerProps) {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const anchorRef = useRef<HTMLButtonElement | null>(null);
-  const flyoutRef = useRef<HTMLDivElement | null>(null);
-  const [flyoutPosition, setFlyoutPosition] = useState({ top: 0, left: 0 });
+const CollapsedSidebarFlyoutTrigger = memo(
+  function CollapsedSidebarFlyoutTrigger({
+    item,
+    groups,
+    pathname,
+    activeSubKey,
+    isOpen,
+    expandedGroups,
+    onOpenFlyout,
+    onScheduleCloseFlyout,
+    onCloseFlyout,
+    onToggleGroup,
+  }: CollapsedSidebarFlyoutTriggerProps) {
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const anchorRef = useRef<HTMLButtonElement | null>(null);
+    const flyoutRef = useRef<HTMLDivElement | null>(null);
+    const [flyoutPosition, setFlyoutPosition] = useState({ top: 0, left: 0 });
 
-  const isItemActive = isItemRouteActive(item, pathname);
+    const isItemActive = isItemRouteActive(item, pathname);
 
-  const updateFlyoutPosition = useCallback(() => {
-    if (!anchorRef.current || !flyoutRef.current) return;
+    const updateFlyoutPosition = useCallback(() => {
+      if (!anchorRef.current || !flyoutRef.current) return;
 
-    const anchorRect = anchorRef.current.getBoundingClientRect();
-    const flyoutHeight = flyoutRef.current.offsetHeight;
-    const rawLeft = anchorRect.right + FLYOUT_GAP;
-    const maxLeft = window.innerWidth - FLYOUT_WIDTH - VIEWPORT_MARGIN;
-    const left = Math.max(VIEWPORT_MARGIN, Math.min(rawLeft, maxLeft));
-    const top = getFlyoutTop(anchorRect, flyoutHeight);
+      const anchorRect = anchorRef.current.getBoundingClientRect();
+      const flyoutHeight = flyoutRef.current.offsetHeight;
+      const rawLeft = anchorRect.right + FLYOUT_GAP;
+      const maxLeft = window.innerWidth - FLYOUT_WIDTH - VIEWPORT_MARGIN;
+      const left = Math.max(VIEWPORT_MARGIN, Math.min(rawLeft, maxLeft));
+      const top = getFlyoutTop(anchorRect, flyoutHeight);
 
-    setFlyoutPosition((prev) =>
-      prev.top === top && prev.left === left ? prev : { top, left },
-    );
-  }, []);
+      setFlyoutPosition((prev) =>
+        prev.top === top && prev.left === left ? prev : { top, left },
+      );
+    }, []);
 
-  const handleMouseEnter = useCallback(() => {
-    onOpenFlyout();
-    window.requestAnimationFrame(updateFlyoutPosition);
-  }, [onOpenFlyout, updateFlyoutPosition]);
+    const handleMouseEnter = useCallback(() => {
+      onOpenFlyout();
+      window.requestAnimationFrame(updateFlyoutPosition);
+    }, [onOpenFlyout, updateFlyoutPosition]);
 
-  useEffect(() => {
-    if (!isOpen) return;
+    useEffect(() => {
+      if (!isOpen) return;
 
-    const handleClickOutside = (event: MouseEvent) => {
-      if (!containerRef.current) return;
-      if (!containerRef.current.contains(event.target as Node)) {
-        onCloseFlyout();
-      }
-    };
+      const handleClickOutside = (event: MouseEvent) => {
+        if (!containerRef.current) return;
+        if (!containerRef.current.contains(event.target as Node)) {
+          onCloseFlyout();
+        }
+      };
 
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        onCloseFlyout();
-      }
-    };
+      const handleEscape = (event: KeyboardEvent) => {
+        if (event.key === "Escape") {
+          onCloseFlyout();
+        }
+      };
 
-    const sidebarScrollContainer = anchorRef.current?.closest("aside");
+      const sidebarScrollContainer = anchorRef.current?.closest("aside");
 
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", handleEscape);
-    window.addEventListener("resize", updateFlyoutPosition);
-    window.addEventListener("scroll", updateFlyoutPosition, true);
-    sidebarScrollContainer?.addEventListener("scroll", updateFlyoutPosition, {
-      passive: true,
-    });
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("keydown", handleEscape);
+      window.addEventListener("resize", updateFlyoutPosition);
+      window.addEventListener("scroll", updateFlyoutPosition, true);
+      sidebarScrollContainer?.addEventListener("scroll", updateFlyoutPosition, {
+        passive: true,
+      });
 
-    const rafId = window.requestAnimationFrame(updateFlyoutPosition);
+      const rafId = window.requestAnimationFrame(updateFlyoutPosition);
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleEscape);
-      window.removeEventListener("resize", updateFlyoutPosition);
-      window.removeEventListener("scroll", updateFlyoutPosition, true);
-      sidebarScrollContainer?.removeEventListener("scroll", updateFlyoutPosition);
-      window.cancelAnimationFrame(rafId);
-    };
-  }, [isOpen, onCloseFlyout, updateFlyoutPosition]);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+        document.removeEventListener("keydown", handleEscape);
+        window.removeEventListener("resize", updateFlyoutPosition);
+        window.removeEventListener("scroll", updateFlyoutPosition, true);
+        sidebarScrollContainer?.removeEventListener(
+          "scroll",
+          updateFlyoutPosition,
+        );
+        window.cancelAnimationFrame(rafId);
+      };
+    }, [isOpen, onCloseFlyout, updateFlyoutPosition]);
 
-  useEffect(() => {
-    if (!isOpen) return;
-    const rafId = window.requestAnimationFrame(updateFlyoutPosition);
-    return () => {
-      window.cancelAnimationFrame(rafId);
-    };
-  }, [isOpen, item.id, expandedGroups, updateFlyoutPosition]);
+    useEffect(() => {
+      if (!isOpen) return;
+      const rafId = window.requestAnimationFrame(updateFlyoutPosition);
+      return () => {
+        window.cancelAnimationFrame(rafId);
+      };
+    }, [isOpen, item.id, expandedGroups, updateFlyoutPosition]);
 
-  return (
-    <div
-      ref={containerRef}
-      className="relative"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={onScheduleCloseFlyout}
-    >
-      <div className="group relative">
-        <button
-          ref={anchorRef}
-          type="button"
-          className={cn(getMainItemClass(isItemActive), "w-full justify-center")}
-          aria-expanded={isOpen}
-          aria-haspopup="menu"
-        >
-          <item.icon className="size-4 shrink-0" />
-        </button>
-
-        <div
-          className={cn(
-            "pointer-events-none absolute left-full top-1/2 z-50 ml-3 -translate-y-1/2 rounded-lg bg-grey-100 px-2 py-1 text-xs font-medium text-white shadow-md",
-            "whitespace-nowrap opacity-0 transition-all duration-150",
-            !isOpen && "group-hover:opacity-100 group-hover:translate-x-0",
-            !isOpen ? "translate-x-1" : "translate-x-0 opacity-0",
-          )}
-        >
-          {item.label}
-        </div>
-      </div>
-
+    return (
       <div
-        ref={flyoutRef}
-        className={cn(
-          "fixed z-[60] w-72 rounded-2xl border border-border bg-white p-3 shadow-lg",
-          "origin-left transition-all duration-200 ease-out",
-          isOpen
-            ? "pointer-events-auto translate-x-0 opacity-100"
-            : "pointer-events-none -translate-x-2 opacity-0",
-        )}
-        style={{
-          left: flyoutPosition.left,
-          top: flyoutPosition.top,
-          width: FLYOUT_WIDTH,
-        }}
-        onMouseEnter={onOpenFlyout}
+        ref={containerRef}
+        className="relative"
+        onMouseEnter={handleMouseEnter}
         onMouseLeave={onScheduleCloseFlyout}
       >
-        <div className="mb-2 flex items-center gap-2 px-2 py-1">
-          <item.icon className="size-4 shrink-0 text-grey-90" />
-          <span className="text-sm font-medium text-grey-100">{item.label}</span>
+        <div className="group relative">
+          <button
+            ref={anchorRef}
+            type="button"
+            className={cn(
+              getMainItemClass(isItemActive),
+              "w-full justify-center",
+            )}
+            aria-expanded={isOpen}
+            aria-haspopup="menu"
+          >
+            <item.icon className="size-4 shrink-0" />
+          </button>
+
+          <div
+            className={cn(
+              "pointer-events-none absolute top-1/2 left-full z-50 ml-3 -translate-y-1/2 rounded-lg bg-grey-100 px-2 py-1 text-xs font-medium text-white shadow-md",
+              "whitespace-nowrap opacity-0 transition-all duration-150",
+              !isOpen && "group-hover:translate-x-0 group-hover:opacity-100",
+              !isOpen ? "translate-x-1" : "translate-x-0 opacity-0",
+            )}
+          >
+            {item.label}
+          </div>
         </div>
 
-        <SidebarGroupsList
-          item={item}
-          groups={groups}
-          pathname={pathname}
-          activeSubKey={activeSubKey}
-          expandedGroups={expandedGroups}
-          onToggleGroup={onToggleGroup}
-          onNavigate={onCloseFlyout}
-          className="space-y-1"
-        />
+        <div
+          ref={flyoutRef}
+          className={cn(
+            "fixed z-[60] w-72 rounded-2xl border border-border bg-white p-3 shadow-lg",
+            "origin-left transition-all duration-200 ease-out",
+            isOpen
+              ? "pointer-events-auto translate-x-0 opacity-100"
+              : "pointer-events-none -translate-x-2 opacity-0",
+          )}
+          style={{
+            left: flyoutPosition.left,
+            top: flyoutPosition.top,
+            width: FLYOUT_WIDTH,
+          }}
+          onMouseEnter={onOpenFlyout}
+          onMouseLeave={onScheduleCloseFlyout}
+        >
+          <div className="mb-2 flex items-center gap-2 px-2 py-1">
+            <item.icon className="size-4 shrink-0 text-grey-90" />
+            <span className="text-base font-medium text-grey-100">
+              {item.label}
+            </span>
+          </div>
+
+          <SidebarGroupsList
+            item={item}
+            groups={groups}
+            pathname={pathname}
+            activeSubKey={activeSubKey}
+            expandedGroups={expandedGroups}
+            onToggleGroup={onToggleGroup}
+            onNavigate={onCloseFlyout}
+            className="space-y-1"
+          />
+        </div>
       </div>
-    </div>
-  );
-});
+    );
+  },
+);
 
 type SidebarGroupsListProps = {
   item: SidebarItem;
@@ -593,7 +620,7 @@ const SidebarGroupRenderer = memo(function SidebarGroupRenderer({
     : activeSubKey === group.id;
 
   const isGroupExpanded = groupHasChildren
-    ? expandedGroups[groupStateKey] ?? groupIsActive
+    ? (expandedGroups[groupStateKey] ?? groupIsActive)
     : false;
 
   if (groupHasChildren && group.collapsible) {
@@ -603,7 +630,7 @@ const SidebarGroupRenderer = memo(function SidebarGroupRenderer({
           type="button"
           onClick={() => onToggleGroup(groupStateKey, groupIsActive)}
           className={cn(
-            "flex w-full items-center justify-between rounded-xl px-4 py-2.5 text-left text-sm transition-colors",
+            "flex w-full items-center justify-between rounded-xl px-4 py-2.5 text-left text-base transition-colors",
             getSubItemClass(groupIsActive),
           )}
         >
@@ -621,7 +648,7 @@ const SidebarGroupRenderer = memo(function SidebarGroupRenderer({
             isGroupExpanded ? "max-h-96 opacity-100" : "max-h-0 opacity-0",
           )}
         >
-          <div className="space-y-1 pl-3 pt-1">
+          <div className="space-y-1 pt-1 pl-3">
             {group.items?.map((groupItem) => {
               const isSubItemActive = isSubItemRouteActive(
                 item,
@@ -636,7 +663,7 @@ const SidebarGroupRenderer = memo(function SidebarGroupRenderer({
                   to={`${item.to}/${group.id}/${groupItem.id}`}
                   onClick={onNavigate}
                   className={cn(
-                    "flex items-center rounded-xl px-4 py-2.5 text-sm transition-colors",
+                    "flex items-center rounded-xl px-4 py-2.5 text-base transition-colors",
                     getSubItemClass(isSubItemActive),
                   )}
                 >
@@ -655,7 +682,7 @@ const SidebarGroupRenderer = memo(function SidebarGroupRenderer({
       to={`${item.to}/${group.id}`}
       onClick={onNavigate}
       className={cn(
-        "flex items-center justify-between rounded-xl px-4 py-2.5 text-sm transition-colors",
+        "flex items-center justify-between rounded-xl px-4 py-2.5 text-base transition-colors",
         getSubItemClass(groupIsActive),
       )}
     >
@@ -695,13 +722,15 @@ const SidebarMainItem = memo(function SidebarMainItem({
           <Icon className="size-4 shrink-0" />
           {sidebarOpen && <span>{label}</span>}
         </span>
-        {sidebarOpen && hasChildren && <ChevronRight className="size-4 shrink-0" />}
+        {sidebarOpen && hasChildren && (
+          <ChevronRight className="size-4 shrink-0" />
+        )}
       </NavLink>
 
       {!sidebarOpen && (
         <div
           className={cn(
-            "pointer-events-none absolute left-full top-1/2 z-50 ml-3 -translate-y-1/2 rounded-lg bg-grey-100 px-2 py-1 text-xs font-medium text-white shadow-md",
+            "pointer-events-none absolute top-1/2 left-full z-50 ml-3 -translate-y-1/2 rounded-lg bg-grey-100 px-2 py-1 text-xs font-medium text-white shadow-md",
             "whitespace-nowrap opacity-0 transition-all duration-150",
             "translate-x-1 group-hover:translate-x-0 group-hover:opacity-100",
           )}

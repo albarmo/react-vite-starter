@@ -1,5 +1,8 @@
 "use client";
 
+import { useUiStore } from "@/app/store/ui.store";
+import { BibliographicExportModal } from "@/features/bibliographic/components/bibliographic-export-modal";
+import { BibliographicImportModal } from "@/features/bibliographic/components/bibliographic-import-modal";
 import { PageContainer } from "@/shared/components/common/app-page-container";
 import { AppPageHeader } from "@/shared/components/common/app-page-header";
 import { DataTable } from "@/shared/components/common/data-table";
@@ -22,6 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
+import { cn } from "@/shared/lib/cn";
 import { type ColumnDef } from "@tanstack/react-table";
 import {
   ChevronDown,
@@ -51,6 +55,9 @@ type BibliographicToolbarProps = {
   selectedCount: number;
   onSearchChange: (value: string) => void;
   onClearSearch: () => void;
+  onOpenExportModal: () => void;
+  onOpenImportModal: () => void;
+  onDeleteSelected: () => void;
 };
 
 type BibliographicFooterProps = {
@@ -66,18 +73,54 @@ type BibliographicFooterProps = {
   onNextPage: () => void;
 };
 
+type BibliographicSelectionBarProps = {
+  selectedCount: number;
+  sidebarOpen: boolean;
+  onDeleteSelected: () => void;
+};
+
 const PAGE_SIZE_OPTIONS = [10, 20, 50];
 const COVER_STYLES: CSSProperties[] = [
-  { background: "linear-gradient(180deg, #122033 0%, #1a8a84 100%)", color: "#ffffff" },
-  { background: "linear-gradient(180deg, #3a244f 0%, #a884ff 100%)", color: "#fff7c2" },
-  { background: "linear-gradient(180deg, #f0e6d7 0%, #f8f3eb 100%)", color: "#243447" },
-  { background: "linear-gradient(180deg, #d8f0c9 0%, #f4fae8 100%)", color: "#22412f" },
-  { background: "linear-gradient(180deg, #c1e9f5 0%, #fde8b7 100%)", color: "#24425a" },
-  { background: "linear-gradient(180deg, #1d1a1a 0%, #564742 100%)", color: "#f6f0df" },
-  { background: "linear-gradient(180deg, #2b6ea6 0%, #f2c94c 100%)", color: "#ffffff" },
-  { background: "linear-gradient(180deg, #7143a8 0%, #d3b5ff 100%)", color: "#ffffff" },
-  { background: "linear-gradient(180deg, #ffffff 0%, #fff4f4 100%)", color: "#d92d20" },
-  { background: "linear-gradient(180deg, #17b66d 0%, #d7ffbb 100%)", color: "#ffffff" },
+  {
+    background: "linear-gradient(180deg, #122033 0%, #1a8a84 100%)",
+    color: "#ffffff",
+  },
+  {
+    background: "linear-gradient(180deg, #3a244f 0%, #a884ff 100%)",
+    color: "#fff7c2",
+  },
+  {
+    background: "linear-gradient(180deg, #f0e6d7 0%, #f8f3eb 100%)",
+    color: "#243447",
+  },
+  {
+    background: "linear-gradient(180deg, #d8f0c9 0%, #f4fae8 100%)",
+    color: "#22412f",
+  },
+  {
+    background: "linear-gradient(180deg, #c1e9f5 0%, #fde8b7 100%)",
+    color: "#24425a",
+  },
+  {
+    background: "linear-gradient(180deg, #1d1a1a 0%, #564742 100%)",
+    color: "#f6f0df",
+  },
+  {
+    background: "linear-gradient(180deg, #2b6ea6 0%, #f2c94c 100%)",
+    color: "#ffffff",
+  },
+  {
+    background: "linear-gradient(180deg, #7143a8 0%, #d3b5ff 100%)",
+    color: "#ffffff",
+  },
+  {
+    background: "linear-gradient(180deg, #ffffff 0%, #fff4f4 100%)",
+    color: "#d92d20",
+  },
+  {
+    background: "linear-gradient(180deg, #17b66d 0%, #d7ffbb 100%)",
+    color: "#ffffff",
+  },
 ];
 const BIBLIOGRAPHIC_BOOKS: BibliographicBook[] = [
   {
@@ -261,10 +304,10 @@ function BookCover({
       className="flex h-14 w-10 shrink-0 flex-col justify-between overflow-hidden rounded-xs px-1.5 py-1 shadow-sm"
       style={style}
     >
-      <span className="text-[5px] line-clamp-4 font-medium uppercase opacity-80">
+      <span className="line-clamp-4 text-[5px] font-medium uppercase opacity-80">
         {accent}
       </span>
-      <span className="text-[4px] font-light uppercase leading-[1.05] tracking-[0.04em]">
+      <span className="text-[4px] leading-[1.05] font-light tracking-[0.04em] uppercase">
         {title}
       </span>
     </div>
@@ -276,6 +319,9 @@ function BibliographicToolbar({
   selectedCount,
   onSearchChange,
   onClearSearch,
+  onOpenExportModal,
+  onOpenImportModal,
+  onDeleteSelected,
 }: BibliographicToolbarProps) {
   return (
     <div className="mb-5 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -292,36 +338,69 @@ function BibliographicToolbar({
       <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button
-              type="button"
-              variant="outline"
-            >
+            <Button type="button" variant="outline">
               Action
               <ChevronDown className="size-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-52">
-            <DropdownMenuItem disabled={selectedCount === 0}>
-              Export selected
+            <DropdownMenuItem onSelect={onOpenExportModal}>
+              Export
             </DropdownMenuItem>
-            <DropdownMenuItem disabled={selectedCount === 0}>
-              Archive selected
+            <DropdownMenuItem onSelect={onOpenImportModal}>
+              Import
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               disabled={selectedCount === 0}
               variant="destructive"
+              onSelect={onDeleteSelected}
             >
               Delete selected
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <Button
-          type="button"
-        >
+        <Button type="button">
           <Plus className="size-4" />
           Create
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+function BibliographicSelectionBar({
+  selectedCount,
+  sidebarOpen,
+  onDeleteSelected,
+}: BibliographicSelectionBarProps) {
+  return (
+    <div
+      className={cn(
+        "fixed inset-x-0 bottom-0 z-40 border-t border-grey-30 bg-white/95 shadow-[0_-18px_48px_rgba(15,23,42,0.08)] backdrop-blur",
+        sidebarOpen ? "md:left-68" : "md:left-20",
+      )}
+    >
+      <div className="mx-auto flex w-full max-w-[1240px] flex-col gap-4 px-3 py-4 sm:px-4 md:flex-row md:items-center md:justify-between md:px-8">
+        <div className="min-w-0">
+          <p className="text-base font-semibold text-grey-100">
+            {selectedCount} item dipilih
+          </p>
+          <p className="text-base text-grey-80">
+            Hapus item yang sudah dicentang dari daftar bibliografi.
+          </p>
+        </div>
+
+        <Button
+          type="button"
+          size="lg"
+          variant="destructive"
+          className="w-full rounded-xl shadow-sm sm:w-auto"
+          onClick={onDeleteSelected}
+        >
+          <Trash2 className="size-4" />
+          Delete
         </Button>
       </div>
     </div>
@@ -342,9 +421,12 @@ function BibliographicFooter({
 }: BibliographicFooterProps) {
   return (
     <div className="mt-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-      <div className="flex items-center gap-3 text-sm text-grey-90">
+      <div className="flex items-center gap-3 text-base text-grey-90">
         <span>Showing</span>
-        <Select value={String(pageSize)} onValueChange={(value) => onPageSizeChange(Number(value))}>
+        <Select
+          value={String(pageSize)}
+          onValueChange={(value) => onPageSizeChange(Number(value))}
+        >
           <SelectTrigger className="h-10 min-w-20 rounded-xl border-grey-50 bg-white text-grey-100 shadow-none">
             <SelectValue placeholder={String(pageSize)} />
           </SelectTrigger>
@@ -359,7 +441,7 @@ function BibliographicFooter({
       </div>
 
       <div className="flex items-center justify-between gap-4 lg:justify-end">
-        <p className="text-sm text-grey-90">
+        <p className="text-base text-grey-90">
           {from} - {to} of {totalItems}
         </p>
 
@@ -393,6 +475,10 @@ function BibliographicFooter({
 }
 
 export function BibliographicListPage() {
+  const sidebarOpen = useUiStore((state) => state.sidebarOpen);
+  const [books, setBooks] = useState(BIBLIOGRAPHIC_BOOKS);
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -403,14 +489,14 @@ export function BibliographicListPage() {
   const isFiltering = search !== deferredSearch;
 
   const filteredBooks = useMemo(() => {
-    if (!normalizedSearch) return BIBLIOGRAPHIC_BOOKS;
+    if (!normalizedSearch) return books;
 
-    return BIBLIOGRAPHIC_BOOKS.filter((book) =>
+    return books.filter((book) =>
       [book.title, book.author, book.isbn].some((value) =>
         value.toLowerCase().includes(normalizedSearch),
       ),
     );
-  }, [normalizedSearch]);
+  }, [books, normalizedSearch]);
 
   const totalItems = filteredBooks.length;
   const lastPage = Math.max(1, Math.ceil(totalItems / pageSize));
@@ -434,7 +520,17 @@ export function BibliographicListPage() {
     currentPageIds.length > 0 &&
     currentPageIds.every((id) => selectedIdSet.has(id));
   const someCurrentPageSelected =
-    currentPageIds.some((id) => selectedIdSet.has(id)) && !allCurrentPageSelected;
+    currentPageIds.some((id) => selectedIdSet.has(id)) &&
+    !allCurrentPageSelected;
+
+  const handleDeleteSelected = () => {
+    if (selectedCount === 0) return;
+
+    setBooks((current) =>
+      current.filter((book) => !selectedIdSet.has(book.id)),
+    );
+    setSelectedIds([]);
+  };
 
   const columns = useMemo<ColumnDef<BibliographicBook>[]>(
     () => [
@@ -485,7 +581,9 @@ export function BibliographicListPage() {
         },
         header: "No.",
         cell: ({ row }) => (
-          <span className="text-sm text-grey-90">{offset + row.index + 1}.</span>
+          <span className="text-base text-grey-90">
+            {offset + row.index + 1}.
+          </span>
         ),
       },
       {
@@ -506,10 +604,12 @@ export function BibliographicListPage() {
                 style={book.coverStyle}
               />
               <div className="min-w-0">
-                <p className="truncate text-sm font-semibold text-grey-100">
+                <p className="truncate text-base font-semibold text-grey-100">
                   {book.title}
                 </p>
-                <p className="mt-1 truncate text-sm italic text-grey-90">{book.author}</p>
+                <p className="mt-1 truncate text-base text-grey-90 italic">
+                  {book.author}
+                </p>
               </div>
             </div>
           );
@@ -521,7 +621,9 @@ export function BibliographicListPage() {
           cellClassName: "px-3 py-4",
         },
         header: "ISBN/ISSN",
-        cell: ({ row }) => <span className="text-grey-90">{row.original.isbn}</span>,
+        cell: ({ row }) => (
+          <span className="text-grey-90">{row.original.isbn}</span>
+        ),
       },
       {
         accessorKey: "copies",
@@ -530,7 +632,9 @@ export function BibliographicListPage() {
           cellClassName: "px-3 py-4",
         },
         header: "Copies",
-        cell: ({ row }) => <span className="text-grey-90">{row.original.copies}</span>,
+        cell: ({ row }) => (
+          <span className="text-grey-90">{row.original.copies}</span>
+        ),
       },
       {
         accessorKey: "updatedAt",
@@ -550,7 +654,7 @@ export function BibliographicListPage() {
           cellClassName: "px-3 py-4 text-right",
         },
         header: () => <div className="text-right">Action</div>,
-        cell: () => (
+        cell: ({ row }) => (
           <div className="flex items-center justify-end gap-1">
             <Button
               type="button"
@@ -567,6 +671,14 @@ export function BibliographicListPage() {
               size="icon-sm"
               className="text-red-50 hover:bg-red-10 hover:text-red-60"
               aria-label="Delete bibliographic item"
+              onClick={() => {
+                setBooks((current) =>
+                  current.filter((book) => book.id !== row.original.id),
+                );
+                setSelectedIds((current) =>
+                  current.filter((id) => id !== row.original.id),
+                );
+              }}
             >
               <Trash2 className="size-4" />
             </Button>
@@ -587,7 +699,12 @@ export function BibliographicListPage() {
   const to = totalItems === 0 ? 0 : offset + pageBooks.length;
 
   return (
-    <PageContainer className="bg-white pb-10 md:bg-transparent">
+    <PageContainer
+      className={cn(
+        "bg-white md:bg-transparent",
+        selectedCount > 0 ? "pb-32 md:pb-36" : "pb-10",
+      )}
+    >
       <AppPageHeader title="Bibliography List" />
 
       <MdUpwardCard className="mt-5">
@@ -598,6 +715,9 @@ export function BibliographicListPage() {
             setSearch(value);
             setCurrentPage(1);
           }}
+          onOpenExportModal={() => setIsExportModalOpen(true)}
+          onOpenImportModal={() => setIsImportModalOpen(true)}
+          onDeleteSelected={handleDeleteSelected}
           onClearSearch={() => {
             setSearch("");
             setCurrentPage(1);
@@ -625,9 +745,28 @@ export function BibliographicListPage() {
             setCurrentPage(1);
           }}
           onPreviousPage={() => setCurrentPage((page) => Math.max(1, page - 1))}
-          onNextPage={() => setCurrentPage((page) => Math.min(lastPage, page + 1))}
+          onNextPage={() =>
+            setCurrentPage((page) => Math.min(lastPage, page + 1))
+          }
         />
       </MdUpwardCard>
+
+      {selectedCount > 0 && (
+        <BibliographicSelectionBar
+          selectedCount={selectedCount}
+          sidebarOpen={sidebarOpen}
+          onDeleteSelected={handleDeleteSelected}
+        />
+      )}
+
+      <BibliographicExportModal
+        open={isExportModalOpen}
+        onOpenChange={setIsExportModalOpen}
+      />
+      <BibliographicImportModal
+        open={isImportModalOpen}
+        onOpenChange={setIsImportModalOpen}
+      />
     </PageContainer>
   );
 }

@@ -1,8 +1,8 @@
 "use client";
-import { useDebounce } from "@/hooks/use-debounce";
+import { useDebounce } from "@/shared/hooks/use-debounce";
 import { cn } from "@/shared/lib/cn";
-import React, { useState, useRef, useEffect, useMemo } from "react";
 import { ChevronDown, ChevronUp, X } from "lucide-react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 export interface ComboboxOption {
   label: string;
@@ -38,13 +38,6 @@ export const Combobox: React.FC<ComboboxProps> = ({
 
   const debouncedInputValue = useDebounce(inputValue, 200);
 
-  // Sync inputValue with displayValue prop
-  useEffect(() => {
-    if (!isOpen) {
-      setInputValue(displayValue || "");
-    }
-  }, [displayValue, isOpen]);
-
   const filteredOptions = useMemo(() => {
     if (!debouncedInputValue) {
       return options;
@@ -59,6 +52,8 @@ export const Combobox: React.FC<ComboboxProps> = ({
     const selected = options.find((opt) => opt.value === value);
     return selected ? selected.label : "";
   }, [value, options]);
+
+  const syncedInputValue = displayValue || selectedOptionLabel;
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -87,18 +82,17 @@ export const Combobox: React.FC<ComboboxProps> = ({
 
   const handleInputFocus = () => {
     setIsOpen(true);
-    // Use displayValue if available, otherwise fall back to selectedOptionLabel
-    setInputValue(displayValue || selectedOptionLabel);
+    setInputValue(syncedInputValue);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {      
+    if (e.key === "Enter") {
       if (allowCustomValue && inputValue.trim()) {
         // Check if the input matches any existing option
         const matchingOption = filteredOptions.find(
-          option => option.label.toLowerCase() === inputValue.toLowerCase()
+          (option) => option.label.toLowerCase() === inputValue.toLowerCase(),
         );
-        
+
         if (matchingOption) {
           // If it matches an existing option, select it
           handleComboboxOption(matchingOption);
@@ -116,22 +110,20 @@ export const Combobox: React.FC<ComboboxProps> = ({
     }
   };
 
-
   return (
     <div className="relative w-full" ref={containerRef}>
       <div className="relative">
         <input
           disabled={disabled}
           type="text"
-          value={isOpen ? inputValue : (displayValue || selectedOptionLabel)}
+          value={isOpen ? inputValue : displayValue || selectedOptionLabel}
           onChange={handleInputChange}
           onFocus={handleInputFocus}
           onKeyDown={handleKeyDown}
-
           placeholder={placeholder}
           className={cn(
-            "w-full px-4 py-2 pr-10 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500",
-            disabled ? "bg-grey-20 cursor-not-allowed" : "bg-white",
+            "focus:ring-blue-500 w-full rounded-lg border bg-white px-4 py-2 pr-10 focus:ring-2 focus:outline-none",
+            disabled ? "cursor-not-allowed bg-grey-20" : "bg-white",
             !!onClear && "pr-16",
           )}
         />
@@ -141,7 +133,7 @@ export const Combobox: React.FC<ComboboxProps> = ({
             disabled={disabled}
             type="button"
             className={cn(
-              "group absolute inset-y-0 right-8 flex items-center px-2 cursor-pointer",
+              "group absolute inset-y-0 right-8 flex cursor-pointer items-center px-2",
               disabled && "cursor-not-allowed",
             )}
             onClick={() => {
@@ -158,37 +150,42 @@ export const Combobox: React.FC<ComboboxProps> = ({
           disabled={disabled}
           type="button"
           className={cn(
-            "group absolute inset-y-0 right-0 flex items-center px-2 text-gray-400 cursor-pointer",
+            "group text-gray-400 absolute inset-y-0 right-0 flex cursor-pointer items-center px-2",
             disabled && "cursor-not-allowed",
           )}
           onClick={() => {
-            setIsOpen(!isOpen);
+            if (isOpen) {
+              setIsOpen(false);
+              return;
+            }
+
+            setInputValue(syncedInputValue);
+            setIsOpen(true);
           }}
         >
-          {React.createElement(
-            isOpen ? ChevronUp : ChevronDown,
-            { className: "w-4 text-grey-50 group-hover:text-grey-70" }
-          )}
+          {React.createElement(isOpen ? ChevronUp : ChevronDown, {
+            className: "w-4 text-grey-50 group-hover:text-grey-70",
+          })}
         </button>
       </div>
 
       {isOpen && (
-        <ul className="absolute z-10 w-full mt-1 overflow-auto bg-white border border-gray-200 rounded-lg shadow-xl max-h-60">
+        <ul className="border-gray-200 absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-lg border bg-white shadow-xl">
           {filteredOptions?.length > 0 ? (
             filteredOptions.map((option) => (
               <li
                 key={option.value}
                 onClick={() => handleComboboxOption(option)}
-                className="px-4 py-2 text-gray-700 cursor-pointer hover:bg-grey-30"
+                className="text-gray-700 cursor-pointer px-4 py-2 hover:bg-grey-30"
               >
                 {option.label}
               </li>
             ))
           ) : (
-            <li className="px-4 py-2 text-gray-500">
+            <li className="text-gray-500 px-4 py-2">
               {allowCustomValue && inputValue.trim() ? (
-                <span 
-                  className="cursor-pointer text-blue-600 hover:text-blue-800"
+                <span
+                  className="text-blue-600 hover:text-blue-800 cursor-pointer"
                   onClick={() => {
                     setIsOpen(false);
                     if (onCustomValue) {
@@ -198,10 +195,10 @@ export const Combobox: React.FC<ComboboxProps> = ({
                 >
                   Pilih &quot;{inputValue.trim()}&quot;
                 </span>
+              ) : inputValue ? (
+                "Tidak ada hasil ditemukan"
               ) : (
-                inputValue
-                  ? "Tidak ada hasil ditemukan"
-                  : "Tidak ada opsi tersedia"
+                "Tidak ada opsi tersedia"
               )}
             </li>
           )}

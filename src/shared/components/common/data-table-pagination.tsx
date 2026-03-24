@@ -1,11 +1,17 @@
 "use client";
 
-
-import IconLeft from "/icons/direction-left.svg";
-import IconRight from "/icons/direction-right.svg";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { cn } from "@/shared/lib/cn";
 import { Button } from "../ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import IconLeft from "/icons/direction-left.svg";
+import IconRight from "/icons/direction-right.svg";
 
 export type PaginationProps = {
   disabled?: boolean;
@@ -16,7 +22,7 @@ export type PaginationProps = {
   total?: number;
   lastPage?: number;
   onChange?: (value: { currentPage?: number; perPage?: number }) => void;
-  showPageSizeSelect?: boolean
+  showPageSizeSelect?: boolean;
 };
 
 export function Pagination({
@@ -31,13 +37,15 @@ export function Pagination({
   showPageSizeSelect = true,
 }: PaginationProps) {
   return (
-    <div className={cn(
-      "flex flex-col md:flex-row items-center gap-2",
-      showPageSizeSelect ? "justify-between" : "justify-end",
-    )}>
+    <div
+      className={cn(
+        "flex flex-col items-center gap-2 md:flex-row",
+        showPageSizeSelect ? "justify-between" : "justify-end",
+      )}
+    >
       {showPageSizeSelect && (
         <div className="flex items-center gap-2">
-          <span className="text-sm">Menampilkan: </span>
+          <span className="text-base">Menampilkan: </span>
           <Select
             disabled={disabled}
             value={String(perPage)}
@@ -63,7 +71,7 @@ export function Pagination({
         </div>
       )}
 
-      <div className="flex gap-2 items-center text-sm">
+      <div className="flex items-center gap-2 text-base">
         {from !== undefined && to !== undefined && (
           <span className="w-max">
             {from} - {to}

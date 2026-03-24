@@ -6,10 +6,17 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import React from "react";
 
 import { cn } from "@/shared/lib/cn";
-import React from "react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 
 type DataTableColumnMeta = {
   headClassName?: string;
@@ -66,7 +73,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div ref={containerRef} className={className}>
-      <Table ref={tableRef} className="w-max min-w-full mb-2">
+      <Table ref={tableRef} className="mb-2 w-max min-w-full">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -83,9 +90,12 @@ export function DataTable<TData, TValue>({
                   <TableHead
                     key={header.id}
                     className={cn(
-                      "text-sm font-medium",
-                      (header.column.columnDef.meta as DataTableColumnMeta | undefined)
-                        ?.headClassName,
+                      "text-base font-medium",
+                      (
+                        header.column.columnDef.meta as
+                          | DataTableColumnMeta
+                          | undefined
+                      )?.headClassName,
                       (isPinnedLeft || isPinnedRight) &&
                         "sticky z-20 bg-neutral-200",
                       isOverflowing && isPinnedRight && "pinned-right",
@@ -133,10 +143,13 @@ export function DataTable<TData, TValue>({
                       className={cn(
                         "max-w-125 whitespace-normal",
                         "text-wrap wrap-break-word",
-                        (cell.column.columnDef.meta as DataTableColumnMeta | undefined)
-                          ?.cellClassName,
+                        (
+                          cell.column.columnDef.meta as
+                            | DataTableColumnMeta
+                            | undefined
+                        )?.cellClassName,
                         (isPinnedLeft || isPinnedRight) &&
-                          "sticky bg-white z-10",
+                          "sticky z-10 bg-white",
                         isOverflowing && isPinnedRight && "pinned-right",
                       )}
                       style={{
@@ -161,7 +174,6 @@ export function DataTable<TData, TValue>({
             </TableRow>
           )}
         </TableBody>
-        
       </Table>
     </div>
   );
