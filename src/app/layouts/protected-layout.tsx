@@ -2,11 +2,16 @@ import { useUiStore } from "@/app/store/ui.store";
 import { Button } from "@/shared/components/ui/button";
 import { cn } from "@/shared/lib/cn";
 import { ChevronsLeftRight } from "lucide-react";
+import type { ReactNode } from "react";
 import { Outlet } from "react-router-dom";
 import { Sidebar } from "./sidebar";
 import { Topbar } from "./topbar";
 
-export function ProtectedLayout() {
+type ProtectedLayoutProps = {
+  children?: ReactNode;
+};
+
+export function ProtectedLayout({ children }: ProtectedLayoutProps) {
   const sidebarOpen = useUiStore((state) => state.sidebarOpen);
   const toggleSidebar = useUiStore((state) => state.toggleSidebar);
   const setSidebarOpen = useUiStore((state) => state.setSidebarOpen);
@@ -47,9 +52,9 @@ export function ProtectedLayout() {
           <ChevronsLeftRight className="size-4" />
         </Button>
 
-        <main className="min-w-0 flex-1 overflow-y-auto bg-neutral-200 px-3 py-4 sm:px-4 sm:py-6 md:px-8 md:py-9">
-          <div className="mx-auto w-full max-w-[1240px]">
-            <Outlet />
+        <main className="min-w-0 flex-1 overflow-y-auto bg-grey-20 px-3 py-4 sm:px-4 sm:py-6 md:px-0 md:py-5">
+          <div className="mx-auto w-full max-w-310">
+            {children ?? <Outlet />}
           </div>
         </main>
       </div>

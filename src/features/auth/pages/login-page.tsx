@@ -24,7 +24,7 @@ export function LoginPage() {
         <LoginForm />
 
         {/* Footer */}
-        <div className="mt-8 text-center text-xs text-muted-foreground">
+        <div className="mt-8 text-center text-sm text-muted-foreground">
           © {new Date().getFullYear()} Library Management System
         </div>
       </div>

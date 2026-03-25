@@ -504,7 +504,7 @@ const CollapsedSidebarFlyoutTrigger = memo(
 
           <div
             className={cn(
-              "pointer-events-none absolute top-1/2 left-full z-50 ml-3 -translate-y-1/2 rounded-lg bg-grey-100 px-2 py-1 text-xs font-medium text-white shadow-md",
+              "pointer-events-none absolute top-1/2 left-full z-50 ml-3 -translate-y-1/2 rounded-lg bg-grey-100 px-2 py-1 text-sm font-medium text-white shadow-md",
               "whitespace-nowrap opacity-0 transition-all duration-150",
               !isOpen && "group-hover:translate-x-0 group-hover:opacity-100",
               !isOpen ? "translate-x-1" : "translate-x-0 opacity-0",
@@ -730,7 +730,7 @@ const SidebarMainItem = memo(function SidebarMainItem({
       {!sidebarOpen && (
         <div
           className={cn(
-            "pointer-events-none absolute top-1/2 left-full z-50 ml-3 -translate-y-1/2 rounded-lg bg-grey-100 px-2 py-1 text-xs font-medium text-white shadow-md",
+            "pointer-events-none absolute top-1/2 left-full z-50 ml-3 -translate-y-1/2 rounded-lg bg-grey-100 px-2 py-1 text-sm font-medium text-white shadow-md",
             "whitespace-nowrap opacity-0 transition-all duration-150",
             "translate-x-1 group-hover:translate-x-0 group-hover:opacity-100",
           )}

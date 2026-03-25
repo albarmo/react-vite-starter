@@ -47,7 +47,7 @@ export function LoginForm() {
         />
 
         {form.formState.errors.username && (
-          <p className="text-red-500 text-xs">
+          <p className="text-red-500 text-sm">
             {form.formState.errors.username.message}
           </p>
         )}
@@ -81,7 +81,7 @@ export function LoginForm() {
         </div>
 
         {form.formState.errors.password && (
-          <p className="text-red-500 text-xs">
+          <p className="text-red-500 text-sm">
             {form.formState.errors.password.message}
           </p>
         )}

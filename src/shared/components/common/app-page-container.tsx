@@ -5,8 +5,6 @@ export function PageContainer({
   children,
 }: React.ComponentProps<"div">) {
   return (
-    <main className={cn("px-8 md:px-12 mx-auto", className)}>
-      {children}
-    </main>
+    <main className={cn("mx-auto px-8 md:px-12", className)}>{children}</main>
   );
 }

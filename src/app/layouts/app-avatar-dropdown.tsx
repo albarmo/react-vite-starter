@@ -62,7 +62,7 @@ export function AppAvatarDropdown({
           aria-label="Profile"
         >
           <Avatar className="size-8">
-            <AvatarFallback className="bg-grey-40 text-xs font-semibold text-blue-70">
+            <AvatarFallback className="bg-grey-40 text-sm font-semibold text-blue-70">
               {getInitials(user?.name)}
             </AvatarFallback>
           </Avatar>
@@ -77,7 +77,7 @@ export function AppAvatarDropdown({
           <p className="truncate text-base font-semibold text-grey-100">
             {displayName}
           </p>
-          <p className="mt-1 truncate text-xs text-grey-80">{displayEmail}</p>
+          <p className="mt-1 truncate text-sm text-grey-80">{displayEmail}</p>
           <Badge variant="outline" className="mt-3 rounded-full border-grey-40">
             {primaryRole}
           </Badge>

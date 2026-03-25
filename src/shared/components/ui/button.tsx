@@ -37,10 +37,25 @@ function Button({
     asChild?: boolean;
     loading?: boolean;
   }) {
-  const Comp = asChild ? Slot : "button";
+  if (asChild) {
+    return (
+      <Slot
+        data-slot="button"
+        className={cn(
+          buttonVariants({ variant, size, className }),
+          loading && loadingVariants({ variant }),
+        )}
+        {...props}
+        aria-busy={loading || undefined}
+        disabled={loading || props.disabled}
+      >
+        {children}
+      </Slot>
+    );
+  }
 
   return (
-    <Comp
+    <button
       data-slot="button"
       className={cn(
         buttonVariants({ variant, size, className }),
@@ -49,11 +64,11 @@ function Button({
       {...props}
       disabled={loading || props.disabled}
     >
-      {loading ? <span className="w-14 inline-block" /> : children}
-      {loading && (
+      {loading ? <span className="inline-block w-14" /> : children}
+      {loading ? (
         <SpinnerIcon className="absolute top-1/2 left-1/2 -translate-1/2 animate-spin opacity-100" />
-      )}
-    </Comp>
+      ) : null}
+    </button>
   );
 }
 

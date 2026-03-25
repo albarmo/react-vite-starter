@@ -23,7 +23,7 @@ export function DashboardCard({
       <CardContent>
         <div className="text-3xl font-bold">{value}</div>
         {description ? (
-          <p className="mt-1 text-xs text-muted-foreground">{description}</p>
+          <p className="mt-1 text-sm text-muted-foreground">{description}</p>
         ) : null}
       </CardContent>
     </Card>

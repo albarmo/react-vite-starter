@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/shared/lib/cn";
 import { CalendarCogIcon, CheckIcon } from "lucide-react";
 import { type FC, JSX, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "./button";
@@ -15,7 +16,6 @@ import {
   SelectValue,
 } from "./select";
 import { Switch } from "./switch";
-import { cn } from "@/shared/lib/cn";
 
 export interface DateRangePickerProps {
   /** Click handler for applying the updates from DateRangePicker. */
@@ -326,7 +326,7 @@ export const DateRangePicker: FC<DateRangePickerProps> = ({
               }`}</div>
             </div>
             {rangeCompare != null && (
-              <div className="-mt-1 text-xs opacity-60">
+              <div className="-mt-1 text-sm opacity-60">
                 <>
                   vs. {formatDate(rangeCompare.from, locale)}
                   {rangeCompare.to != null
