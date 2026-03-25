@@ -1,6 +1,6 @@
 "use client";
 
-import { ContentTypeDeleteModal } from "@/features/master-file/components/content-type-delete-modal";
+import { CrossReferenceDeleteModal } from "@/features/master-file/components/cross-reference-delete-modal";
 import { PageContainer } from "@/shared/components/common/app-page-container";
 import { MdUpwardCard } from "@/shared/components/common/md-upward-card";
 import {
@@ -16,61 +16,64 @@ import { Pencil, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-type ContentTypeDetail = {
+type CrossReferenceDetail = {
   id: string;
   code: string;
-  name: string;
-  updatedAt: string;
+  description: string;
 };
 
-const CONTENT_TYPE_DETAILS: ContentTypeDetail[] = [
+const CROSS_REFERENCE_PRESETS: Omit<CrossReferenceDetail, "id">[] = [
   {
-    id: "content-type-1",
-    code: "crd",
-    name: "cartographic dataset",
-    updatedAt: "28 Feb 2026",
+    code: "BT",
+    description: "Broader Term",
   },
   {
-    id: "content-type-2",
-    code: "cri",
-    name: "cartographic image",
-    updatedAt: "15 Mar 2026",
+    code: "NT",
+    description: "Narrower Term",
   },
   {
-    id: "content-type-3",
-    code: "crm",
-    name: "cartographic moving image",
-    updatedAt: "31 Mar 2026",
+    code: "RT",
+    description: "Related Term",
   },
   {
-    id: "content-type-4",
-    code: "crt",
-    name: "cartographic tactile image",
-    updatedAt: "10 Apr 2026",
+    code: "SA",
+    description: "Related Term",
   },
   {
-    id: "content-type-5",
-    code: "crn",
-    name: "cartographic tactile three-dimensional form",
-    updatedAt: "30 Apr 2026",
+    code: "U",
+    description: "Use",
+  },
+  {
+    code: "UF",
+    description: "Use For",
   },
 ];
 
-function ContentTypeDetailBreadcrumb() {
+function CrossReferenceDetailBreadcrumb() {
   return (
     <Breadcrumb className="mt-2">
       <BreadcrumbList className="text-sm text-grey-80">
         <BreadcrumbItem>
           <BreadcrumbLink asChild className="hover:text-blue-50">
-            <Link to="/master-file/authority-files/content-type">
-              Content Type
-            </Link>
+            <Link to="/master-file">Master File</Link>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator className="text-grey-70" />
+        <BreadcrumbItem>
+          <BreadcrumbLink asChild className="hover:text-blue-50">
+            <Link to="/master-file/authority-files/subject">Authority Files</Link>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator className="text-grey-70" />
+        <BreadcrumbItem>
+          <BreadcrumbLink asChild className="hover:text-blue-50">
+            <Link to="/master-file/authority-files/subject">Subject</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator className="text-grey-70" />
         <BreadcrumbItem>
           <BreadcrumbPage className="font-medium text-blue-50">
-            Content Type Detail
+            Cross Reference Detail
           </BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
@@ -78,32 +81,42 @@ function ContentTypeDetailBreadcrumb() {
   );
 }
 
-export function ContentTypeDetailPage() {
+export function CrossReferenceDetailPage() {
   const navigate = useNavigate();
-  const { id = "content-type-3" } = useParams();
+  const { id = "cross-reference-1" } = useParams();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const detail = useMemo(
-    () =>
-      CONTENT_TYPE_DETAILS.find((item) => item.id === id) ??
-      CONTENT_TYPE_DETAILS[2],
-    [id],
-  );
+  const detail = useMemo(() => {
+    const matchedIndex = Number.parseInt(
+      id.replace(/^cross-reference-/, ""),
+      10,
+    );
+    const safeIndex =
+      Number.isFinite(matchedIndex) && matchedIndex > 0 ? matchedIndex - 1 : 0;
+    const preset =
+      CROSS_REFERENCE_PRESETS[safeIndex % CROSS_REFERENCE_PRESETS.length] ??
+      CROSS_REFERENCE_PRESETS[0];
+
+    return {
+      id,
+      ...preset,
+    };
+  }, [id]);
 
   return (
     <PageContainer className="pt-6 pb-10 md:pt-8">
       <div>
         <h1 className="text-2xl font-medium text-primary">
-          Content Type Detail
+          Cross Reference Detail
         </h1>
-        <ContentTypeDetailBreadcrumb />
+        <CrossReferenceDetailBreadcrumb />
       </div>
 
       <MdUpwardCard className="mt-6 rounded-[18px] p-5">
         <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
           <div>
             <h2 className="text-xl font-medium text-grey-100">
-              Content Type Detail
+              Cross Reference Detail
             </h2>
           </div>
 
@@ -111,9 +124,10 @@ export function ContentTypeDetailPage() {
             <Button
               type="button"
               variant="outline"
+              className="h-11 px-6"
               onClick={() =>
                 navigate(
-                  `/master-file/authority-files/content-type/edit/${detail.id}`,
+                  `/master-file/authority-files/subject/cross-reference/edit/${detail.id}`,
                 )
               }
             >
@@ -123,6 +137,7 @@ export function ContentTypeDetailPage() {
             <Button
               type="button"
               variant="destructive"
+              className="h-11 px-6"
               onClick={() => setIsDeleteModalOpen(true)}
             >
               <Trash2 className="size-4" />
@@ -135,18 +150,15 @@ export function ContentTypeDetailPage() {
           <dt className="text-grey-90">Code</dt>
           <dd className="text-grey-100">{detail.code}</dd>
 
-          <dt className="text-grey-90">Name</dt>
-          <dd className="text-grey-100">{detail.name}</dd>
-
-          <dt className="text-grey-90">Last Updated</dt>
-          <dd className="text-grey-100">{detail.updatedAt}</dd>
+          <dt className="text-grey-90">Description</dt>
+          <dd className="text-grey-100">{detail.description}</dd>
         </dl>
       </MdUpwardCard>
 
-      <ContentTypeDeleteModal
+      <CrossReferenceDeleteModal
         open={isDeleteModalOpen}
         onOpenChange={setIsDeleteModalOpen}
-        onDelete={() => navigate("/master-file/authority-files/content-type")}
+        onDelete={() => navigate("/master-file/authority-files/subject")}
       />
     </PageContainer>
   );

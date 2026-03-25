@@ -1,6 +1,6 @@
 "use client";
 
-import { useUiStore } from "@/app/store/ui.store";
+import { LocationDeleteModal } from "@/features/master-file/components/location-delete-modal";
 import { PageContainer } from "@/shared/components/common/app-page-container";
 import { AppPageHeader } from "@/shared/components/common/app-page-header";
 import { DataTable } from "@/shared/components/common/data-table";
@@ -8,7 +8,6 @@ import { MdUpwardCard } from "@/shared/components/common/md-upward-card";
 import { SearchInput } from "@/shared/components/common/search-input";
 import { SelectionCheckbox } from "@/shared/components/common/selection-checkbox";
 import { Spinner } from "@/shared/components/common/spinner";
-import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import {
   Select,
@@ -22,36 +21,23 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { useDeferredValue, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthorDeleteModal } from "../components/author-delete-modal";
 
-type AuthorStatus = "active" | "orphaned";
+type LocationStatus = "active" | "orphaned";
 
-type AuthorRecord = {
+type LocationRecord = {
   id: string;
+  code: string;
   name: string;
-  birthYear: string;
-  type: string;
-  files: string;
-  status: AuthorStatus;
+  status: LocationStatus;
   updatedAt: string;
 };
 
-type DeleteTarget =
-  | {
-      type: "single";
-      record: AuthorRecord;
-    }
-  | {
-      type: "selected";
-      ids: string[];
-    };
-
 type ToolbarProps = {
   search: string;
-  activeFilter: AuthorStatus;
+  activeFilter: LocationStatus;
   onSearchChange: (value: string) => void;
   onClearSearch: () => void;
-  onFilterChange: (value: AuthorStatus) => void;
+  onFilterChange: (value: LocationStatus) => void;
   onCreate: () => void;
 };
 
@@ -62,34 +48,25 @@ type FooterProps = {
   onPageSizeChange: (value: number) => void;
 };
 
-type SelectionBarProps = {
-  sidebarOpen: boolean;
-  onDeleteSelected: () => void;
-};
-
 const PAGE_SIZE_OPTIONS = [10, 20, 50];
-const AUTHOR_RECORDS: AuthorRecord[] = [
+const LOCATION_RECORDS: LocationRecord[] = [
   {
-    id: "author-1",
-    name: "Gunawan",
-    birthYear: "-",
-    type: "Personal Name",
-    files: "-",
+    id: "location-1",
+    code: "SL",
+    name: "My Library",
     status: "active",
     updatedAt: "28 Feb 2026",
   },
   {
-    id: "author-2",
-    name: "Orphan Author",
-    birthYear: "-",
-    type: "Organizational Body",
-    files: "-",
+    id: "location-2",
+    code: "ORP",
+    name: "Orphaned Location",
     status: "orphaned",
     updatedAt: "15 Mar 2026",
   },
 ];
 
-function AuthorToolbar({
+function LocationToolbar({
   search,
   activeFilter,
   onSearchChange,
@@ -100,7 +77,7 @@ function AuthorToolbar({
   return (
     <div className="mb-5 space-y-5">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="w-full lg:max-w-75">
+        <div className="w-full lg:max-w-[300px]">
           <SearchInput
             value={search}
             placeholder="Search"
@@ -112,7 +89,7 @@ function AuthorToolbar({
 
         <Button
           type="button"
-          className="h-11 self-start px-5 lg:self-auto"
+          className="h-11 px-5 self-start lg:self-auto"
           onClick={onCreate}
         >
           <Plus className="size-4" />
@@ -123,12 +100,10 @@ function AuthorToolbar({
       <div className="flex flex-wrap items-center gap-3">
         <span className="text-base text-grey-100">Filter:</span>
 
-        {(
-          [
-            { value: "active", label: "Active" },
-            { value: "orphaned", label: "Orphaned" },
-          ] as const
-        ).map((filter) => (
+        {([
+          { value: "active", label: "Active" },
+          { value: "orphaned", label: "Orphaned" },
+        ] as const).map((filter) => (
           <Button
             key={filter.value}
             type="button"
@@ -148,7 +123,7 @@ function AuthorToolbar({
   );
 }
 
-function AuthorFooter({
+function LocationFooter({
   pageSize,
   totalItems,
   displayedCount,
@@ -182,41 +157,14 @@ function AuthorFooter({
   );
 }
 
-function AuthorSelectionBar({
-  sidebarOpen,
-  onDeleteSelected,
-}: SelectionBarProps) {
-  return (
-    <div
-      className={cn(
-        "fixed inset-x-0 bottom-0 z-40 border-t border-grey-30 bg-white/95 shadow-[0_-18px_48px_rgba(15,23,42,0.08)] backdrop-blur",
-        sidebarOpen ? "md:left-68" : "md:left-20",
-      )}
-    >
-      <div className="mx-auto flex w-full max-w-310 items-center justify-end px-3 py-4 sm:px-4 md:px-8">
-        <Button
-          type="button"
-          size="lg"
-          variant="destructive"
-          onClick={onDeleteSelected}
-        >
-          <Trash2 className="size-4" />
-          Delete
-        </Button>
-      </div>
-    </div>
-  );
-}
-
-export function AuthorPage() {
+export default function LocationPage() {
   const navigate = useNavigate();
-  const sidebarOpen = useUiStore((state) => state.sidebarOpen);
-  const [records, setRecords] = useState(AUTHOR_RECORDS);
-  const [deleteTarget, setDeleteTarget] = useState<DeleteTarget | null>(null);
+  const [records, setRecords] = useState(LOCATION_RECORDS);
   const [search, setSearch] = useState("");
-  const [activeFilter, setActiveFilter] = useState<AuthorStatus>("active");
+  const [activeFilter, setActiveFilter] = useState<LocationStatus>("active");
   const [pageSize, setPageSize] = useState(10);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [deleteRecord, setDeleteRecord] = useState<LocationRecord | null>(null);
 
   const deferredSearch = useDeferredValue(search);
   const normalizedSearch = deferredSearch.trim().toLowerCase();
@@ -227,7 +175,7 @@ export function AuthorPage() {
       if (record.status !== activeFilter) return false;
       if (!normalizedSearch) return true;
 
-      return [record.name, record.status, record.updatedAt].some((value) =>
+      return [record.code, record.name, record.updatedAt].some((value) =>
         value.toLowerCase().includes(normalizedSearch),
       );
     });
@@ -242,7 +190,6 @@ export function AuthorPage() {
     [displayedRecords],
   );
   const selectedIdSet = useMemo(() => new Set(selectedIds), [selectedIds]);
-  const selectedCount = selectedIds.length;
   const allCurrentPageSelected =
     currentPageIds.length > 0 &&
     currentPageIds.every((id) => selectedIdSet.has(id));
@@ -250,37 +197,16 @@ export function AuthorPage() {
     currentPageIds.some((id) => selectedIdSet.has(id)) &&
     !allCurrentPageSelected;
 
-  const handleOpenDeleteSelected = () => {
-    if (selectedCount === 0) return;
-
-    setDeleteTarget({
-      type: "selected",
-      ids: selectedIds,
-    });
-  };
-
   const handleConfirmDelete = () => {
-    if (!deleteTarget) return;
+    if (!deleteRecord) return;
 
-    if (deleteTarget.type === "single") {
-      const { id } = deleteTarget.record;
-      setRecords((current) => current.filter((record) => record.id !== id));
-      setSelectedIds((current) =>
-        current.filter((selectedId) => selectedId !== id),
-      );
-      setDeleteTarget(null);
-      return;
-    }
-
-    const deleteIdSet = new Set(deleteTarget.ids);
-    setRecords((current) =>
-      current.filter((record) => !deleteIdSet.has(record.id)),
-    );
-    setSelectedIds([]);
-    setDeleteTarget(null);
+    const { id } = deleteRecord;
+    setRecords((current) => current.filter((record) => record.id !== id));
+    setSelectedIds((current) => current.filter((selectedId) => selectedId !== id));
+    setDeleteRecord(null);
   };
 
-  const columns = useMemo<ColumnDef<AuthorRecord>[]>(
+  const columns = useMemo<ColumnDef<LocationRecord>[]>(
     () => [
       {
         id: "select",
@@ -302,7 +228,7 @@ export function AuthorPage() {
                 return current.filter((id) => !pageIdSet.has(id));
               });
             }}
-            ariaLabel="Select all rows on current page"
+            ariaLabel="Select all location rows on current page"
           />
         ),
         cell: ({ row }) => (
@@ -335,9 +261,20 @@ export function AuthorPage() {
         ),
       },
       {
+        accessorKey: "code",
+        meta: {
+          headClassName: "w-[180px]",
+          cellClassName: "px-3 py-4",
+        },
+        header: "Code",
+        cell: ({ row }) => (
+          <span className="text-base text-grey-90">{row.original.code}</span>
+        ),
+      },
+      {
         accessorKey: "name",
         meta: {
-          headClassName: "min-w-[180px]",
+          headClassName: "min-w-[240px]",
           cellClassName: "px-3 py-4",
         },
         header: "Name",
@@ -346,124 +283,75 @@ export function AuthorPage() {
         ),
       },
       {
-        accessorKey: "birthYear",
-        header: "Birth Year",
-        cell: ({ row }) => (
-          <span className="text-base text-grey-90">
-            {row.original.birthYear}
-          </span>
-        ),
-      },
-      {
-        accessorKey: "type",
-        header: "Type",
-        cell: ({ row }) => (
-          <span className="text-base text-grey-90">{row.original.type}</span>
-        ),
-      },
-      {
-        accessorKey: "files",
-        header: "Files",
-        cell: ({ row }) => (
-          <span className="text-base text-grey-90">{row.original.files}</span>
-        ),
-      },
-      {
-        accessorKey: "status",
-        header: "Status",
-        cell: ({ row }) => (
-          <Badge
-            variant={row.original.status === "active" ? "green" : "orange"}
-            className="rounded-md px-2 py-0.5 text-sm font-medium"
-          >
-            {row.original.status === "active" ? "Active" : "Orphaned"}
-          </Badge>
-        ),
-      },
-      {
         accessorKey: "updatedAt",
+        meta: {
+          headClassName: "w-[220px]",
+          cellClassName: "px-3 py-4",
+        },
         header: "Last Updated",
         cell: ({ row }) => (
-          <span className="text-base text-grey-90">
-            {row.original.updatedAt}
-          </span>
+          <span className="text-base text-grey-90">{row.original.updatedAt}</span>
         ),
       },
       {
         id: "actions",
         meta: {
-          headClassName: "w-max text-right",
-          cellClassName: "px-3 py-4 text-center",
+          headClassName: "w-[110px] text-right",
+          cellClassName: "px-3 py-4 text-right",
         },
-        header: () => <div className="text-center">Action</div>,
-        cell: ({ row }) => {
-          const isSelected = selectedIdSet.has(row.original.id);
-
-          return (
-            <div className="flex items-center justify-end gap-3">
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon-sm"
-                disabled={isSelected}
-                aria-label={`Edit ${row.original.name}`}
-                className={cn(
-                  "text-blue-60 hover:bg-blue-10 hover:text-blue-50",
-                  isSelected && "text-grey-60 hover:bg-transparent",
-                )}
-                onClick={(event) => {
-                  event.stopPropagation();
-                  navigate(
-                    `/master-file/authority-files/author/edit/${row.original.id}`,
-                  );
-                }}
-              >
-                <Pencil className="size-4" />
-              </Button>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon-sm"
-                disabled={isSelected}
-                aria-label={`Delete ${row.original.name}`}
-                className={cn(
-                  "text-red-50 hover:bg-red-10 hover:text-red-60",
-                  isSelected && "text-grey-60 hover:bg-transparent",
-                )}
-                onClick={(event) => {
-                  event.stopPropagation();
-                  setDeleteTarget({
-                    type: "single",
-                    record: row.original,
-                  });
-                }}
-              >
-                <Trash2 className="size-4" />
-              </Button>
-            </div>
-          );
-        },
+        header: () => <div className="text-right">Action</div>,
+        cell: ({ row }) => (
+          <div className="flex items-center justify-end gap-3">
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-sm"
+              aria-label={`Edit ${row.original.name}`}
+              className="text-blue-60 hover:bg-blue-10 hover:text-blue-50"
+              onClick={(event) => {
+                event.stopPropagation();
+                navigate(
+                  `/master-file/authority-files/location/edit/${row.original.id}`,
+                );
+              }}
+            >
+              <Pencil className="size-4" />
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-sm"
+              aria-label={`Delete ${row.original.name}`}
+              className="text-red-50 hover:bg-red-10 hover:text-red-60"
+              onClick={(event) => {
+                event.stopPropagation();
+                setDeleteRecord(row.original);
+              }}
+            >
+              <Trash2 className="size-4" />
+            </Button>
+          </div>
+        ),
       },
     ],
     [
       allCurrentPageSelected,
       currentPageIds,
-      navigate,
       selectedIdSet,
       someCurrentPageSelected,
+      navigate,
     ],
   );
 
   return (
-    <PageContainer
-      className={cn(selectedCount > 0 ? "pb-32 md:pb-36" : "pb-10")}
-    >
-      <AppPageHeader title="Author" />
+    <PageContainer className="pb-10">
+      <AppPageHeader title="Location" />
 
       <MdUpwardCard className="mt-5">
-        <AuthorToolbar
+        <LocationToolbar
           search={search}
           activeFilter={activeFilter}
+          onCreate={() => navigate("/master-file/authority-files/location/create")}
           onSearchChange={(value) => {
             setSearch(value);
             setSelectedIds([]);
@@ -476,9 +364,6 @@ export function AuthorPage() {
             setActiveFilter(value);
             setSelectedIds([]);
           }}
-          onCreate={() =>
-            navigate("/master-file/authority-files/author/create")
-          }
         />
 
         <Spinner visible={isFiltering}>
@@ -488,14 +373,12 @@ export function AuthorPage() {
             data={displayedRecords}
             emptyMessage="No data."
             onRowClick={(record) =>
-              navigate(
-                `/master-file/authority-files/author/detail/${record.id}`,
-              )
+              navigate(`/master-file/authority-files/location/detail/${record.id}`)
             }
           />
         </Spinner>
 
-        <AuthorFooter
+        <LocationFooter
           pageSize={pageSize}
           totalItems={filteredRecords.length}
           displayedCount={displayedRecords.length}
@@ -506,26 +389,14 @@ export function AuthorPage() {
         />
       </MdUpwardCard>
 
-      {selectedCount > 0 ? (
-        <AuthorSelectionBar
-          sidebarOpen={sidebarOpen}
-          onDeleteSelected={handleOpenDeleteSelected}
-        />
-      ) : null}
-
-      <AuthorDeleteModal
-        open={deleteTarget !== null}
+      <LocationDeleteModal
+        open={deleteRecord !== null}
         onOpenChange={(open) => {
           if (!open) {
-            setDeleteTarget(null);
+            setDeleteRecord(null);
           }
         }}
         onDelete={handleConfirmDelete}
-        description={
-          deleteTarget?.type === "selected"
-            ? "Are you sure you want to delete selected Authors?"
-            : "Are you sure you want to delete this Author?"
-        }
       />
     </PageContainer>
   );

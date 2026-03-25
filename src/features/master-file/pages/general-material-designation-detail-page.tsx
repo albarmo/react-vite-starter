@@ -106,7 +106,6 @@ export function GeneralMaterialDesignationDetailPage() {
             <Button
               type="button"
               variant="outline"
-              className="h-11 px-6"
               onClick={() =>
                 navigate(`/master-file/authority-files/gmd/edit/${detail.id}`)
               }
@@ -117,7 +116,6 @@ export function GeneralMaterialDesignationDetailPage() {
             <Button
               type="button"
               variant="destructive"
-              className="h-11 px-6"
               onClick={() => setIsDeleteModalOpen(true)}
             >
               <Trash2 className="size-4" />

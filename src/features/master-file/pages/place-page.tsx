@@ -1,6 +1,12 @@
 "use client";
 
 import { useUiStore } from "@/app/store/ui.store";
+import { PlaceDeleteModal } from "@/features/master-file/components/place-delete-modal";
+import {
+  PLACE_PRESET_RECORDS,
+  type PlacePresetRecord,
+  type PlaceStatus,
+} from "@/features/master-file/components/place-form-presets";
 import { PageContainer } from "@/shared/components/common/app-page-container";
 import { AppPageHeader } from "@/shared/components/common/app-page-header";
 import { DataTable } from "@/shared/components/common/data-table";
@@ -22,24 +28,11 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { useDeferredValue, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthorDeleteModal } from "../components/author-delete-modal";
-
-type AuthorStatus = "active" | "orphaned";
-
-type AuthorRecord = {
-  id: string;
-  name: string;
-  birthYear: string;
-  type: string;
-  files: string;
-  status: AuthorStatus;
-  updatedAt: string;
-};
 
 type DeleteTarget =
   | {
       type: "single";
-      record: AuthorRecord;
+      record: PlacePresetRecord;
     }
   | {
       type: "selected";
@@ -48,10 +41,10 @@ type DeleteTarget =
 
 type ToolbarProps = {
   search: string;
-  activeFilter: AuthorStatus;
+  activeFilter: PlaceStatus;
   onSearchChange: (value: string) => void;
   onClearSearch: () => void;
-  onFilterChange: (value: AuthorStatus) => void;
+  onFilterChange: (value: PlaceStatus) => void;
   onCreate: () => void;
 };
 
@@ -68,28 +61,8 @@ type SelectionBarProps = {
 };
 
 const PAGE_SIZE_OPTIONS = [10, 20, 50];
-const AUTHOR_RECORDS: AuthorRecord[] = [
-  {
-    id: "author-1",
-    name: "Gunawan",
-    birthYear: "-",
-    type: "Personal Name",
-    files: "-",
-    status: "active",
-    updatedAt: "28 Feb 2026",
-  },
-  {
-    id: "author-2",
-    name: "Orphan Author",
-    birthYear: "-",
-    type: "Organizational Body",
-    files: "-",
-    status: "orphaned",
-    updatedAt: "15 Mar 2026",
-  },
-];
 
-function AuthorToolbar({
+function PlaceToolbar({
   search,
   activeFilter,
   onSearchChange,
@@ -100,7 +73,7 @@ function AuthorToolbar({
   return (
     <div className="mb-5 space-y-5">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="w-full lg:max-w-75">
+        <div className="w-full lg:max-w-[300px]">
           <SearchInput
             value={search}
             placeholder="Search"
@@ -148,7 +121,7 @@ function AuthorToolbar({
   );
 }
 
-function AuthorFooter({
+function PlaceFooter({
   pageSize,
   totalItems,
   displayedCount,
@@ -182,7 +155,7 @@ function AuthorFooter({
   );
 }
 
-function AuthorSelectionBar({
+function PlaceSelectionBar({
   sidebarOpen,
   onDeleteSelected,
 }: SelectionBarProps) {
@@ -208,13 +181,13 @@ function AuthorSelectionBar({
   );
 }
 
-export function AuthorPage() {
+export function PlacePage() {
   const navigate = useNavigate();
   const sidebarOpen = useUiStore((state) => state.sidebarOpen);
-  const [records, setRecords] = useState(AUTHOR_RECORDS);
+  const [records, setRecords] = useState(PLACE_PRESET_RECORDS);
   const [deleteTarget, setDeleteTarget] = useState<DeleteTarget | null>(null);
   const [search, setSearch] = useState("");
-  const [activeFilter, setActiveFilter] = useState<AuthorStatus>("active");
+  const [activeFilter, setActiveFilter] = useState<PlaceStatus>("active");
   const [pageSize, setPageSize] = useState(10);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
@@ -280,7 +253,7 @@ export function AuthorPage() {
     setDeleteTarget(null);
   };
 
-  const columns = useMemo<ColumnDef<AuthorRecord>[]>(
+  const columns = useMemo<ColumnDef<PlacePresetRecord>[]>(
     () => [
       {
         id: "select",
@@ -302,7 +275,7 @@ export function AuthorPage() {
                 return current.filter((id) => !pageIdSet.has(id));
               });
             }}
-            ariaLabel="Select all rows on current page"
+            ariaLabel="Select all place rows on current page"
           />
         ),
         cell: ({ row }) => (
@@ -337,7 +310,7 @@ export function AuthorPage() {
       {
         accessorKey: "name",
         meta: {
-          headClassName: "min-w-[180px]",
+          headClassName: "min-w-[280px]",
           cellClassName: "px-3 py-4",
         },
         header: "Name",
@@ -346,30 +319,11 @@ export function AuthorPage() {
         ),
       },
       {
-        accessorKey: "birthYear",
-        header: "Birth Year",
-        cell: ({ row }) => (
-          <span className="text-base text-grey-90">
-            {row.original.birthYear}
-          </span>
-        ),
-      },
-      {
-        accessorKey: "type",
-        header: "Type",
-        cell: ({ row }) => (
-          <span className="text-base text-grey-90">{row.original.type}</span>
-        ),
-      },
-      {
-        accessorKey: "files",
-        header: "Files",
-        cell: ({ row }) => (
-          <span className="text-base text-grey-90">{row.original.files}</span>
-        ),
-      },
-      {
         accessorKey: "status",
+        meta: {
+          headClassName: "w-[180px]",
+          cellClassName: "px-3 py-4",
+        },
         header: "Status",
         cell: ({ row }) => (
           <Badge
@@ -382,6 +336,10 @@ export function AuthorPage() {
       },
       {
         accessorKey: "updatedAt",
+        meta: {
+          headClassName: "w-[180px]",
+          cellClassName: "px-3 py-4",
+        },
         header: "Last Updated",
         cell: ({ row }) => (
           <span className="text-base text-grey-90">
@@ -392,10 +350,10 @@ export function AuthorPage() {
       {
         id: "actions",
         meta: {
-          headClassName: "w-max text-right",
-          cellClassName: "px-3 py-4 text-center",
+          headClassName: "w-[110px] text-right",
+          cellClassName: "px-3 py-4 text-right",
         },
-        header: () => <div className="text-center">Action</div>,
+        header: () => <div className="text-right">Action</div>,
         cell: ({ row }) => {
           const isSelected = selectedIdSet.has(row.original.id);
 
@@ -414,7 +372,7 @@ export function AuthorPage() {
                 onClick={(event) => {
                   event.stopPropagation();
                   navigate(
-                    `/master-file/authority-files/author/edit/${row.original.id}`,
+                    `/master-file/look-up-files/place/edit/${row.original.id}`,
                   );
                 }}
               >
@@ -458,10 +416,10 @@ export function AuthorPage() {
     <PageContainer
       className={cn(selectedCount > 0 ? "pb-32 md:pb-36" : "pb-10")}
     >
-      <AppPageHeader title="Author" />
+      <AppPageHeader title="Place" />
 
       <MdUpwardCard className="mt-5">
-        <AuthorToolbar
+        <PlaceToolbar
           search={search}
           activeFilter={activeFilter}
           onSearchChange={(value) => {
@@ -476,9 +434,7 @@ export function AuthorPage() {
             setActiveFilter(value);
             setSelectedIds([]);
           }}
-          onCreate={() =>
-            navigate("/master-file/authority-files/author/create")
-          }
+          onCreate={() => navigate("/master-file/look-up-files/place/create")}
         />
 
         <Spinner visible={isFiltering}>
@@ -488,14 +444,12 @@ export function AuthorPage() {
             data={displayedRecords}
             emptyMessage="No data."
             onRowClick={(record) =>
-              navigate(
-                `/master-file/authority-files/author/detail/${record.id}`,
-              )
+              navigate(`/master-file/look-up-files/place/detail/${record.id}`)
             }
           />
         </Spinner>
 
-        <AuthorFooter
+        <PlaceFooter
           pageSize={pageSize}
           totalItems={filteredRecords.length}
           displayedCount={displayedRecords.length}
@@ -507,13 +461,13 @@ export function AuthorPage() {
       </MdUpwardCard>
 
       {selectedCount > 0 ? (
-        <AuthorSelectionBar
+        <PlaceSelectionBar
           sidebarOpen={sidebarOpen}
           onDeleteSelected={handleOpenDeleteSelected}
         />
       ) : null}
 
-      <AuthorDeleteModal
+      <PlaceDeleteModal
         open={deleteTarget !== null}
         onOpenChange={(open) => {
           if (!open) {
@@ -523,8 +477,8 @@ export function AuthorPage() {
         onDelete={handleConfirmDelete}
         description={
           deleteTarget?.type === "selected"
-            ? "Are you sure you want to delete selected Authors?"
-            : "Are you sure you want to delete this Author?"
+            ? "Are you sure you want to delete selected Places?"
+            : "Are you sure you want to delete this Place?"
         }
       />
     </PageContainer>

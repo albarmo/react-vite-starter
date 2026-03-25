@@ -12,6 +12,9 @@ import { BibliographicListPage } from "@/features/bibliographic/pages/bibliograp
 import { BibliographicPage } from "@/features/bibliographic/pages/bibliographic-page";
 import { CirculationPage } from "@/features/circulation/pages/circulation-page";
 import { DashboardPage } from "@/features/dashboard/pages/dashboard-page";
+import { AuthorCreatePage } from "@/features/master-file/pages/author-create-page";
+import { AuthorDetailPage } from "@/features/master-file/pages/author-detail-page";
+import { AuthorEditPage } from "@/features/master-file/pages/author-edit-page";
 import { AuthorPage } from "@/features/master-file/pages/author-page";
 import { CarrierTypeCreatePage } from "@/features/master-file/pages/carrier-type-create-page";
 import { CarrierTypeEditPage } from "@/features/master-file/pages/carrier-type-edit-page";
@@ -20,18 +23,34 @@ import { ContentTypeCreatePage } from "@/features/master-file/pages/content-type
 import { ContentTypeDetailPage } from "@/features/master-file/pages/content-type-detail-page";
 import { ContentTypeEditPage } from "@/features/master-file/pages/content-type-edit-page";
 import ContentTypePage from "@/features/master-file/pages/content-type-page";
+import { CrossReferenceCreatePage } from "@/features/master-file/pages/cross-reference-create-page";
+import { CrossReferenceDetailPage } from "@/features/master-file/pages/cross-reference-detail-page";
+import { CrossReferenceEditPage } from "@/features/master-file/pages/cross-reference-edit-page";
 import { GeneralMaterialDesignationCreatePage } from "@/features/master-file/pages/general-material-designation-create-page";
 import { GeneralMaterialDesignationDetailPage } from "@/features/master-file/pages/general-material-designation-detail-page";
 import { GeneralMaterialDesignationEditPage } from "@/features/master-file/pages/general-material-designation-edit-page";
 import { GeneralMaterialDesignationPage } from "@/features/master-file/pages/general-material-designation-page";
+import { LocationCreatePage } from "@/features/master-file/pages/location-create-page";
+import { LocationDetailPage } from "@/features/master-file/pages/location-detail-page";
+import { LocationEditPage } from "@/features/master-file/pages/location-edit-page";
+import LocationPage from "@/features/master-file/pages/location-page";
+import LookupFilesPage from "@/features/master-file/pages/lookup-files-page";
 import { MasterFilePage } from "@/features/master-file/pages/master-file-page";
 import { MediaTypeCreatePage } from "@/features/master-file/pages/media-type-create-page";
 import { MediaTypeEditPage } from "@/features/master-file/pages/media-type-edit-page";
 import { MediaTypePage } from "@/features/master-file/pages/media-type-page";
+import { PlaceCreatePage } from "@/features/master-file/pages/place-create-page";
+import { PlaceDetailPage } from "@/features/master-file/pages/place-detail-page";
+import { PlaceEditPage } from "@/features/master-file/pages/place-edit-page";
+import { PlacePage } from "@/features/master-file/pages/place-page";
 import { PublisherCreatePage } from "@/features/master-file/pages/publisher-create-page";
 import { PublisherDetailPage } from "@/features/master-file/pages/publisher-detail-page";
 import { PublisherEditPage } from "@/features/master-file/pages/publisher-edit-page";
 import { PublisherPage } from "@/features/master-file/pages/publisher-page";
+import { SubjectCreatePage } from "@/features/master-file/pages/subject-create-page";
+import { SubjectDetailPage } from "@/features/master-file/pages/subject-detail-page";
+import { SubjectEditPage } from "@/features/master-file/pages/subject-edit-page";
+import SubjectPage from "@/features/master-file/pages/subject-page";
 import { SupplierCreatePage } from "@/features/master-file/pages/supplier-create-page";
 import { SupplierDetailPage } from "@/features/master-file/pages/supplier-detail-page";
 import { SupplierEditPage } from "@/features/master-file/pages/supplier-edit-page";
@@ -165,9 +184,84 @@ const masterFileRoutes = [
     element: <SupplierDetailPage />,
   },
   { path: "master-file/authority-files/author", element: <AuthorPage /> },
-  { path: "master-file/authority-files/subject", element: <MasterFilePage /> },
-  { path: "master-file/authority-files/location", element: <MasterFilePage /> },
-  { path: "master-file/look-up-files", element: <MasterFilePage /> },
+  {
+    path: "master-file/authority-files/author/create",
+    element: <AuthorCreatePage />,
+  },
+  {
+    path: "master-file/authority-files/author/edit/:id",
+    element: <AuthorEditPage />,
+  },
+  {
+    path: "master-file/authority-files/author/detail/:id",
+    element: <AuthorDetailPage />,
+  },
+  { path: "master-file/authority-files/subject", element: <SubjectPage /> },
+  {
+    path: "master-file/authority-files/subject/create",
+    element: <SubjectCreatePage />,
+  },
+  {
+    path: "master-file/authority-files/subject/edit/:id",
+    element: <SubjectEditPage />,
+  },
+  {
+    path: "master-file/authority-files/subject/detail/:id",
+    element: <SubjectDetailPage />,
+  },
+  {
+    path: "master-file/authority-files/subject/cross-reference/create",
+    element: <CrossReferenceCreatePage />,
+  },
+  {
+    path: "master-file/authority-files/subject/cross-reference/edit/:id",
+    element: <CrossReferenceEditPage />,
+  },
+  {
+    path: "master-file/authority-files/subject/cross-reference/detail/:id",
+    element: <CrossReferenceDetailPage />,
+  },
+  { path: "master-file/authority-files/location", element: <LocationPage /> },
+  {
+    path: "master-file/authority-files/location/create",
+    element: <LocationCreatePage />,
+  },
+  {
+    path: "master-file/authority-files/location/edit/:id",
+    element: <LocationEditPage />,
+  },
+  {
+    path: "master-file/authority-files/location/detail/:id",
+    element: <LocationDetailPage />,
+  },
+  { path: "master-file/look-up-files", element: <LookupFilesPage /> },
+  { path: "master-file/look-up-files/place", element: <PlacePage /> },
+  {
+    path: "master-file/look-up-files/place/create",
+    element: <PlaceCreatePage />,
+  },
+  {
+    path: "master-file/look-up-files/place/edit/:id",
+    element: <PlaceEditPage />,
+  },
+  {
+    path: "master-file/look-up-files/place/detail/:id",
+    element: <PlaceDetailPage />,
+  },
+  {
+    path: "master-file/look-up-files/item-status",
+    element: <LookupFilesPage />,
+  },
+  {
+    path: "master-file/look-up-files/collection-type",
+    element: <LookupFilesPage />,
+  },
+  {
+    path: "master-file/look-up-files/doc-language",
+    element: <LookupFilesPage />,
+  },
+  { path: "master-file/look-up-files/label", element: <LookupFilesPage /> },
+  { path: "master-file/look-up-files/frequency", element: <LookupFilesPage /> },
   { path: "master-file/tools", element: <MasterFilePage /> },
 ];
 

@@ -53,6 +53,15 @@ const AUTHORITY_FILE_ITEMS: SidebarSubItem[] = [
   { id: "location", label: "Location" },
 ];
 
+const LOOKUP_FILE_ITEMS: SidebarSubItem[] = [
+  { id: "place", label: "Place" },
+  { id: "item-status", label: "Item Status" },
+  { id: "collection-type", label: "Collection Type" },
+  { id: "doc-language", label: "Doc. Language" },
+  { id: "label", label: "Label" },
+  { id: "frequency", label: "Frequency" },
+];
+
 const MASTER_FILE_GROUPS: SidebarGroup[] = [
   {
     id: "authority-files",
@@ -60,7 +69,12 @@ const MASTER_FILE_GROUPS: SidebarGroup[] = [
     items: AUTHORITY_FILE_ITEMS,
     collapsible: true,
   },
-  { id: "look-up-files", label: "Look Up Files" },
+  {
+    id: "look-up-files",
+    label: "Look Up Files",
+    items: LOOKUP_FILE_ITEMS,
+    collapsible: true,
+  },
   { id: "tools", label: "Tools" },
 ];
 

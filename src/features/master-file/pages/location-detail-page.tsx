@@ -1,6 +1,6 @@
 "use client";
 
-import { SupplierDeleteModal } from "@/features/master-file/components/supplier-delete-modal";
+import { LocationDeleteModal } from "@/features/master-file/components/location-delete-modal";
 import { PageContainer } from "@/shared/components/common/app-page-container";
 import { MdUpwardCard } from "@/shared/components/common/md-upward-card";
 import {
@@ -16,43 +16,53 @@ import { Pencil, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-type SupplierDetail = {
+type LocationDetail = {
   id: string;
+  code: string;
   name: string;
-  address: string;
-  contact: string;
-  phoneNumber: string;
-  faxNumber: string;
-  accountNumber: string;
   updatedAt: string;
 };
 
-const SUPPLIER_DETAILS: SupplierDetail[] = [
+const LOCATION_DETAIL_PRESETS: Omit<LocationDetail, "id">[] = [
   {
-    id: "supplier-1",
-    name: "Gramedia",
-    address: "Jalan Abuserin III",
-    contact: "Mariyanto",
-    phoneNumber: "081234567890",
-    faxNumber: "081234567890",
-    accountNumber: "081234567890",
+    code: "SL",
+    name: "My Library",
     updatedAt: "28 Feb 2026",
+  },
+  {
+    code: "ORP",
+    name: "Orphaned Location",
+    updatedAt: "15 Mar 2026",
   },
 ];
 
-function SupplierDetailBreadcrumb() {
+function LocationDetailBreadcrumb() {
   return (
     <Breadcrumb className="mt-2">
       <BreadcrumbList className="text-sm text-grey-80">
         <BreadcrumbItem>
           <BreadcrumbLink asChild className="hover:text-blue-50">
-            <Link to="/master-file/authority-files/supplier">Supplier</Link>
+            <Link to="/master-file">Master File</Link>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator className="text-grey-70" />
+        <BreadcrumbItem>
+          <BreadcrumbLink asChild className="hover:text-blue-50">
+            <Link to="/master-file/authority-files/location">
+              Authority Files
+            </Link>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator className="text-grey-70" />
+        <BreadcrumbItem>
+          <BreadcrumbLink asChild className="hover:text-blue-50">
+            <Link to="/master-file/authority-files/location">Location</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator className="text-grey-70" />
         <BreadcrumbItem>
           <BreadcrumbPage className="font-medium text-blue-50">
-            Supplier Detail
+            Location Detail
           </BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
@@ -60,29 +70,37 @@ function SupplierDetailBreadcrumb() {
   );
 }
 
-export function SupplierDetailPage() {
+export function LocationDetailPage() {
   const navigate = useNavigate();
-  const { id = "supplier-1" } = useParams();
+  const { id = "location-1" } = useParams();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const detail = useMemo(
-    () =>
-      SUPPLIER_DETAILS.find((item) => item.id === id) ?? SUPPLIER_DETAILS[0],
-    [id],
-  );
+  const detail = useMemo(() => {
+    const matchedIndex = Number.parseInt(id.replace(/^location-/, ""), 10);
+    const safeIndex =
+      Number.isFinite(matchedIndex) && matchedIndex > 0 ? matchedIndex - 1 : 0;
+    const preset =
+      LOCATION_DETAIL_PRESETS[safeIndex % LOCATION_DETAIL_PRESETS.length] ??
+      LOCATION_DETAIL_PRESETS[0];
+
+    return {
+      id,
+      ...preset,
+    };
+  }, [id]);
 
   return (
     <PageContainer className="pt-6 pb-10 md:pt-8">
       <div>
-        <h1 className="text-2xl font-medium text-primary">Supplier Detail</h1>
-        <SupplierDetailBreadcrumb />
+        <h1 className="text-2xl font-medium text-primary">Location Detail</h1>
+        <LocationDetailBreadcrumb />
       </div>
 
       <MdUpwardCard className="mt-6 rounded-[18px] p-5">
         <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
           <div>
             <h2 className="text-xl font-medium text-grey-100">
-              Supplier Detail
+              Location Detail
             </h2>
           </div>
 
@@ -90,10 +108,9 @@ export function SupplierDetailPage() {
             <Button
               type="button"
               variant="outline"
+              className="h-11 px-6"
               onClick={() =>
-                navigate(
-                  `/master-file/authority-files/supplier/edit/${detail.id}`,
-                )
+                navigate(`/master-file/authority-files/location/edit/${detail.id}`)
               }
             >
               <Pencil className="size-4" />
@@ -102,6 +119,7 @@ export function SupplierDetailPage() {
             <Button
               type="button"
               variant="destructive"
+              className="h-11 px-6"
               onClick={() => setIsDeleteModalOpen(true)}
             >
               <Trash2 className="size-4" />
@@ -110,34 +128,22 @@ export function SupplierDetailPage() {
           </div>
         </div>
 
-        <dl className="mt-8 grid max-w-140 grid-cols-[130px_minmax(0,1fr)] gap-x-8 gap-y-4">
+        <dl className="mt-8 grid max-w-115 grid-cols-[104px_minmax(0,1fr)] gap-x-8 gap-y-4">
+          <dt className="text-grey-90">Code</dt>
+          <dd className="text-grey-100">{detail.code}</dd>
+
           <dt className="text-grey-90">Name</dt>
           <dd className="text-grey-100">{detail.name}</dd>
-
-          <dt className="text-grey-90">Address</dt>
-          <dd className="text-grey-100">{detail.address}</dd>
-
-          <dt className="text-grey-90">Contact Person</dt>
-          <dd className="text-grey-100">{detail.contact}</dd>
-
-          <dt className="text-grey-90">Phone Number</dt>
-          <dd className="text-grey-100">{detail.phoneNumber}</dd>
-
-          <dt className="text-grey-90">Fax Number</dt>
-          <dd className="text-grey-100">{detail.faxNumber}</dd>
-
-          <dt className="text-grey-90">Account Number</dt>
-          <dd className="text-grey-100">{detail.accountNumber}</dd>
 
           <dt className="text-grey-90">Last Updated</dt>
           <dd className="text-grey-100">{detail.updatedAt}</dd>
         </dl>
       </MdUpwardCard>
 
-      <SupplierDeleteModal
+      <LocationDeleteModal
         open={isDeleteModalOpen}
         onOpenChange={setIsDeleteModalOpen}
-        onDelete={() => navigate("/master-file/authority-files/supplier")}
+        onDelete={() => navigate("/master-file/authority-files/location")}
       />
     </PageContainer>
   );

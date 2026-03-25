@@ -1,8 +1,10 @@
 "use client";
 
-import { SupplierDeleteModal } from "@/features/master-file/components/supplier-delete-modal";
+import { PlaceDeleteModal } from "@/features/master-file/components/place-delete-modal";
+import { PLACE_PRESET_RECORDS } from "@/features/master-file/components/place-form-presets";
 import { PageContainer } from "@/shared/components/common/app-page-container";
 import { MdUpwardCard } from "@/shared/components/common/md-upward-card";
+import { Badge } from "@/shared/components/ui/badge";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,43 +18,31 @@ import { Pencil, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-type SupplierDetail = {
-  id: string;
-  name: string;
-  address: string;
-  contact: string;
-  phoneNumber: string;
-  faxNumber: string;
-  accountNumber: string;
-  updatedAt: string;
-};
-
-const SUPPLIER_DETAILS: SupplierDetail[] = [
-  {
-    id: "supplier-1",
-    name: "Gramedia",
-    address: "Jalan Abuserin III",
-    contact: "Mariyanto",
-    phoneNumber: "081234567890",
-    faxNumber: "081234567890",
-    accountNumber: "081234567890",
-    updatedAt: "28 Feb 2026",
-  },
-];
-
-function SupplierDetailBreadcrumb() {
+function PlaceDetailBreadcrumb() {
   return (
     <Breadcrumb className="mt-2">
       <BreadcrumbList className="text-sm text-grey-80">
         <BreadcrumbItem>
           <BreadcrumbLink asChild className="hover:text-blue-50">
-            <Link to="/master-file/authority-files/supplier">Supplier</Link>
+            <Link to="/master-file">Master File</Link>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator className="text-grey-70" />
+        <BreadcrumbItem>
+          <BreadcrumbLink asChild className="hover:text-blue-50">
+            <Link to="/master-file/look-up-files/place">Look Up Files</Link>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator className="text-grey-70" />
+        <BreadcrumbItem>
+          <BreadcrumbLink asChild className="hover:text-blue-50">
+            <Link to="/master-file/look-up-files/place">Place</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator className="text-grey-70" />
         <BreadcrumbItem>
           <BreadcrumbPage className="font-medium text-blue-50">
-            Supplier Detail
+            Place Detail
           </BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
@@ -60,41 +50,34 @@ function SupplierDetailBreadcrumb() {
   );
 }
 
-export function SupplierDetailPage() {
+export function PlaceDetailPage() {
   const navigate = useNavigate();
-  const { id = "supplier-1" } = useParams();
+  const { id = "place-1" } = useParams();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const detail = useMemo(
-    () =>
-      SUPPLIER_DETAILS.find((item) => item.id === id) ?? SUPPLIER_DETAILS[0],
+    () => PLACE_PRESET_RECORDS.find((item) => item.id === id) ?? PLACE_PRESET_RECORDS[0],
     [id],
   );
 
   return (
     <PageContainer className="pt-6 pb-10 md:pt-8">
       <div>
-        <h1 className="text-2xl font-medium text-primary">Supplier Detail</h1>
-        <SupplierDetailBreadcrumb />
+        <h1 className="text-2xl font-medium text-primary">Place Detail</h1>
+        <PlaceDetailBreadcrumb />
       </div>
 
       <MdUpwardCard className="mt-6 rounded-[18px] p-5">
         <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
           <div>
-            <h2 className="text-xl font-medium text-grey-100">
-              Supplier Detail
-            </h2>
+            <h2 className="text-xl font-medium text-grey-100">Place Detail</h2>
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row">
             <Button
               type="button"
               variant="outline"
-              onClick={() =>
-                navigate(
-                  `/master-file/authority-files/supplier/edit/${detail.id}`,
-                )
-              }
+              onClick={() => navigate(`/master-file/look-up-files/place/edit/${detail.id}`)}
             >
               <Pencil className="size-4" />
               Edit
@@ -110,34 +93,29 @@ export function SupplierDetailPage() {
           </div>
         </div>
 
-        <dl className="mt-8 grid max-w-140 grid-cols-[130px_minmax(0,1fr)] gap-x-8 gap-y-4">
+        <dl className="mt-8 grid max-w-115 grid-cols-[104px_minmax(0,1fr)] gap-x-8 gap-y-4">
           <dt className="text-grey-90">Name</dt>
           <dd className="text-grey-100">{detail.name}</dd>
 
-          <dt className="text-grey-90">Address</dt>
-          <dd className="text-grey-100">{detail.address}</dd>
-
-          <dt className="text-grey-90">Contact Person</dt>
-          <dd className="text-grey-100">{detail.contact}</dd>
-
-          <dt className="text-grey-90">Phone Number</dt>
-          <dd className="text-grey-100">{detail.phoneNumber}</dd>
-
-          <dt className="text-grey-90">Fax Number</dt>
-          <dd className="text-grey-100">{detail.faxNumber}</dd>
-
-          <dt className="text-grey-90">Account Number</dt>
-          <dd className="text-grey-100">{detail.accountNumber}</dd>
+          <dt className="text-grey-90">Status</dt>
+          <dd>
+            <Badge
+              variant={detail.status === "active" ? "green" : "orange"}
+              className="rounded-md px-2 py-0.5 text-sm font-medium"
+            >
+              {detail.status === "active" ? "Active" : "Orphaned"}
+            </Badge>
+          </dd>
 
           <dt className="text-grey-90">Last Updated</dt>
           <dd className="text-grey-100">{detail.updatedAt}</dd>
         </dl>
       </MdUpwardCard>
 
-      <SupplierDeleteModal
+      <PlaceDeleteModal
         open={isDeleteModalOpen}
         onOpenChange={setIsDeleteModalOpen}
-        onDelete={() => navigate("/master-file/authority-files/supplier")}
+        onDelete={() => navigate("/master-file/look-up-files/place")}
       />
     </PageContainer>
   );

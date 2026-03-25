@@ -1,6 +1,5 @@
 "use client";
 
-import { PublisherDeleteModal } from "@/features/master-file/components/publisher-delete-modal";
 import { PageContainer } from "@/shared/components/common/app-page-container";
 import { MdUpwardCard } from "@/shared/components/common/md-upward-card";
 import { Badge } from "@/shared/components/ui/badge";
@@ -16,44 +15,66 @@ import { Button } from "@/shared/components/ui/button";
 import { Pencil, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { AuthorDeleteModal } from "../components/author-delete-modal";
 
-type PublisherStatus = "active" | "orphaned";
+type AuthorStatus = "active" | "orphaned";
 
-type PublisherDetail = {
+type AuthorDetail = {
   id: string;
   name: string;
-  status: PublisherStatus;
+  birthYear: string;
+  type: string;
+  files: string;
+  status: AuthorStatus;
   updatedAt: string;
 };
 
-const PUBLISHER_DETAILS: PublisherDetail[] = [
+const AUTHOR_DETAILS: AuthorDetail[] = [
   {
-    id: "publisher-1",
-    name: "\\'Gramedia",
+    id: "author-1",
+    name: "Gunawan",
+    birthYear: "-",
+    type: "Personal Name",
+    files: "-",
     status: "active",
-    updatedAt: "05 Mar 2026",
+    updatedAt: "28 Feb 2026",
   },
   {
-    id: "publisher-2",
-    name: "Orphan Publisher",
+    id: "author-2",
+    name: "Orphan Author",
+    birthYear: "-",
+    type: "Personal Name",
+    files: "-",
     status: "orphaned",
     updatedAt: "15 Mar 2026",
   },
 ];
 
-function PublisherDetailBreadcrumb() {
+function AuthorDetailBreadcrumb() {
   return (
     <Breadcrumb className="mt-2">
       <BreadcrumbList className="text-sm text-grey-80">
         <BreadcrumbItem>
           <BreadcrumbLink asChild className="hover:text-blue-50">
-            <Link to="/master-file/authority-files/publisher">Publisher</Link>
+            <Link to="/master-file">Master File</Link>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator className="text-grey-70" />
+        <BreadcrumbItem>
+          <BreadcrumbLink asChild className="hover:text-blue-50">
+            <Link to="/master-file/authority-files/author">Authority Files</Link>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator className="text-grey-70" />
+        <BreadcrumbItem>
+          <BreadcrumbLink asChild className="hover:text-blue-50">
+            <Link to="/master-file/authority-files/author">Author</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator className="text-grey-70" />
         <BreadcrumbItem>
           <BreadcrumbPage className="font-medium text-blue-50">
-            Publisher Detail
+            Author Detail
           </BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
@@ -61,39 +82,37 @@ function PublisherDetailBreadcrumb() {
   );
 }
 
-export function PublisherDetailPage() {
+export function AuthorDetailPage() {
   const navigate = useNavigate();
-  const { id = "publisher-1" } = useParams();
+  const { id = "author-1" } = useParams();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const detail = useMemo(
-    () =>
-      PUBLISHER_DETAILS.find((item) => item.id === id) ?? PUBLISHER_DETAILS[0],
+    () => AUTHOR_DETAILS.find((item) => item.id === id) ?? AUTHOR_DETAILS[0],
     [id],
   );
 
   return (
     <PageContainer className="pt-6 pb-10 md:pt-8">
       <div>
-        <h1 className="text-2xl font-medium text-primary">Publisher Detail</h1>
-        <PublisherDetailBreadcrumb />
+        <h1 className="text-2xl font-medium text-primary">Author Detail</h1>
+        <AuthorDetailBreadcrumb />
       </div>
 
       <MdUpwardCard className="mt-6 rounded-[18px] p-5">
         <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
           <div>
-            <h2 className="text-xl font-medium text-grey-100">
-              Publisher Detail
-            </h2>
+            <h2 className="text-xl font-medium text-grey-100">Author Detail</h2>
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row">
             <Button
               type="button"
               variant="outline"
+              className="h-11 px-6"
               onClick={() =>
                 navigate(
-                  `/master-file/authority-files/publisher/edit/${detail.id}`,
+                  `/master-file/authority-files/author/edit/${detail.id}`,
                 )
               }
             >
@@ -103,6 +122,7 @@ export function PublisherDetailPage() {
             <Button
               type="button"
               variant="destructive"
+              className="h-11 px-6"
               onClick={() => setIsDeleteModalOpen(true)}
             >
               <Trash2 className="size-4" />
@@ -111,9 +131,18 @@ export function PublisherDetailPage() {
           </div>
         </div>
 
-        <dl className="mt-8 grid max-w-115 grid-cols-[104px_minmax(0,1fr)] gap-x-8 gap-y-4">
+        <dl className="mt-8 grid max-w-130 grid-cols-[130px_minmax(0,1fr)] gap-x-8 gap-y-4">
           <dt className="text-grey-90">Name</dt>
           <dd className="text-grey-100">{detail.name}</dd>
+
+          <dt className="text-grey-90">Birth Year</dt>
+          <dd className="text-grey-100">{detail.birthYear}</dd>
+
+          <dt className="text-grey-90">Type</dt>
+          <dd className="text-grey-100">{detail.type}</dd>
+
+          <dt className="text-grey-90">Files</dt>
+          <dd className="text-grey-100">{detail.files}</dd>
 
           <dt className="text-grey-90">Status</dt>
           <dd>
@@ -130,10 +159,10 @@ export function PublisherDetailPage() {
         </dl>
       </MdUpwardCard>
 
-      <PublisherDeleteModal
+      <AuthorDeleteModal
         open={isDeleteModalOpen}
         onOpenChange={setIsDeleteModalOpen}
-        onDelete={() => navigate("/master-file/authority-files/publisher")}
+        onDelete={() => navigate("/master-file/authority-files/author")}
       />
     </PageContainer>
   );
