@@ -1,6 +1,10 @@
 "use client";
 
 import { BibliographicDeleteModal } from "@/features/bibliographic/components/bibliographic-delete-modal";
+import type {
+  ItemDetailField,
+  ItemDetailRecord,
+} from "@/features/bibliographic/types/bibliographic-item-detail.types";
 import { PageContainer } from "@/shared/components/common/app-page-container";
 import { MdUpwardCard } from "@/shared/components/common/md-upward-card";
 import {
@@ -15,19 +19,6 @@ import { Button } from "@/shared/components/ui/button";
 import { Pencil, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-
-type ItemDetailField = {
-  label: string;
-  value: string;
-};
-
-type ItemDetailRecord = {
-  id: string;
-  bibliographicId: string;
-  itemCode: string;
-  title: string;
-  fields: ItemDetailField[];
-};
 
 const DEFAULT_ITEM_DETAIL: ItemDetailRecord = {
   id: "item-1",

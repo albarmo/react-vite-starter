@@ -1,5 +1,6 @@
 "use client";
 
+import type { BibliographicDeleteModalProps } from "@/features/bibliographic/types/bibliographic-modal.types";
 import { Button } from "@/shared/components/ui/button";
 import {
   Dialog,
@@ -10,15 +11,6 @@ import {
 } from "@/shared/components/ui/dialog";
 import { cn } from "@/shared/lib/cn";
 import { Trash2, X } from "lucide-react";
-import type { ReactNode } from "react";
-
-type BibliographicDeleteModalProps = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onDelete: () => void;
-  description: ReactNode;
-  title?: string;
-};
 
 export function BibliographicDeleteModal({
   open,

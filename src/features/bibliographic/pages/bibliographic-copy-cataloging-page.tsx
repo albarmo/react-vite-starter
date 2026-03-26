@@ -1,6 +1,13 @@
 "use client";
 
 import { useUiStore } from "@/app/store/ui.store";
+import type {
+  CatalogSourceOption,
+  CopyCatalogRecord,
+  CopyCatalogSelectionBarProps as SelectionBarProps,
+  SearchFieldOption,
+  SearchFilters,
+} from "@/features/bibliographic/types/bibliographic-copy-cataloging.types";
 import { PageContainer } from "@/shared/components/common/app-page-container";
 import { AppPageHeader } from "@/shared/components/common/app-page-header";
 import { DataTable } from "@/shared/components/common/data-table";
@@ -18,31 +25,6 @@ import {
 import { cn } from "@/shared/lib/cn";
 import { type ColumnDef } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
-
-type CopyCatalogRecord = {
-  id: string;
-  title: string;
-  author: string;
-  isbn: string;
-  gmd: string;
-  collation: string;
-  publisher: string;
-  publishingYear: string;
-};
-
-type SearchFieldOption = "all-fields" | "isbn" | "title-series" | "authors";
-type CatalogSourceOption = "loc-sru-voyager" | "slims-library";
-
-type SearchFilters = {
-  query: string;
-  field: SearchFieldOption;
-  source: CatalogSourceOption;
-};
-
-type SelectionBarProps = {
-  sidebarOpen: boolean;
-  onSaveSelected: () => void;
-};
 
 const PAGE_SIZE_OPTIONS = [10, 20, 50];
 const SEARCH_FIELD_OPTIONS: Array<{

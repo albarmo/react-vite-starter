@@ -22,39 +22,15 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { cn } from "@/shared/lib/cn";
+import type {
+  BibliographicItemFormProps,
+  BibliographicItemFormSelectOption as SelectOption,
+  ItemFormValues,
+} from "@/features/bibliographic/types/bibliographic-item-form.types";
 import { Calendar } from "lucide-react";
 import { useEffect, useMemo, type ReactNode } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-
-type SelectOption = {
-  value: string;
-  label: string;
-};
-
-type ItemFormValues = {
-  title: string;
-  itemCode: string;
-  inventoryCode: string;
-  location: string;
-  shelfLocation: string;
-  collectionType: string;
-  itemStatus: string;
-  orderNumber: string;
-  orderDate: string;
-  receivingDate: string;
-  supplier: string;
-  source: "buy" | "prize-grant";
-  invoice: string;
-  invoiceDate: string;
-  priceCurrency: string;
-  price: string;
-};
-
-type BibliographicItemFormProps = {
-  itemId?: string;
-  pageTitle?: string;
-};
 
 const FORM_INPUT_CLASS =
   "h-10.5 rounded-md border-grey-40 bg-white text-base text-grey-100 placeholder:text-grey-70 shadow-none";

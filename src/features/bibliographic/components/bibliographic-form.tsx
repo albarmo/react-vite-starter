@@ -1,6 +1,16 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { bibliographicFormSchema } from "@/features/bibliographic/schemas/bibliographic-form.schema";
+import type {
+  BibliographicFormAuthorEntry as AuthorEntry,
+  BibliographicFormData,
+  BibliographicFormInitialState,
+  BibliographicFormProps,
+  BibliographicFormLabelEntry as LabelEntry,
+  ScalarFieldName,
+  BibliographicSelectOption as SelectOption,
+  BibliographicFormSubjectEntry as SubjectEntry,
+} from "@/features/bibliographic/types/bibliographic-form.types";
 import { PageContainer } from "@/shared/components/common/app-page-container";
 import { MdUpwardCard } from "@/shared/components/common/md-upward-card";
 import {
@@ -34,14 +44,8 @@ import {
 } from "@/shared/components/ui/table";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { cn } from "@/shared/lib/cn";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { FileText, Heart, Play, Plus, Trash2, Upload } from "lucide-react";
-import {
-  Controller,
-  useFieldArray,
-  useForm,
-  useWatch,
-  type Control,
-} from "react-hook-form";
 import {
   useEffect,
   useId,
@@ -51,28 +55,14 @@ import {
   type ComponentProps,
   type ReactNode,
 } from "react";
-import { Link } from "react-router-dom";
 import {
-  bibliographicFormSchema,
-  type BibliographicFormAuthorEntry as AuthorEntry,
-  type BibliographicFormData,
-  type BibliographicFormInitialState,
-  type BibliographicFormLabelEntry as LabelEntry,
-  type BibliographicFormSubjectEntry as SubjectEntry,
-  type BibliographicFormValues,
-} from "./bibliographic-form-presets";
-
-type SelectOption = {
-  value: string;
-  label: string;
-};
-
-type BibliographicFormProps = {
-  pageTitle: string;
-  initialState: BibliographicFormInitialState;
-};
-
-type ScalarFieldName = keyof BibliographicFormValues;
+  Controller,
+  useFieldArray,
+  useForm,
+  useWatch,
+  type Control,
+} from "react-hook-form";
+import { Link } from "react-router-dom";
 
 const FORM_INPUT_CLASS =
   "h-10.5 rounded-md border-grey-40 bg-white text-base text-grey-100 placeholder:text-grey-70 shadow-none";
@@ -469,9 +459,7 @@ export function BibliographicForm({
     name: "subjects",
     keyName: "fieldKey",
   });
-  const {
-    fields: labelFields,
-  } = useFieldArray({
+  const { fields: labelFields } = useFieldArray({
     control: form.control,
     name: "labels",
     keyName: "fieldKey",
@@ -1203,7 +1191,9 @@ export function BibliographicForm({
                     key={entry.fieldKey}
                     className={cn(
                       "flex flex-col gap-3 rounded-md px-3 py-2.5 sm:flex-row sm:items-start",
-                      labels[index]?.checked ? "bg-blue-10/60" : "bg-transparent",
+                      labels[index]?.checked
+                        ? "bg-blue-10/60"
+                        : "bg-transparent",
                     )}
                   >
                     <div className="flex min-w-0 items-center gap-3 sm:w-[200px] sm:min-w-[200px]">

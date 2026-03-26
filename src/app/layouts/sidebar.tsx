@@ -62,6 +62,11 @@ const LOOKUP_FILE_ITEMS: SidebarSubItem[] = [
   { id: "frequency", label: "Frequency" },
 ];
 
+const TOOLS_ITEMS: SidebarSubItem[] = [
+  { id: "cataloging-servers", label: "Cataloging Servers" },
+  { id: "item-code-pattern", label: "Item Code Pattern" },
+];
+
 const MASTER_FILE_GROUPS: SidebarGroup[] = [
   {
     id: "authority-files",
@@ -75,7 +80,12 @@ const MASTER_FILE_GROUPS: SidebarGroup[] = [
     items: LOOKUP_FILE_ITEMS,
     collapsible: true,
   },
-  { id: "tools", label: "Tools" },
+  {
+    id: "tools",
+    label: "Tools",
+    items: TOOLS_ITEMS,
+    collapsible: true,
+  },
 ];
 
 const SIDEBAR_ITEMS: SidebarItem[] = [
@@ -659,10 +669,10 @@ const SidebarGroupRenderer = memo(function SidebarGroupRenderer({
         <div
           className={cn(
             "overflow-hidden transition-all duration-200 ease-out",
-            isGroupExpanded ? "max-h-96 opacity-100" : "max-h-0 opacity-0",
+            isGroupExpanded ? "opacity-100" : "max-h-0 opacity-0",
           )}
         >
-          <div className="space-y-1 pt-1 pl-3">
+          <div className="space-y-1 py-1 pl-3">
             {group.items?.map((groupItem) => {
               const isSubItemActive = isSubItemRouteActive(
                 item,

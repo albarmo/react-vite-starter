@@ -1,5 +1,10 @@
 "use client";
 
+import type {
+  BibliographicExportFormValues,
+  BibliographicExportModalProps,
+  RecordSeparator,
+} from "@/features/bibliographic/types/bibliographic-modal.types";
 import { Button } from "@/shared/components/ui/button";
 import { Checkbox } from "@/shared/components/ui/checkbox";
 import {
@@ -15,23 +20,6 @@ import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
 import { cn } from "@/shared/lib/cn";
 import { Upload, X } from "lucide-react";
 import { useId, useState } from "react";
-
-type RecordSeparator = "new-line" | "carriage-return";
-
-export type BibliographicExportFormValues = {
-  fieldSeparator: string;
-  fieldEnclosedWith: string;
-  recordSeparator: RecordSeparator;
-  numberOfRecordsToExport: string;
-  startFromRecord: string;
-  putColumnNamesInFirstRow: boolean;
-};
-
-type BibliographicExportModalProps = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onExport?: (values: BibliographicExportFormValues) => void;
-};
 
 const DEFAULT_EXPORT_VALUES: BibliographicExportFormValues = {
   fieldSeparator: ";",

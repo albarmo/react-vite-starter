@@ -1,5 +1,10 @@
 "use client";
 
+import type {
+  BibliographicImportFormValues,
+  BibliographicImportModalProps,
+  UploadState,
+} from "@/features/bibliographic/types/bibliographic-modal.types";
 import { Button } from "@/shared/components/ui/button";
 import { Checkbox } from "@/shared/components/ui/checkbox";
 import {
@@ -14,23 +19,6 @@ import { Label } from "@/shared/components/ui/label";
 import { cn } from "@/shared/lib/cn";
 import { Folder, Pause, Trash2, Upload, X } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
-
-export type BibliographicImportFormValues = {
-  file: File | null;
-  fieldSeparator: string;
-  fieldEnclosedWith: string;
-  numberOfRecordsToExport: string;
-  startFromRecord: string;
-  putColumnNamesInFirstRow: boolean;
-};
-
-type BibliographicImportModalProps = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onImport?: (values: BibliographicImportFormValues) => void;
-};
-
-type UploadState = "idle" | "uploading" | "uploaded" | "paused";
 
 const MAX_FILE_SIZE_KB = 2048;
 

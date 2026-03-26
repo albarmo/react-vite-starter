@@ -2,6 +2,11 @@
 
 import { BibliographicExportModal } from "@/features/bibliographic/components/bibliographic-export-modal";
 import { BibliographicImportModal } from "@/features/bibliographic/components/bibliographic-import-modal";
+import type {
+  BibliographicItem,
+  ItemFooterProps,
+  ItemToolbarProps,
+} from "@/features/bibliographic/types/bibliographic-tab-content-item.types";
 import { DataTable } from "@/shared/components/common/data-table";
 import { SearchInput } from "@/shared/components/common/search-input";
 import { SelectionCheckbox } from "@/shared/components/common/selection-checkbox";
@@ -34,39 +39,6 @@ import {
 } from "lucide-react";
 import { useDeferredValue, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-
-type BibliographicItem = {
-  id: string;
-  bookId: string;
-  itemCode: string;
-  title: string;
-  author: string;
-  collectionType: string;
-  location: string;
-  callNumber: string;
-  updatedAt: string;
-};
-
-type ItemToolbarProps = {
-  search: string;
-  onSearchChange: (value: string) => void;
-  onClearSearch: () => void;
-  onOpenExportModal: () => void;
-  onOpenImportModal: () => void;
-};
-
-type ItemFooterProps = {
-  currentPage: number;
-  pageSize: number;
-  totalItems: number;
-  from: number;
-  to: number;
-  canPreviousPage: boolean;
-  canNextPage: boolean;
-  onPageSizeChange: (value: number) => void;
-  onPreviousPage: () => void;
-  onNextPage: () => void;
-};
 
 const PAGE_SIZE_OPTIONS = [10, 20, 50];
 const ITEM_PAGE_SAMPLE_CODES = [

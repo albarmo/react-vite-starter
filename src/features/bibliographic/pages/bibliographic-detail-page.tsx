@@ -1,6 +1,10 @@
 "use client";
 
 import { BibliographicDeleteModal } from "@/features/bibliographic/components/bibliographic-delete-modal";
+import type {
+  BibliographicDetailField,
+  BibliographicLogEntry,
+} from "@/features/bibliographic/types/bibliographic-detail.types";
 import { PageContainer } from "@/shared/components/common/app-page-container";
 import { MdUpwardCard } from "@/shared/components/common/md-upward-card";
 import { SearchInput } from "@/shared/components/common/search-input";
@@ -39,19 +43,6 @@ import { cn } from "@/shared/lib/cn";
 import { ChevronDown, Heart, Pencil, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-
-type BibliographicDetailField = {
-  label: string;
-  value: string;
-  multiline?: boolean;
-};
-
-type BibliographicLogEntry = {
-  id: string;
-  lastUpdated: string;
-  userName: string;
-  details: string[];
-};
 
 const PAGE_SIZE_OPTIONS = [10, 20, 50];
 

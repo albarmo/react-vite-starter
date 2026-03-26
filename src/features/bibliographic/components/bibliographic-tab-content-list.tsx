@@ -4,6 +4,13 @@ import { useUiStore } from "@/app/store/ui.store";
 import { BibliographicDeleteModal } from "@/features/bibliographic/components/bibliographic-delete-modal";
 import { BibliographicExportModal } from "@/features/bibliographic/components/bibliographic-export-modal";
 import { BibliographicImportModal } from "@/features/bibliographic/components/bibliographic-import-modal";
+import type {
+  BibliographicBook,
+  BibliographicFooterProps,
+  BibliographicSelectionBarProps,
+  BibliographicToolbarProps,
+  DeleteTarget,
+} from "@/features/bibliographic/types/bibliographic-tab-content-list.types";
 import { DataTable } from "@/shared/components/common/data-table";
 import { SearchInput } from "@/shared/components/common/search-input";
 import { SelectionCheckbox } from "@/shared/components/common/selection-checkbox";
@@ -36,60 +43,8 @@ import {
   Printer,
   Trash2,
 } from "lucide-react";
-import type { CSSProperties } from "react";
-import { useDeferredValue, useMemo, useState } from "react";
+import { type CSSProperties, useDeferredValue, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-
-type BibliographicBook = {
-  id: string;
-  title: string;
-  author: string;
-  isbn: string;
-  copies: number;
-  updatedAt: string;
-  coverTitle: string;
-  coverAccent: string;
-  coverStyle: CSSProperties;
-};
-
-type DeleteTarget =
-  | {
-      type: "single";
-      book: BibliographicBook;
-    }
-  | {
-      type: "selected";
-      ids: string[];
-    };
-
-type BibliographicToolbarProps = {
-  search: string;
-  selectedCount: number;
-  onSearchChange: (value: string) => void;
-  onClearSearch: () => void;
-  onOpenExportModal: () => void;
-  onOpenImportModal: () => void;
-  onDeleteSelected: () => void;
-};
-
-type BibliographicFooterProps = {
-  currentPage: number;
-  pageSize: number;
-  totalItems: number;
-  from: number;
-  to: number;
-  canPreviousPage: boolean;
-  canNextPage: boolean;
-  onPageSizeChange: (value: number) => void;
-  onPreviousPage: () => void;
-  onNextPage: () => void;
-};
-
-type BibliographicSelectionBarProps = {
-  selectedCount: number;
-  sidebarOpen: boolean;
-  onDeleteSelected: () => void;
-};
 
 const PAGE_SIZE_OPTIONS = [10, 20, 50];
 const COVER_STYLES: CSSProperties[] = [
