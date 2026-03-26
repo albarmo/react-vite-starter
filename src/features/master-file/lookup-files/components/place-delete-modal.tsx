@@ -10,14 +10,7 @@ import {
 } from "@/shared/components/ui/dialog";
 import { cn } from "@/shared/lib/cn";
 import { Trash2, X } from "lucide-react";
-import type { ReactNode } from "react";
-
-type PlaceDeleteModalProps = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onDelete: () => void;
-  description?: ReactNode;
-};
+import type { PlaceDeleteModalProps } from "@/features/master-file/lookup-files/types/place.types";
 
 export function PlaceDeleteModal({
   open,

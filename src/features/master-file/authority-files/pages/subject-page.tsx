@@ -29,70 +29,17 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { ChevronLeft, ChevronRight, Pencil, Plus, Trash2 } from "lucide-react";
 import { useDeferredValue, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-type SubjectStatus = "active" | "orphaned";
-type SubjectTabValue = "subject" | "cross-reference";
-
-type SubjectRecord = {
-  id: string;
-  subject: string;
-  classificationCode: string;
-  type: string;
-  authorityFiles: string;
-  status: SubjectStatus;
-};
-
-type CrossReferenceRecord = {
-  id: string;
-  code: string;
-  description: string;
-};
-
-type DeleteTarget =
-  | {
-      tab: "subject";
-      id: string;
-    }
-  | {
-      tab: "cross-reference";
-      id: string;
-    };
-
-type SubjectToolbarProps = {
-  search: string;
-  activeFilter: SubjectStatus;
-  onCreate: () => void;
-  onSearchChange: (value: string) => void;
-  onClearSearch: () => void;
-  onFilterChange: (value: SubjectStatus) => void;
-};
-
-type CrossReferenceToolbarProps = {
-  search: string;
-  onCreate: () => void;
-  onSearchChange: (value: string) => void;
-  onClearSearch: () => void;
-};
-
-type SubjectFooterProps = {
-  currentPage: number;
-  pageSize: number;
-  totalItems: number;
-  from: number;
-  to: number;
-  canPreviousPage: boolean;
-  canNextPage: boolean;
-  onPageSizeChange: (value: number) => void;
-  onPreviousPage: () => void;
-  onNextPage: () => void;
-};
-
-type CrossReferenceFooterProps = {
-  pageSize: number;
-  totalItems: number;
-  displayedCount: number;
-  onPageSizeChange: (value: number) => void;
-};
+import type { CrossReferenceRecord } from "@/features/master-file/authority-files/types/cross-reference.types";
+import type {
+  CrossReferenceFooterProps,
+  CrossReferenceToolbarProps,
+  SubjectFooterProps,
+  SubjectPageDeleteTarget as DeleteTarget,
+  SubjectRecord,
+  SubjectStatus,
+  SubjectTabValue,
+  SubjectToolbarProps,
+} from "@/features/master-file/authority-files/types/subject.types";
 
 const PAGE_SIZE_OPTIONS = [10, 20, 50];
 const SUBJECT_BASE_RECORDS: Omit<SubjectRecord, "id">[] = [

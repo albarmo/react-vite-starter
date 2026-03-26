@@ -23,46 +23,14 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { useDeferredValue, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-type PublisherStatus = "active" | "orphaned";
-
-type PublisherRecord = {
-  id: string;
-  name: string;
-  status: PublisherStatus;
-  updatedAt: string;
-};
-
-type DeleteTarget =
-  | {
-      type: "single";
-      record: PublisherRecord;
-    }
-  | {
-      type: "selected";
-      ids: string[];
-    };
-
-type ToolbarProps = {
-  search: string;
-  activeFilter: PublisherStatus;
-  onSearchChange: (value: string) => void;
-  onClearSearch: () => void;
-  onFilterChange: (value: PublisherStatus) => void;
-  onCreate: () => void;
-};
-
-type FooterProps = {
-  pageSize: number;
-  totalItems: number;
-  displayedCount: number;
-  onPageSizeChange: (value: number) => void;
-};
-
-type SelectionBarProps = {
-  sidebarOpen: boolean;
-  onDeleteSelected: () => void;
-};
+import type {
+  PublisherDeleteTarget as DeleteTarget,
+  PublisherFooterProps as FooterProps,
+  PublisherRecord,
+  PublisherSelectionBarProps as SelectionBarProps,
+  PublisherStatus,
+  PublisherToolbarProps as ToolbarProps,
+} from "@/features/master-file/authority-files/types/publisher.types";
 
 const PAGE_SIZE_OPTIONS = [10, 20, 50];
 const PUBLISHER_RECORDS: PublisherRecord[] = [

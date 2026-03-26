@@ -21,32 +21,12 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { useDeferredValue, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-type LocationStatus = "active" | "orphaned";
-
-type LocationRecord = {
-  id: string;
-  code: string;
-  name: string;
-  status: LocationStatus;
-  updatedAt: string;
-};
-
-type ToolbarProps = {
-  search: string;
-  activeFilter: LocationStatus;
-  onSearchChange: (value: string) => void;
-  onClearSearch: () => void;
-  onFilterChange: (value: LocationStatus) => void;
-  onCreate: () => void;
-};
-
-type FooterProps = {
-  pageSize: number;
-  totalItems: number;
-  displayedCount: number;
-  onPageSizeChange: (value: number) => void;
-};
+import type {
+  LocationFooterProps as FooterProps,
+  LocationRecord,
+  LocationStatus,
+  LocationToolbarProps as ToolbarProps,
+} from "@/features/master-file/authority-files/types/location.types";
 
 const PAGE_SIZE_OPTIONS = [10, 20, 50];
 const LOCATION_RECORDS: LocationRecord[] = [

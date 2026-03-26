@@ -2,10 +2,14 @@
 
 import { useUiStore } from "@/app/store/ui.store";
 import { LabelDeleteModal } from "@/features/master-file/lookup-files/components/label-delete-modal";
-import {
-  LABEL_PRESET_RECORDS,
-  type LabelPresetRecord,
-} from "@/features/master-file/lookup-files/components/label-form-presets";
+import { LABEL_PRESET_RECORDS } from "@/features/master-file/lookup-files/components/label-form-presets";
+import type {
+  LabelDeleteTarget as DeleteTarget,
+  LabelFooterProps as FooterProps,
+  LabelRecord,
+  LabelSelectionBarProps as SelectionBarProps,
+  LabelToolbarProps as ToolbarProps,
+} from "@/features/master-file/lookup-files/types/label.types";
 import { PageContainer } from "@/shared/components/common/app-page-container";
 import { AppPageHeader } from "@/shared/components/common/app-page-header";
 import { DataTable } from "@/shared/components/common/data-table";
@@ -26,35 +30,6 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { useDeferredValue, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-type DeleteTarget =
-  | {
-      type: "single";
-      record: LabelPresetRecord;
-    }
-  | {
-      type: "selected";
-      ids: string[];
-    };
-
-type ToolbarProps = {
-  search: string;
-  onSearchChange: (value: string) => void;
-  onClearSearch: () => void;
-  onCreate: () => void;
-};
-
-type FooterProps = {
-  pageSize: number;
-  totalItems: number;
-  displayedCount: number;
-  onPageSizeChange: (value: number) => void;
-};
-
-type SelectionBarProps = {
-  sidebarOpen: boolean;
-  onDeleteSelected: () => void;
-};
 
 const PAGE_SIZE_OPTIONS = [10, 20, 50];
 
@@ -220,7 +195,7 @@ export default function LabelPage() {
     setDeleteTarget(null);
   };
 
-  const columns = useMemo<ColumnDef<LabelPresetRecord>[]>(
+  const columns = useMemo<ColumnDef<LabelRecord>[]>(
     () => [
       {
         id: "select",

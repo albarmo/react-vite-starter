@@ -2,10 +2,14 @@
 
 import { useUiStore } from "@/app/store/ui.store";
 import { ItemCodePatternDeleteModal } from "@/features/master-file/tools/components/item-code-pattern-delete-modal";
-import {
-  ITEM_CODE_PATTERN_PRESET_RECORDS,
-  type ItemCodePatternPresetRecord,
-} from "@/features/master-file/tools/components/item-code-pattern-presets";
+import { ITEM_CODE_PATTERN_PRESET_RECORDS } from "@/features/master-file/tools/components/item-code-pattern-presets";
+import type {
+  ItemCodePatternDeleteTarget as DeleteTarget,
+  ItemCodePatternFooterProps as FooterProps,
+  ItemCodePatternRecord,
+  ItemCodePatternSelectionBarProps as SelectionBarProps,
+  ItemCodePatternToolbarProps as ToolbarProps,
+} from "@/features/master-file/tools/types/item-code-pattern.types";
 import { PageContainer } from "@/shared/components/common/app-page-container";
 import { AppPageHeader } from "@/shared/components/common/app-page-header";
 import { DataTable } from "@/shared/components/common/data-table";
@@ -26,35 +30,6 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { Plus, Trash2 } from "lucide-react";
 import { useDeferredValue, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-type DeleteTarget =
-  | {
-      type: "single";
-      record: ItemCodePatternPresetRecord;
-    }
-  | {
-      type: "selected";
-      ids: string[];
-    };
-
-type ToolbarProps = {
-  search: string;
-  onSearchChange: (value: string) => void;
-  onClearSearch: () => void;
-  onCreate: () => void;
-};
-
-type FooterProps = {
-  pageSize: number;
-  totalItems: number;
-  displayedCount: number;
-  onPageSizeChange: (value: number) => void;
-};
-
-type SelectionBarProps = {
-  sidebarOpen: boolean;
-  onDeleteSelected: () => void;
-};
 
 const PAGE_SIZE_OPTIONS = [10, 20, 50];
 
@@ -218,7 +193,7 @@ export default function ItemCodePatternPage() {
     setDeleteTarget(null);
   };
 
-  const columns = useMemo<ColumnDef<ItemCodePatternPresetRecord>[]>(
+  const columns = useMemo<ColumnDef<ItemCodePatternRecord>[]>(
     () => [
       {
         id: "select",

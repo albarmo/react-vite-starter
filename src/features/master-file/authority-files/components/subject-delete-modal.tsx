@@ -1,5 +1,6 @@
 "use client";
 
+import type { SubjectDeleteModalProps } from "@/features/master-file/authority-files/types/subject.types";
 import { Button } from "@/shared/components/ui/button";
 import {
   Dialog,
@@ -10,12 +11,6 @@ import {
 } from "@/shared/components/ui/dialog";
 import { cn } from "@/shared/lib/cn";
 import { Trash2, X } from "lucide-react";
-
-type SubjectDeleteModalProps = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onDelete: () => void;
-};
 
 export function SubjectDeleteModal({
   open,

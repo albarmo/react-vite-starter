@@ -17,20 +17,15 @@ import { Form } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { cn } from "@/shared/lib/cn";
+import { mediaTypeFormSchema } from "@/features/master-file/authority-files/schema/media-type.schema";
+import type {
+  MediaTypeFormData,
+  MediaTypeFormInitialState,
+  MediaTypeFormProps,
+} from "@/features/master-file/authority-files/types/media-type.types";
 import { useEffect, useMemo, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  mediaTypeFormSchema,
-  type MediaTypeFormData,
-  type MediaTypeFormInitialState,
-} from "./media-type-form-presets";
-
-type MediaTypeFormProps = {
-  mode: "create" | "edit";
-  pageTitle: string;
-  initialState: MediaTypeFormInitialState;
-};
 
 const FORM_INPUT_CLASS =
   "h-11 rounded-md border-grey-40 bg-white text-base text-grey-100 shadow-none placeholder:text-grey-70";

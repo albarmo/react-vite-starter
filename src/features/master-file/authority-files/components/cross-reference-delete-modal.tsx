@@ -1,5 +1,6 @@
 "use client";
 
+import type { CrossReferenceDeleteModalProps } from "@/features/master-file/authority-files/types/cross-reference.types";
 import { Button } from "@/shared/components/ui/button";
 import {
   Dialog,
@@ -10,12 +11,6 @@ import {
 } from "@/shared/components/ui/dialog";
 import { cn } from "@/shared/lib/cn";
 import { Trash2, X } from "lucide-react";
-
-type CrossReferenceDeleteModalProps = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onDelete: () => void;
-};
 
 export function CrossReferenceDeleteModal({
   open,

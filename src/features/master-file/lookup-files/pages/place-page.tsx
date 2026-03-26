@@ -2,11 +2,15 @@
 
 import { useUiStore } from "@/app/store/ui.store";
 import { PlaceDeleteModal } from "@/features/master-file/lookup-files/components/place-delete-modal";
-import {
-  PLACE_PRESET_RECORDS,
-  type PlacePresetRecord,
-  type PlaceStatus,
-} from "@/features/master-file/lookup-files/components/place-form-presets";
+import { PLACE_PRESET_RECORDS } from "@/features/master-file/lookup-files/components/place-form-presets";
+import type {
+  PlaceDeleteTarget as DeleteTarget,
+  PlaceFooterProps as FooterProps,
+  PlaceRecord,
+  PlaceSelectionBarProps as SelectionBarProps,
+  PlaceStatus,
+  PlaceToolbarProps as ToolbarProps,
+} from "@/features/master-file/lookup-files/types/place.types";
 import { PageContainer } from "@/shared/components/common/app-page-container";
 import { AppPageHeader } from "@/shared/components/common/app-page-header";
 import { DataTable } from "@/shared/components/common/data-table";
@@ -28,37 +32,6 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { useDeferredValue, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-type DeleteTarget =
-  | {
-      type: "single";
-      record: PlacePresetRecord;
-    }
-  | {
-      type: "selected";
-      ids: string[];
-    };
-
-type ToolbarProps = {
-  search: string;
-  activeFilter: PlaceStatus;
-  onSearchChange: (value: string) => void;
-  onClearSearch: () => void;
-  onFilterChange: (value: PlaceStatus) => void;
-  onCreate: () => void;
-};
-
-type FooterProps = {
-  pageSize: number;
-  totalItems: number;
-  displayedCount: number;
-  onPageSizeChange: (value: number) => void;
-};
-
-type SelectionBarProps = {
-  sidebarOpen: boolean;
-  onDeleteSelected: () => void;
-};
 
 const PAGE_SIZE_OPTIONS = [10, 20, 50];
 
@@ -253,7 +226,7 @@ export function PlacePage() {
     setDeleteTarget(null);
   };
 
-  const columns = useMemo<ColumnDef<PlacePresetRecord>[]>(
+  const columns = useMemo<ColumnDef<PlaceRecord>[]>(
     () => [
       {
         id: "select",

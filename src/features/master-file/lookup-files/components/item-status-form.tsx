@@ -21,20 +21,16 @@ import { cn } from "@/shared/lib/cn";
 import { useEffect, useMemo, type ReactNode } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { itemStatusFormSchema } from "@/features/master-file/lookup-files/schemas/item-status.schema";
+import type {
+  ItemStatusFormData,
+  ItemStatusFormInitialState,
+  ItemStatusFormProps,
+  ItemStatusRuleKey,
+} from "@/features/master-file/lookup-files/types/item-status.types";
 import {
   ITEM_STATUS_RULE_OPTIONS,
-  itemStatusFormSchema,
-  type ItemStatusFormData,
-  type ItemStatusFormInitialState,
-  type ItemStatusRuleKey,
 } from "./item-status-form-presets";
-
-type ItemStatusFormProps = {
-  mode: "create" | "edit";
-  pageTitle: string;
-  initialState: ItemStatusFormInitialState;
-  recordId?: string;
-};
 
 const FORM_INPUT_CLASS =
   "h-11 rounded-md border-grey-40 bg-white text-base text-grey-100 shadow-none placeholder:text-grey-70";

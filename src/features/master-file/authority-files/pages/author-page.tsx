@@ -23,49 +23,14 @@ import { Pencil, Plus, Trash2 } from "lucide-react";
 import { useDeferredValue, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthorDeleteModal } from "../components/author-delete-modal";
-
-type AuthorStatus = "active" | "orphaned";
-
-type AuthorRecord = {
-  id: string;
-  name: string;
-  birthYear: string;
-  type: string;
-  files: string;
-  status: AuthorStatus;
-  updatedAt: string;
-};
-
-type DeleteTarget =
-  | {
-      type: "single";
-      record: AuthorRecord;
-    }
-  | {
-      type: "selected";
-      ids: string[];
-    };
-
-type ToolbarProps = {
-  search: string;
-  activeFilter: AuthorStatus;
-  onSearchChange: (value: string) => void;
-  onClearSearch: () => void;
-  onFilterChange: (value: AuthorStatus) => void;
-  onCreate: () => void;
-};
-
-type FooterProps = {
-  pageSize: number;
-  totalItems: number;
-  displayedCount: number;
-  onPageSizeChange: (value: number) => void;
-};
-
-type SelectionBarProps = {
-  sidebarOpen: boolean;
-  onDeleteSelected: () => void;
-};
+import type {
+  AuthorDeleteTarget as DeleteTarget,
+  AuthorFooterProps as FooterProps,
+  AuthorRecord,
+  AuthorSelectionBarProps as SelectionBarProps,
+  AuthorStatus,
+  AuthorToolbarProps as ToolbarProps,
+} from "@/features/master-file/authority-files/types/author.types";
 
 const PAGE_SIZE_OPTIONS = [10, 20, 50];
 const AUTHOR_RECORDS: AuthorRecord[] = [

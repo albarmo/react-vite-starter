@@ -1,20 +1,9 @@
-import { z } from "zod";
+import type {
+  LabelFormInitialState,
+  LabelRecord,
+} from "@/features/master-file/lookup-files/types/label.types";
 
-export type LabelAttachment = {
-  name: string;
-  size: number;
-  format: string;
-};
-
-export type LabelPresetRecord = {
-  id: string;
-  name: string;
-  description: string;
-  attachment: LabelAttachment | null;
-  updatedAt: string;
-};
-
-export const LABEL_PRESET_RECORDS: LabelPresetRecord[] = [
+export const LABEL_PRESET_RECORDS: LabelRecord[] = [
   {
     id: "label-1",
     name: "label-favorite",
@@ -42,36 +31,12 @@ export const LABEL_PRESET_RECORDS: LabelPresetRecord[] = [
   },
 ];
 
-export function getLabelRecordById(id: string): LabelPresetRecord {
+export function getLabelRecordById(id: string): LabelRecord {
   return (
     LABEL_PRESET_RECORDS.find((record) => record.id === id) ??
     LABEL_PRESET_RECORDS[0]
   );
 }
-
-const labelAttachmentSchema = z.object({
-  name: z.string().trim().min(1),
-  size: z.number().min(0),
-  format: z.string().trim().min(1),
-});
-
-export const labelFormSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(1, "Name wajib diisi")
-    .max(120, "Name maksimal 120 karakter"),
-  attachment: labelAttachmentSchema.nullable(),
-  description: z
-    .string()
-    .trim()
-    .max(160, "Description maksimal 160 karakter")
-    .optional()
-    .or(z.literal("")),
-});
-
-export type LabelFormData = z.infer<typeof labelFormSchema>;
-export type LabelFormInitialState = LabelFormData;
 
 export const CREATE_LABEL_FORM_INITIAL_STATE: LabelFormInitialState = {
   name: "",

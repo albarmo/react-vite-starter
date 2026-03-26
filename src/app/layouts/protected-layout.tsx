@@ -4,6 +4,7 @@ import { cn } from "@/shared/lib/cn";
 import { ChevronsLeftRight } from "lucide-react";
 import type { ReactNode } from "react";
 import { Outlet } from "react-router-dom";
+import { AppSectionNavbar } from "./app-section-navbar";
 import { Sidebar } from "./sidebar";
 import { Topbar } from "./topbar";
 
@@ -19,7 +20,8 @@ export function ProtectedLayout({ children }: ProtectedLayoutProps) {
   return (
     <div className="h-screen overflow-hidden bg-grey-20 text-foreground">
       <Topbar />
-      <div className="relative flex h-[calc(100svh-4rem)] min-h-[calc(100svh-4rem)]">
+      <AppSectionNavbar />
+      <div className="relative flex h-[calc(100svh-6.5rem)] min-h-[calc(100svh-6.5rem)]">
         {sidebarOpen && (
           <button
             type="button"
@@ -31,7 +33,7 @@ export function ProtectedLayout({ children }: ProtectedLayoutProps) {
 
         <div
           className={cn(
-            "fixed inset-y-16 left-0 z-40 w-screen transition-transform duration-200 md:relative md:inset-y-0 md:z-auto md:w-auto md:translate-x-0",
+            "fixed top-[6.5rem] bottom-0 left-0 z-40 w-screen transition-transform duration-200 md:relative md:inset-y-0 md:z-auto md:w-auto md:translate-x-0",
             sidebarOpen
               ? "translate-x-0"
               : "-translate-x-full md:translate-x-0",
@@ -44,7 +46,7 @@ export function ProtectedLayout({ children }: ProtectedLayoutProps) {
           type="button"
           onClick={toggleSidebar}
           className={cn(
-            "absolute top-32 z-20 hidden size-9 -translate-x-1/2 items-center justify-center rounded-xl border border-border bg-neutral-100 text-grey-100 shadow-sm transition-colors hover:bg-white md:inline-flex",
+            "absolute top-24 z-20 hidden size-9 -translate-x-1/2 items-center justify-center rounded-xl border border-border bg-neutral-100 text-grey-100 shadow-sm transition-colors hover:bg-white md:inline-flex",
             sidebarOpen ? "left-68" : "left-20",
           )}
           aria-label={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}

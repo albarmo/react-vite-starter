@@ -16,18 +16,7 @@ import { Button } from "@/shared/components/ui/button";
 import { Pencil, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-
-type SubjectStatus = "active" | "orphaned";
-
-type SubjectDetail = {
-  id: string;
-  subject: string;
-  classificationCode: string;
-  type: string;
-  authorityFiles: string;
-  status: SubjectStatus;
-  updatedAt: string;
-};
+import type { SubjectDetail } from "@/features/master-file/authority-files/types/subject.types";
 
 const SUBJECT_DETAIL_PRESETS: Omit<SubjectDetail, "id">[] = [
   {

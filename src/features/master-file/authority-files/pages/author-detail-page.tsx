@@ -16,18 +16,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { AuthorDeleteModal } from "../components/author-delete-modal";
-
-type AuthorStatus = "active" | "orphaned";
-
-type AuthorDetail = {
-  id: string;
-  name: string;
-  birthYear: string;
-  type: string;
-  files: string;
-  status: AuthorStatus;
-  updatedAt: string;
-};
+import type { AuthorDetail } from "@/features/master-file/authority-files/types/author.types";
 
 const AUTHOR_DETAILS: AuthorDetail[] = [
   {

@@ -15,13 +15,7 @@ import { Button } from "@/shared/components/ui/button";
 import { Pencil, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-
-type GeneralMaterialDesignationDetail = {
-  id: string;
-  code: string;
-  name: string;
-  updatedAt: string;
-};
+import type { GeneralMaterialDesignationDetail } from "@/features/master-file/authority-files/types/general-material-designation.types";
 
 const GENERAL_MATERIAL_DESIGNATION_DETAILS: GeneralMaterialDesignationDetail[] =
   [

@@ -37,8 +37,7 @@ type SidebarItem = {
 const BIBLIOGRAPHY_GROUPS: SidebarGroup[] = [
   { id: "list", label: "List" },
   { id: "copy-cataloging", label: "Copy Cataloging" },
-  { id: "labels-printing", label: "Labels Printing" },
-  { id: "item-barcode-printing", label: "Item Barcode Printing" },
+  { id: "book-requests", label: "Book Requests" },
 ];
 
 const AUTHORITY_FILE_ITEMS: SidebarSubItem[] = [

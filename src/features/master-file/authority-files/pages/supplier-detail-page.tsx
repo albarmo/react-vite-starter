@@ -15,17 +15,7 @@ import { Button } from "@/shared/components/ui/button";
 import { Pencil, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-
-type SupplierDetail = {
-  id: string;
-  name: string;
-  address: string;
-  contact: string;
-  phoneNumber: string;
-  faxNumber: string;
-  accountNumber: string;
-  updatedAt: string;
-};
+import type { SupplierDetail } from "@/features/master-file/authority-files/types/supplier.types";
 
 const SUPPLIER_DETAILS: SupplierDetail[] = [
   {

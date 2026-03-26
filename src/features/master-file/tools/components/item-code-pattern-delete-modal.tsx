@@ -8,16 +8,9 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
+import type { ItemCodePatternDeleteModalProps } from "@/features/master-file/tools/types/item-code-pattern.types";
 import { cn } from "@/shared/lib/cn";
 import { Trash2, X } from "lucide-react";
-import type { ReactNode } from "react";
-
-type ItemCodePatternDeleteModalProps = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onDelete: () => void;
-  description?: ReactNode;
-};
 
 export function ItemCodePatternDeleteModal({
   open,

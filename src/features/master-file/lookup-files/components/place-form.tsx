@@ -20,18 +20,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  placeFormSchema,
-  type PlaceFormData,
-  type PlaceFormInitialState,
-} from "./place-form-presets";
-
-type PlaceFormProps = {
-  mode: "create" | "edit";
-  pageTitle: string;
-  initialState: PlaceFormInitialState;
-  recordId?: string;
-};
+import { placeFormSchema } from "@/features/master-file/lookup-files/schemas/place.schema";
+import type {
+  PlaceFormData,
+  PlaceFormInitialState,
+  PlaceFormProps,
+} from "@/features/master-file/lookup-files/types/place.types";
 
 const FORM_INPUT_CLASS =
   "h-11 rounded-md border-grey-40 bg-white text-base text-grey-100 shadow-none placeholder:text-grey-70";

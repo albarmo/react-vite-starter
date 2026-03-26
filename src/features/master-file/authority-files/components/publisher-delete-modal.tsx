@@ -1,5 +1,6 @@
 "use client";
 
+import type { PublisherDeleteModalProps } from "@/features/master-file/authority-files/types/publisher.types";
 import { Button } from "@/shared/components/ui/button";
 import {
   Dialog,
@@ -10,14 +11,6 @@ import {
 } from "@/shared/components/ui/dialog";
 import { cn } from "@/shared/lib/cn";
 import { Trash2, X } from "lucide-react";
-import type { ReactNode } from "react";
-
-type PublisherDeleteModalProps = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onDelete: () => void;
-  description?: ReactNode;
-};
 
 export function PublisherDeleteModal({
   open,

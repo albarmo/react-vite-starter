@@ -1,12 +1,9 @@
-import { z } from "zod";
+import type {
+  DocLanguageFormInitialState,
+  DocLanguageRecord,
+} from "@/features/master-file/lookup-files/types/doc-language.types";
 
-export type DocLanguagePresetRecord = {
-  id: string;
-  language: string;
-  updatedAt: string;
-};
-
-export const DOC_LANGUAGE_PRESET_RECORDS: DocLanguagePresetRecord[] = [
+export const DOC_LANGUAGE_PRESET_RECORDS: DocLanguageRecord[] = [
   {
     id: "doc-language-1",
     language: "English",
@@ -18,17 +15,6 @@ export const DOC_LANGUAGE_PRESET_RECORDS: DocLanguagePresetRecord[] = [
     updatedAt: "28 Feb 2026",
   },
 ];
-
-export const docLanguageFormSchema = z.object({
-  language: z
-    .string()
-    .trim()
-    .min(1, "Language wajib diisi")
-    .max(120, "Language maksimal 120 karakter"),
-});
-
-export type DocLanguageFormData = z.infer<typeof docLanguageFormSchema>;
-export type DocLanguageFormInitialState = DocLanguageFormData;
 
 export const CREATE_DOC_LANGUAGE_FORM_INITIAL_STATE: DocLanguageFormInitialState =
   {

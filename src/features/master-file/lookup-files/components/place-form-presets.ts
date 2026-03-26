@@ -1,15 +1,9 @@
-import { z } from "zod";
+import type {
+  PlaceFormInitialState,
+  PlaceRecord,
+} from "@/features/master-file/lookup-files/types/place.types";
 
-export type PlaceStatus = "active" | "orphaned";
-
-export type PlacePresetRecord = {
-  id: string;
-  name: string;
-  status: PlaceStatus;
-  updatedAt: string;
-};
-
-export const PLACE_PRESET_RECORDS: PlacePresetRecord[] = [
+export const PLACE_PRESET_RECORDS: PlaceRecord[] = [
   {
     id: "place-1",
     name: "Senayan",
@@ -23,17 +17,6 @@ export const PLACE_PRESET_RECORDS: PlacePresetRecord[] = [
     updatedAt: "15 Mar 2026",
   },
 ];
-
-export const placeFormSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(1, "Name wajib diisi")
-    .max(120, "Name maksimal 120 karakter"),
-});
-
-export type PlaceFormData = z.infer<typeof placeFormSchema>;
-export type PlaceFormInitialState = PlaceFormData;
 
 export const CREATE_PLACE_FORM_INITIAL_STATE: PlaceFormInitialState = {
   name: "",

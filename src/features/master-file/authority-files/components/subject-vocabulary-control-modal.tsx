@@ -20,22 +20,15 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { cn } from "@/shared/lib/cn";
+import { subjectVocabularyControlModalSchema } from "@/features/master-file/authority-files/schema/subject.schema";
+import type {
+  SubjectVocabularyControlModalData,
+  SubjectVocabularyControlModalProps,
+} from "@/features/master-file/authority-files/types/subject.types";
 import { Plus, X } from "lucide-react";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import {
-  RELATED_TERM_OPTIONS,
-  subjectVocabularyControlModalSchema,
-  type SubjectVocabularyControlModalData,
-} from "./subject-form-presets";
-
-type SubjectVocabularyControlModalProps = {
-  open: boolean;
-  mode: "create" | "edit";
-  initialState: SubjectVocabularyControlModalData;
-  onOpenChange: (open: boolean) => void;
-  onSubmit: (values: SubjectVocabularyControlModalData) => void;
-};
+import { RELATED_TERM_OPTIONS } from "./subject-form-presets";
 
 const INPUT_CLASS =
   "h-11 rounded-md border-grey-40 bg-white text-base text-grey-100 shadow-none placeholder:text-grey-70";

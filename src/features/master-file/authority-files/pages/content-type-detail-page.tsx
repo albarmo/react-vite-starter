@@ -15,13 +15,7 @@ import { Button } from "@/shared/components/ui/button";
 import { Pencil, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-
-type ContentTypeDetail = {
-  id: string;
-  code: string;
-  name: string;
-  updatedAt: string;
-};
+import type { ContentTypeDetail } from "@/features/master-file/authority-files/types/content-type.types";
 
 const CONTENT_TYPE_DETAILS: ContentTypeDetail[] = [
   {

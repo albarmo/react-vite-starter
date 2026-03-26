@@ -5,8 +5,14 @@ import { CatalogingServerDeleteModal } from "@/features/master-file/tools/compon
 import {
   CATALOGING_SERVER_PRESET_RECORDS,
   getCatalogingServerTypeLabel,
-  type CatalogingServerPresetRecord,
 } from "@/features/master-file/tools/components/cataloging-server-form-presets";
+import type {
+  CatalogingServerDeleteTarget as DeleteTarget,
+  CatalogingServerFooterProps as FooterProps,
+  CatalogingServerRecord,
+  CatalogingServerSelectionBarProps as SelectionBarProps,
+  CatalogingServerToolbarProps as ToolbarProps,
+} from "@/features/master-file/tools/types/cataloging-server.types";
 import { PageContainer } from "@/shared/components/common/app-page-container";
 import { AppPageHeader } from "@/shared/components/common/app-page-header";
 import { DataTable } from "@/shared/components/common/data-table";
@@ -27,35 +33,6 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { useDeferredValue, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-type DeleteTarget =
-  | {
-      type: "single";
-      record: CatalogingServerPresetRecord;
-    }
-  | {
-      type: "selected";
-      ids: string[];
-    };
-
-type ToolbarProps = {
-  search: string;
-  onSearchChange: (value: string) => void;
-  onClearSearch: () => void;
-  onCreate: () => void;
-};
-
-type FooterProps = {
-  pageSize: number;
-  totalItems: number;
-  displayedCount: number;
-  onPageSizeChange: (value: number) => void;
-};
-
-type SelectionBarProps = {
-  sidebarOpen: boolean;
-  onDeleteSelected: () => void;
-};
 
 const PAGE_SIZE_OPTIONS = [10, 20, 50];
 
@@ -224,7 +201,7 @@ export default function CatalogingServersPage() {
     setDeleteTarget(null);
   };
 
-  const columns = useMemo<ColumnDef<CatalogingServerPresetRecord>[]>(
+  const columns = useMemo<ColumnDef<CatalogingServerRecord>[]>(
     () => [
       {
         id: "select",

@@ -20,19 +20,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { itemCodePatternFormSchema } from "@/features/master-file/tools/schemas/item-code-pattern.schema";
+import type {
+  ItemCodePatternFormData,
+  ItemCodePatternFormInitialState,
+  ItemCodePatternFormProps,
+} from "@/features/master-file/tools/types/item-code-pattern.types";
 import {
   CREATE_ITEM_CODE_PATTERN_FORM_INITIAL_STATE,
-  itemCodePatternFormSchema,
-  type ItemCodePatternFormData,
-  type ItemCodePatternFormInitialState,
 } from "./item-code-pattern-presets";
-
-type ItemCodePatternFormProps = {
-  mode: "create" | "edit";
-  pageTitle: string;
-  initialState?: ItemCodePatternFormInitialState;
-  recordId?: string;
-};
 
 const FORM_INPUT_CLASS =
   "h-11 rounded-md border-grey-40 bg-white text-base text-grey-100 shadow-none placeholder:text-grey-70";

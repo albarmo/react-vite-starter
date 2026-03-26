@@ -27,6 +27,7 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { cn } from "@/shared/lib/cn";
+import { subjectFormSchema } from "@/features/master-file/authority-files/schema/subject.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type ColumnDef } from "@tanstack/react-table";
 import { Pencil, Plus, Trash2 } from "lucide-react";
@@ -44,23 +45,15 @@ import {
   PAGE_SIZE_OPTIONS,
   RELATED_TERM_OPTIONS,
   SUBJECT_TYPE_OPTIONS,
-  subjectFormSchema,
-  type SubjectFormData,
-  type SubjectFormInitialState,
-  type SubjectVocabularyControl,
-  type SubjectVocabularyControlModalData,
 } from "./subject-form-presets";
-
-type SubjectFormProps = {
-  mode: "create" | "edit";
-  pageTitle: string;
-  initialState: SubjectFormInitialState;
-  recordId?: string;
-};
-
-type VocabularyControlTableRow = SubjectVocabularyControl & {
-  formIndex: number;
-};
+import type {
+  SubjectFormData,
+  SubjectFormInitialState,
+  SubjectFormProps,
+  SubjectVocabularyControl,
+  SubjectVocabularyControlModalData,
+  VocabularyControlTableRow,
+} from "@/features/master-file/authority-files/types/subject.types";
 
 const FORM_INPUT_CLASS =
   "h-11 rounded-md border-grey-40 bg-white text-base text-grey-100 shadow-none placeholder:text-grey-70";

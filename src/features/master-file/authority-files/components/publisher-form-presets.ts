@@ -1,4 +1,4 @@
-import { z } from "zod";
+import type { PublisherFormInitialState } from "@/features/master-file/authority-files/types/publisher.types";
 
 const PUBLISHER_FORM_PRESET_RECORDS = [
   {
@@ -8,17 +8,6 @@ const PUBLISHER_FORM_PRESET_RECORDS = [
     name: "Orphan Publisher",
   },
 ] as const;
-
-export const publisherFormSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(1, "Name wajib diisi")
-    .max(120, "Name maksimal 120 karakter"),
-});
-
-export type PublisherFormData = z.infer<typeof publisherFormSchema>;
-export type PublisherFormInitialState = PublisherFormData;
 
 export const CREATE_PUBLISHER_FORM_INITIAL_STATE: PublisherFormInitialState = {
   name: "",

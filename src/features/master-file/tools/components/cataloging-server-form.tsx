@@ -21,20 +21,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo, type ReactNode } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { catalogingServerFormSchema } from "@/features/master-file/tools/schemas/cataloging-server.schema";
+import type {
+  CatalogingServerFormData,
+  CatalogingServerFormInitialState,
+  CatalogingServerFormProps,
+} from "@/features/master-file/tools/types/cataloging-server.types";
 import {
   CATALOGING_SERVER_TYPE_OPTIONS,
   CREATE_CATALOGING_SERVER_FORM_INITIAL_STATE,
-  catalogingServerFormSchema,
-  type CatalogingServerFormData,
-  type CatalogingServerFormInitialState,
 } from "./cataloging-server-form-presets";
-
-type CatalogingServerFormProps = {
-  mode: "create" | "edit";
-  pageTitle: string;
-  initialState?: CatalogingServerFormInitialState;
-  recordId?: string;
-};
 
 const FORM_INPUT_CLASS =
   "h-11 rounded-md border-grey-40 bg-white text-base text-grey-100 shadow-none placeholder:text-grey-70";

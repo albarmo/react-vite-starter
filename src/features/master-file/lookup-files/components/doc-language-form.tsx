@@ -20,18 +20,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  docLanguageFormSchema,
-  type DocLanguageFormData,
-  type DocLanguageFormInitialState,
-} from "./doc-language-form-presets";
-
-type DocLanguageFormProps = {
-  mode: "create" | "edit";
-  pageTitle: string;
-  initialState: DocLanguageFormInitialState;
-  recordId?: string;
-};
+import { docLanguageFormSchema } from "@/features/master-file/lookup-files/schemas/doc-language.schema";
+import type {
+  DocLanguageFormData,
+  DocLanguageFormInitialState,
+  DocLanguageFormProps,
+} from "@/features/master-file/lookup-files/types/doc-language.types";
 
 const FORM_INPUT_CLASS =
   "h-11 rounded-md border-grey-40 bg-white text-base text-grey-100 shadow-none placeholder:text-grey-70";

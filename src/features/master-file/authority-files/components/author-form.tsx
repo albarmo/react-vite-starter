@@ -18,21 +18,16 @@ import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
 import { cn } from "@/shared/lib/cn";
+import { authorFormSchema } from "@/features/master-file/authority-files/schema/author.schema";
+import type {
+  AuthorFormData,
+  AuthorFormInitialState,
+  AuthorFormProps,
+} from "@/features/master-file/authority-files/types/author.types";
 import { Controller, useForm } from "react-hook-form";
 import { useEffect, useMemo, type ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  AUTHOR_TYPE_OPTIONS,
-  authorFormSchema,
-  type AuthorFormData,
-  type AuthorFormInitialState,
-} from "./author-form-presets";
-
-type AuthorFormProps = {
-  mode: "create" | "edit";
-  pageTitle: string;
-  initialState: AuthorFormInitialState;
-};
+import { AUTHOR_TYPE_OPTIONS } from "./author-form-presets";
 
 const FORM_INPUT_CLASS =
   "h-11 rounded-md border-grey-40 bg-white text-base text-grey-100 shadow-none placeholder:text-grey-70";

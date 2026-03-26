@@ -3,7 +3,13 @@
 import { useUiStore } from "@/app/store/ui.store";
 import { ItemStatusDeleteModal } from "@/features/master-file/lookup-files/components/item-status-delete-modal";
 import { ITEM_STATUS_PRESET_RECORDS } from "@/features/master-file/lookup-files/components/item-status-form-presets";
-import type { ItemStatusPresetRecord } from "@/features/master-file/lookup-files/components/item-status-form-presets";
+import type {
+  ItemStatusDeleteTarget as DeleteTarget,
+  ItemStatusFooterProps as FooterProps,
+  ItemStatusRecord,
+  ItemStatusSelectionBarProps as SelectionBarProps,
+  ItemStatusToolbarProps as ToolbarProps,
+} from "@/features/master-file/lookup-files/types/item-status.types";
 import { PageContainer } from "@/shared/components/common/app-page-container";
 import { AppPageHeader } from "@/shared/components/common/app-page-header";
 import { DataTable } from "@/shared/components/common/data-table";
@@ -24,35 +30,6 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { useDeferredValue, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-type DeleteTarget =
-  | {
-      type: "single";
-      record: ItemStatusPresetRecord;
-    }
-  | {
-      type: "selected";
-      ids: string[];
-    };
-
-type ToolbarProps = {
-  search: string;
-  onSearchChange: (value: string) => void;
-  onClearSearch: () => void;
-  onCreate: () => void;
-};
-
-type FooterProps = {
-  pageSize: number;
-  totalItems: number;
-  displayedCount: number;
-  onPageSizeChange: (value: number) => void;
-};
-
-type SelectionBarProps = {
-  sidebarOpen: boolean;
-  onDeleteSelected: () => void;
-};
 
 const PAGE_SIZE_OPTIONS = [10, 20, 50];
 
@@ -216,7 +193,7 @@ export default function ItemStatusPage() {
     setDeleteTarget(null);
   };
 
-  const columns = useMemo<ColumnDef<ItemStatusPresetRecord>[]>(
+  const columns = useMemo<ColumnDef<ItemStatusRecord>[]>(
     () => [
       {
         id: "select",

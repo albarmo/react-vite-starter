@@ -17,21 +17,15 @@ import { Form } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { cn } from "@/shared/lib/cn";
+import { locationFormSchema } from "@/features/master-file/authority-files/schema/location.schema";
+import type {
+  LocationFormData,
+  LocationFormInitialState,
+  LocationFormProps,
+} from "@/features/master-file/authority-files/types/location.types";
 import { useEffect, useMemo, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  locationFormSchema,
-  type LocationFormData,
-  type LocationFormInitialState,
-} from "./location-form-presets";
-
-type LocationFormProps = {
-  mode: "create" | "edit";
-  pageTitle: string;
-  initialState: LocationFormInitialState;
-  recordId?: string;
-};
 
 const FORM_INPUT_CLASS =
   "h-11 rounded-md border-grey-40 bg-white text-base text-grey-100 shadow-none placeholder:text-grey-70";

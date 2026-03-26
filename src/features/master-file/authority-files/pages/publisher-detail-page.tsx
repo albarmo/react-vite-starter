@@ -16,15 +16,7 @@ import { Button } from "@/shared/components/ui/button";
 import { Pencil, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-
-type PublisherStatus = "active" | "orphaned";
-
-type PublisherDetail = {
-  id: string;
-  name: string;
-  status: PublisherStatus;
-  updatedAt: string;
-};
+import type { PublisherDetail } from "@/features/master-file/authority-files/types/publisher.types";
 
 const PUBLISHER_DETAILS: PublisherDetail[] = [
   {

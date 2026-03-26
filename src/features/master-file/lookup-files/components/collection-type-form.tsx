@@ -20,18 +20,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  collectionTypeFormSchema,
-  type CollectionTypeFormData,
-  type CollectionTypeFormInitialState,
-} from "./collection-type-form-presets";
-
-type CollectionTypeFormProps = {
-  mode: "create" | "edit";
-  pageTitle: string;
-  initialState: CollectionTypeFormInitialState;
-  recordId?: string;
-};
+import { collectionTypeFormSchema } from "@/features/master-file/lookup-files/schemas/collection-type.schema";
+import type {
+  CollectionTypeFormData,
+  CollectionTypeFormInitialState,
+  CollectionTypeFormProps,
+} from "@/features/master-file/lookup-files/types/collection-type.types";
 
 const FORM_INPUT_CLASS =
   "h-11 rounded-md border-grey-40 bg-white text-base text-grey-100 shadow-none placeholder:text-grey-70";

@@ -10,6 +10,8 @@ import { BibliographicItemDetailPage } from "@/features/bibliographic/pages/bibl
 import { BibliographicItemEditPage } from "@/features/bibliographic/pages/bibliographic-item-edit-page";
 import { BibliographicListPage } from "@/features/bibliographic/pages/bibliographic-list-page";
 import { BibliographicPage } from "@/features/bibliographic/pages/bibliographic-page";
+import { BookRequestDetailPage } from "@/features/bibliographic/pages/book-request-detail-page";
+import BookRequestsPage from "@/features/bibliographic/pages/book-requests-page";
 import { CirculationPage } from "@/features/circulation/pages/circulation-page";
 import { DashboardPage } from "@/features/dashboard/pages/dashboard-page";
 import { AuthorCreatePage } from "@/features/master-file/authority-files/pages/author-create-page";
@@ -133,12 +135,12 @@ const bibliographicRoutes = [
     element: <BibliographicCopyCatalogingPage />,
   },
   {
-    path: "bibliographic/labels-printing",
-    element: <BibliographicPage />,
+    path: "bibliographic/book-requests",
+    element: <BookRequestsPage />,
   },
   {
-    path: "bibliographic/item-barcode-printing",
-    element: <BibliographicPage />,
+    path: "bibliographic/book-requests/detail/:id",
+    element: <BookRequestDetailPage />,
   },
 ];
 

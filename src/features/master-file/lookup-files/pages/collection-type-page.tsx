@@ -2,10 +2,14 @@
 
 import { useUiStore } from "@/app/store/ui.store";
 import { CollectionTypeDeleteModal } from "@/features/master-file/lookup-files/components/collection-type-delete-modal";
-import {
-  COLLECTION_TYPE_PRESET_RECORDS,
-  type CollectionTypePresetRecord,
-} from "@/features/master-file/lookup-files/components/collection-type-form-presets";
+import { COLLECTION_TYPE_PRESET_RECORDS } from "@/features/master-file/lookup-files/components/collection-type-form-presets";
+import type {
+  CollectionTypeDeleteTarget as DeleteTarget,
+  CollectionTypeFooterProps as FooterProps,
+  CollectionTypeRecord,
+  CollectionTypeSelectionBarProps as SelectionBarProps,
+  CollectionTypeToolbarProps as ToolbarProps,
+} from "@/features/master-file/lookup-files/types/collection-type.types";
 import { PageContainer } from "@/shared/components/common/app-page-container";
 import { AppPageHeader } from "@/shared/components/common/app-page-header";
 import { DataTable } from "@/shared/components/common/data-table";
@@ -26,35 +30,6 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { useDeferredValue, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-type DeleteTarget =
-  | {
-      type: "single";
-      record: CollectionTypePresetRecord;
-    }
-  | {
-      type: "selected";
-      ids: string[];
-    };
-
-type ToolbarProps = {
-  search: string;
-  onSearchChange: (value: string) => void;
-  onClearSearch: () => void;
-  onCreate: () => void;
-};
-
-type FooterProps = {
-  pageSize: number;
-  totalItems: number;
-  displayedCount: number;
-  onPageSizeChange: (value: number) => void;
-};
-
-type SelectionBarProps = {
-  sidebarOpen: boolean;
-  onDeleteSelected: () => void;
-};
 
 const PAGE_SIZE_OPTIONS = [10, 20, 50];
 
@@ -218,7 +193,7 @@ export default function CollectionTypePage() {
     setDeleteTarget(null);
   };
 
-  const columns = useMemo<ColumnDef<CollectionTypePresetRecord>[]>(
+  const columns = useMemo<ColumnDef<CollectionTypeRecord>[]>(
     () => [
       {
         id: "select",

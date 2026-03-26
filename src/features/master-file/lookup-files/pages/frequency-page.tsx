@@ -6,8 +6,14 @@ import {
   FREQUENCY_PRESET_RECORDS,
   getFrequencyLanguageLabel,
   getFrequencyTimeUnitLabel,
-  type FrequencyPresetRecord,
 } from "@/features/master-file/lookup-files/components/frequency-form-presets";
+import type {
+  FrequencyDeleteTarget as DeleteTarget,
+  FrequencyFooterProps as FooterProps,
+  FrequencyRecord,
+  FrequencySelectionBarProps as SelectionBarProps,
+  FrequencyToolbarProps as ToolbarProps,
+} from "@/features/master-file/lookup-files/types/frequency.types";
 import { PageContainer } from "@/shared/components/common/app-page-container";
 import { AppPageHeader } from "@/shared/components/common/app-page-header";
 import { DataTable } from "@/shared/components/common/data-table";
@@ -28,35 +34,6 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { useDeferredValue, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-type DeleteTarget =
-  | {
-      type: "single";
-      record: FrequencyPresetRecord;
-    }
-  | {
-      type: "selected";
-      ids: string[];
-    };
-
-type ToolbarProps = {
-  search: string;
-  onSearchChange: (value: string) => void;
-  onClearSearch: () => void;
-  onCreate: () => void;
-};
-
-type FooterProps = {
-  pageSize: number;
-  totalItems: number;
-  displayedCount: number;
-  onPageSizeChange: (value: number) => void;
-};
-
-type SelectionBarProps = {
-  sidebarOpen: boolean;
-  onDeleteSelected: () => void;
-};
 
 const PAGE_SIZE_OPTIONS = [10, 20, 50];
 
@@ -224,7 +201,7 @@ export default function FrequencyPage() {
     setDeleteTarget(null);
   };
 
-  const columns = useMemo<ColumnDef<FrequencyPresetRecord>[]>(
+  const columns = useMemo<ColumnDef<FrequencyRecord>[]>(
     () => [
       {
         id: "select",

@@ -10,14 +10,7 @@ import {
 } from "@/shared/components/ui/dialog";
 import { cn } from "@/shared/lib/cn";
 import { Trash2, X } from "lucide-react";
-import type { ReactNode } from "react";
-
-type LabelDeleteModalProps = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onDelete: () => void;
-  description?: ReactNode;
-};
+import type { LabelDeleteModalProps } from "@/features/master-file/lookup-files/types/label.types";
 
 export function LabelDeleteModal({
   open,

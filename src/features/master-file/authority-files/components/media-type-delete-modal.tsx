@@ -1,5 +1,6 @@
 "use client";
 
+import type { MediaTypeDeleteModalProps } from "@/features/master-file/authority-files/types/media-type.types";
 import { Button } from "@/shared/components/ui/button";
 import {
   Dialog,
@@ -10,14 +11,6 @@ import {
 } from "@/shared/components/ui/dialog";
 import { cn } from "@/shared/lib/cn";
 import { Trash2, X } from "lucide-react";
-import type { ReactNode } from "react";
-
-type MediaTypeDeleteModalProps = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onDelete: () => void;
-  description?: ReactNode;
-};
 
 export function MediaTypeDeleteModal({
   open,

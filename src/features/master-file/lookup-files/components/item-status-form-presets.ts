@@ -1,4 +1,8 @@
-import { z } from "zod";
+import type {
+  ItemStatusFormInitialState,
+  ItemStatusRecord,
+  ItemStatusRuleKey,
+} from "@/features/master-file/lookup-files/types/item-status.types";
 
 export const ITEM_STATUS_RULE_OPTIONS = [
   {
@@ -11,17 +15,7 @@ export const ITEM_STATUS_RULE_OPTIONS = [
   },
 ] as const;
 
-export type ItemStatusRuleKey = (typeof ITEM_STATUS_RULE_OPTIONS)[number]["value"];
-
-export type ItemStatusPresetRecord = {
-  id: string;
-  code: string;
-  name: string;
-  rules: ItemStatusRuleKey[];
-  updatedAt: string;
-};
-
-export const ITEM_STATUS_PRESET_RECORDS: ItemStatusPresetRecord[] = [
+export const ITEM_STATUS_PRESET_RECORDS: ItemStatusRecord[] = [
   {
     id: "item-status-1",
     code: "MIS",
@@ -44,30 +38,6 @@ export const ITEM_STATUS_PRESET_RECORDS: ItemStatusPresetRecord[] = [
     updatedAt: "28 Feb 2026",
   },
 ];
-
-export const itemStatusFormSchema = z.object({
-  code: z
-    .string()
-    .trim()
-    .min(1, "Code wajib diisi")
-    .max(20, "Code maksimal 20 karakter"),
-  name: z
-    .string()
-    .trim()
-    .min(1, "Name wajib diisi")
-    .max(120, "Name maksimal 120 karakter"),
-  rules: z.array(
-    z.enum(
-      ITEM_STATUS_RULE_OPTIONS.map((option) => option.value) as [
-        ItemStatusRuleKey,
-        ...ItemStatusRuleKey[],
-      ],
-    ),
-  ),
-});
-
-export type ItemStatusFormData = z.infer<typeof itemStatusFormSchema>;
-export type ItemStatusFormInitialState = ItemStatusFormData;
 
 export const CREATE_ITEM_STATUS_FORM_INITIAL_STATE: ItemStatusFormInitialState =
   {

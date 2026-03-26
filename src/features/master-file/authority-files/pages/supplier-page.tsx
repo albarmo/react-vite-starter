@@ -22,27 +22,12 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { useDeferredValue, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-type SupplierRecord = {
-  id: string;
-  name: string;
-  address: string;
-  contact: string;
-  phoneNumber: string;
-  faxNumber: string;
-  accountNumber: string;
-  updatedAt: string;
-};
-
-type DeleteTarget =
-  | {
-      type: "single";
-      record: SupplierRecord;
-    }
-  | {
-      type: "selected";
-      ids: string[];
-    };
+import type {
+  SupplierDeleteTarget as DeleteTarget,
+  SupplierFooterProps,
+  SupplierRecord,
+  SupplierSelectionBarProps,
+} from "@/features/master-file/authority-files/types/supplier.types";
 
 const PAGE_SIZE_OPTIONS = [10, 20, 50];
 const SUPPLIER_RECORDS: SupplierRecord[] = [
@@ -57,16 +42,6 @@ const SUPPLIER_RECORDS: SupplierRecord[] = [
     updatedAt: "28 Feb 2026",
   },
 ];
-
-type SupplierFooterProps = {
-  pageSize: number;
-  onPageSizeChange: (value: number) => void;
-};
-
-type SupplierSelectionBarProps = {
-  sidebarOpen: boolean;
-  onDeleteSelected: () => void;
-};
 
 function SupplierFooter({ pageSize, onPageSizeChange }: SupplierFooterProps) {
   return (

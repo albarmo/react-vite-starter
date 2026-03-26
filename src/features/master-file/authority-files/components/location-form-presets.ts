@@ -1,4 +1,4 @@
-import { z } from "zod";
+import type { LocationFormInitialState } from "@/features/master-file/authority-files/types/location.types";
 
 const LOCATION_FORM_PRESET_RECORDS = [
   {
@@ -10,23 +10,6 @@ const LOCATION_FORM_PRESET_RECORDS = [
     name: "Orphaned Location",
   },
 ] as const;
-
-export const locationFormSchema = z.object({
-  code: z
-    .string()
-    .trim()
-    .min(1, "Code wajib diisi")
-    .max(20, "Code maksimal 20 karakter")
-    .regex(/^[A-Za-z0-9-]+$/, "Code hanya boleh huruf, angka, dan tanda hubung"),
-  name: z
-    .string()
-    .trim()
-    .min(1, "Name wajib diisi")
-    .max(120, "Name maksimal 120 karakter"),
-});
-
-export type LocationFormData = z.infer<typeof locationFormSchema>;
-export type LocationFormInitialState = LocationFormData;
 
 export const CREATE_LOCATION_FORM_INITIAL_STATE: LocationFormInitialState = {
   code: "",

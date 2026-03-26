@@ -1,4 +1,8 @@
-import { z } from "zod";
+import type {
+  CatalogingServerFormInitialState,
+  CatalogingServerRecord,
+  CatalogingServerTypeValue,
+} from "@/features/master-file/tools/types/cataloging-server.types";
 
 export const CATALOGING_SERVER_TYPE_OPTIONS = [
   { value: "p2p-server", label: "P2P server" },
@@ -7,18 +11,7 @@ export const CATALOGING_SERVER_TYPE_OPTIONS = [
   { value: "marc-sru-server", label: "MARC SRU server" },
 ] as const;
 
-export type CatalogingServerTypeValue =
-  (typeof CATALOGING_SERVER_TYPE_OPTIONS)[number]["value"];
-
-export type CatalogingServerPresetRecord = {
-  id: string;
-  name: string;
-  url: string;
-  type: CatalogingServerTypeValue;
-  updatedAt: string;
-};
-
-export const CATALOGING_SERVER_PRESET_RECORDS: CatalogingServerPresetRecord[] = [
+export const CATALOGING_SERVER_PRESET_RECORDS: CatalogingServerRecord[] = [
   {
     id: "cataloging-server-1",
     name: "Senayan",
@@ -39,41 +32,12 @@ export function getCatalogingServerTypeLabel(
 
 export function getCatalogingServerRecordById(
   id: string,
-): CatalogingServerPresetRecord {
+): CatalogingServerRecord {
   return (
     CATALOGING_SERVER_PRESET_RECORDS.find((record) => record.id === id) ??
     CATALOGING_SERVER_PRESET_RECORDS[0]
   );
 }
-
-export const catalogingServerFormSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(1, "Name wajib diisi")
-    .max(120, "Name maksimal 120 karakter"),
-  url: z
-    .string()
-    .trim()
-    .min(1, "URL wajib diisi")
-    .max(255, "URL maksimal 255 karakter"),
-  type: z.enum(
-    [
-      "p2p-server",
-      "z3950-server",
-      "z3950-sru-server",
-      "marc-sru-server",
-    ],
-    {
-      message: "Type wajib dipilih",
-    },
-  ),
-});
-
-export type CatalogingServerFormData = z.infer<
-  typeof catalogingServerFormSchema
->;
-export type CatalogingServerFormInitialState = CatalogingServerFormData;
 
 export const CREATE_CATALOGING_SERVER_FORM_INITIAL_STATE: CatalogingServerFormInitialState =
   {

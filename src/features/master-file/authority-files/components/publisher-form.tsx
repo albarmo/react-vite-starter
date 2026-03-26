@@ -17,20 +17,15 @@ import { Form } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { cn } from "@/shared/lib/cn";
+import { publisherFormSchema } from "@/features/master-file/authority-files/schema/publisher.schema";
+import type {
+  PublisherFormData,
+  PublisherFormInitialState,
+  PublisherFormProps,
+} from "@/features/master-file/authority-files/types/publisher.types";
 import { useEffect, useMemo, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  publisherFormSchema,
-  type PublisherFormData,
-  type PublisherFormInitialState,
-} from "./publisher-form-presets";
-
-type PublisherFormProps = {
-  mode: "create" | "edit";
-  pageTitle: string;
-  initialState: PublisherFormInitialState;
-};
 
 const FORM_INPUT_CLASS =
   "h-11 rounded-md border-grey-40 bg-white text-base text-grey-100 shadow-none placeholder:text-grey-70";

@@ -22,48 +22,13 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { ChevronLeft, ChevronRight, Pencil, Plus, Trash2 } from "lucide-react";
 import { useDeferredValue, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-type MediaTypeRecord = {
-  id: string;
-  code: string;
-  name: string;
-  updatedAt: string;
-};
-
-type DeleteTarget =
-  | {
-      type: "single";
-      record: MediaTypeRecord;
-    }
-  | {
-      type: "selected";
-      ids: string[];
-    };
-
-type ToolbarProps = {
-  search: string;
-  onSearchChange: (value: string) => void;
-  onClearSearch: () => void;
-  onCreate: () => void;
-};
-
-type FooterProps = {
-  currentPage: number;
-  pageSize: number;
-  totalItems: number;
-  from: number;
-  to: number;
-  canPreviousPage: boolean;
-  canNextPage: boolean;
-  onPageSizeChange: (value: number) => void;
-  onPreviousPage: () => void;
-  onNextPage: () => void;
-};
-
-type SelectionBarProps = {
-  sidebarOpen: boolean;
-  onDeleteSelected: () => void;
-};
+import type {
+  MediaTypeDeleteTarget as DeleteTarget,
+  MediaTypeFooterProps as FooterProps,
+  MediaTypeRecord,
+  MediaTypeSelectionBarProps as SelectionBarProps,
+  MediaTypeToolbarProps as ToolbarProps,
+} from "@/features/master-file/authority-files/types/media-type.types";
 
 const PAGE_SIZE_OPTIONS = [10, 20, 50];
 const MEDIA_TYPE_BASE_RECORDS: Omit<MediaTypeRecord, "id">[] = [

@@ -1,12 +1,9 @@
-import { z } from "zod";
+import type {
+  CollectionTypeFormInitialState,
+  CollectionTypeRecord,
+} from "@/features/master-file/lookup-files/types/collection-type.types";
 
-export type CollectionTypePresetRecord = {
-  id: string;
-  type: string;
-  updatedAt: string;
-};
-
-export const COLLECTION_TYPE_PRESET_RECORDS: CollectionTypePresetRecord[] = [
+export const COLLECTION_TYPE_PRESET_RECORDS: CollectionTypeRecord[] = [
   {
     id: "collection-type-1",
     type: "Fiction",
@@ -23,17 +20,6 @@ export const COLLECTION_TYPE_PRESET_RECORDS: CollectionTypePresetRecord[] = [
     updatedAt: "28 Feb 2026",
   },
 ];
-
-export const collectionTypeFormSchema = z.object({
-  type: z
-    .string()
-    .trim()
-    .min(1, "Type wajib diisi")
-    .max(120, "Type maksimal 120 karakter"),
-});
-
-export type CollectionTypeFormData = z.infer<typeof collectionTypeFormSchema>;
-export type CollectionTypeFormInitialState = CollectionTypeFormData;
 
 export const CREATE_COLLECTION_TYPE_FORM_INITIAL_STATE: CollectionTypeFormInitialState =
   {

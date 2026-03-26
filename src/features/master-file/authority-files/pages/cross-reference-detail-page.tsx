@@ -15,12 +15,7 @@ import { Button } from "@/shared/components/ui/button";
 import { Pencil, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-
-type CrossReferenceDetail = {
-  id: string;
-  code: string;
-  description: string;
-};
+import type { CrossReferenceDetail } from "@/features/master-file/authority-files/types/cross-reference.types";
 
 const CROSS_REFERENCE_PRESETS: Omit<CrossReferenceDetail, "id">[] = [
   {

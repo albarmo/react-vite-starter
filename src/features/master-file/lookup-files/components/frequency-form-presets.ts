@@ -1,4 +1,9 @@
-import { z } from "zod";
+import type {
+  FrequencyFormInitialState,
+  FrequencyLanguageValue,
+  FrequencyRecord,
+  FrequencyTimeUnitValue,
+} from "@/features/master-file/lookup-files/types/frequency.types";
 
 export const FREQUENCY_LANGUAGE_OPTIONS = [
   { value: "english", label: "English" },
@@ -12,21 +17,7 @@ export const FREQUENCY_TIME_UNIT_OPTIONS = [
   { value: "year", label: "Year" },
 ] as const;
 
-export type FrequencyLanguageValue =
-  (typeof FREQUENCY_LANGUAGE_OPTIONS)[number]["value"];
-export type FrequencyTimeUnitValue =
-  (typeof FREQUENCY_TIME_UNIT_OPTIONS)[number]["value"];
-
-export type FrequencyPresetRecord = {
-  id: string;
-  frequency: string;
-  language: FrequencyLanguageValue;
-  timeIncrement: string;
-  timeUnit: FrequencyTimeUnitValue;
-  updatedAt: string;
-};
-
-export const FREQUENCY_PRESET_RECORDS: FrequencyPresetRecord[] = [
+export const FREQUENCY_PRESET_RECORDS: FrequencyRecord[] = [
   {
     id: "frequency-1",
     frequency: "3 Times a Year",
@@ -111,34 +102,12 @@ export function getFrequencyTimeUnitLabel(
   );
 }
 
-export function getFrequencyRecordById(id: string): FrequencyPresetRecord {
+export function getFrequencyRecordById(id: string): FrequencyRecord {
   return (
     FREQUENCY_PRESET_RECORDS.find((record) => record.id === id) ??
     FREQUENCY_PRESET_RECORDS[0]
   );
 }
-
-export const frequencyFormSchema = z.object({
-  frequency: z
-    .string()
-    .trim()
-    .min(1, "Frequency wajib diisi")
-    .max(120, "Frequency maksimal 120 karakter"),
-  language: z.enum(["english", "indonesia"], {
-    message: "Language wajib dipilih",
-  }),
-  timeIncrement: z
-    .string()
-    .trim()
-    .min(1, "Time Increment wajib diisi")
-    .regex(/^\d+$/, "Time Increment harus berupa angka"),
-  timeUnit: z.enum(["day", "week", "month", "year"], {
-    message: "Time Unit wajib dipilih",
-  }),
-});
-
-export type FrequencyFormData = z.infer<typeof frequencyFormSchema>;
-export type FrequencyFormInitialState = FrequencyFormData;
 
 export const CREATE_FREQUENCY_FORM_INITIAL_STATE: FrequencyFormInitialState = {
   frequency: "",

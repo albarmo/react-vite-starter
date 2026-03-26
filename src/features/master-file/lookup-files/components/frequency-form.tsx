@@ -21,21 +21,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo, type ReactNode } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { frequencyFormSchema } from "@/features/master-file/lookup-files/schemas/frequency.schema";
+import type {
+  FrequencyFormData,
+  FrequencyFormInitialState,
+  FrequencyFormProps,
+} from "@/features/master-file/lookup-files/types/frequency.types";
 import {
   CREATE_FREQUENCY_FORM_INITIAL_STATE,
   FREQUENCY_LANGUAGE_OPTIONS,
   FREQUENCY_TIME_UNIT_OPTIONS,
-  frequencyFormSchema,
-  type FrequencyFormData,
-  type FrequencyFormInitialState,
 } from "./frequency-form-presets";
-
-type FrequencyFormProps = {
-  mode: "create" | "edit";
-  pageTitle: string;
-  initialState?: FrequencyFormInitialState;
-  recordId?: string;
-};
 
 const FORM_INPUT_CLASS =
   "h-11 rounded-md border-grey-40 bg-white text-base text-grey-100 shadow-none placeholder:text-grey-70";

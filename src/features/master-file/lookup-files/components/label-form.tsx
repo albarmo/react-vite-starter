@@ -28,21 +28,14 @@ import {
 } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  labelFormSchema,
-  type LabelAttachment,
-  type LabelFormData,
-  type LabelFormInitialState,
-} from "./label-form-presets";
-
-type LabelFormProps = {
-  mode: "create" | "edit";
-  pageTitle: string;
-  initialState: LabelFormInitialState;
-  recordId?: string;
-};
-
-type UploadState = "idle" | "uploading" | "uploaded" | "paused";
+import { labelFormSchema } from "@/features/master-file/lookup-files/schemas/label.schema";
+import type {
+  LabelAttachment,
+  LabelFormData,
+  LabelFormInitialState,
+  LabelFormProps,
+  LabelUploadState as UploadState,
+} from "@/features/master-file/lookup-files/types/label.types";
 
 const FORM_INPUT_CLASS =
   "h-11 rounded-md border-grey-40 bg-white text-base text-grey-100 shadow-none placeholder:text-grey-70";

@@ -8,16 +8,9 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
+import type { CatalogingServerDeleteModalProps } from "@/features/master-file/tools/types/cataloging-server.types";
 import { cn } from "@/shared/lib/cn";
 import { Trash2, X } from "lucide-react";
-import type { ReactNode } from "react";
-
-type CatalogingServerDeleteModalProps = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onDelete: () => void;
-  description?: ReactNode;
-};
 
 export function CatalogingServerDeleteModal({
   open,

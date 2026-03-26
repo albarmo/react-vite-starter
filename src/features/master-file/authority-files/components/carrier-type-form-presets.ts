@@ -1,4 +1,4 @@
-import { z } from "zod";
+import type { CarrierTypeFormInitialState } from "@/features/master-file/authority-files/types/carrier-type.types";
 
 const CARRIER_TYPE_FORM_PRESET_RECORDS = [
   {
@@ -52,29 +52,6 @@ const CARRIER_TYPE_FORM_PRESET_RECORDS = [
     marcLeaderCode: "c",
   },
 ] as const;
-
-export const carrierTypeFormSchema = z.object({
-  code: z
-    .string()
-    .trim()
-    .min(1, "Code wajib diisi")
-    .max(20, "Code maksimal 20 karakter")
-    .regex(/^[A-Za-z0-9-]+$/, "Code hanya boleh huruf, angka, dan tanda hubung"),
-  name: z
-    .string()
-    .trim()
-    .min(1, "Name wajib diisi")
-    .max(120, "Name maksimal 120 karakter"),
-  marcLeaderCode: z
-    .string()
-    .trim()
-    .min(1, "MARC Leader Code wajib diisi")
-    .max(10, "MARC Leader Code maksimal 10 karakter")
-    .regex(/^[A-Za-z0-9]+$/, "MARC Leader Code hanya boleh huruf dan angka"),
-});
-
-export type CarrierTypeFormData = z.infer<typeof carrierTypeFormSchema>;
-export type CarrierTypeFormInitialState = CarrierTypeFormData;
 
 export const CREATE_CARRIER_TYPE_FORM_INITIAL_STATE: CarrierTypeFormInitialState =
   {
