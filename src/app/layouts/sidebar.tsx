@@ -1,28 +1,28 @@
+import { LIBRARY_ROUTE_PATHS } from "@/app/config/library-route-paths";
 import { PERMISSIONS, type AppPermission } from "@/app/config/permissions";
 import { useAuthStore } from "@/app/store/auth.store";
 import { useUiStore } from "@/app/store/ui.store";
 import { cn } from "@/shared/lib/cn";
-import {
-  ArrowUpDown,
-  BookOpen,
-  Bookmark,
-  ChevronDown,
-  ChevronRight,
-} from "lucide-react";
+import { BookOpen, Bookmark, ChevronDown, ChevronRight } from "lucide-react";
 import type React from "react";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Link, NavLink, useLocation } from "react-router-dom";
 
 type SidebarSubItem = {
   id: string;
   label: string;
+  to: string;
+  permission?: AppPermission;
 };
 
 type SidebarGroup = {
   id: string;
   label: string;
+  to: string;
   items?: SidebarSubItem[];
   collapsible?: boolean;
+  permission?: AppPermission;
 };
 
 type SidebarItem = {
@@ -34,54 +34,151 @@ type SidebarItem = {
   groups?: SidebarGroup[];
 };
 
-const BIBLIOGRAPHY_GROUPS: SidebarGroup[] = [
-  { id: "list", label: "List" },
-  { id: "copy-cataloging", label: "Copy Cataloging" },
-  { id: "book-requests", label: "Book Requests" },
+const BIBLIOGRAPHY_GROUPS: SidebarSubItem[] = [
+  {
+    id: "list",
+    label: "List",
+    to: LIBRARY_ROUTE_PATHS.bibliographic.list,
+  },
+  {
+    id: "copy-cataloging",
+    label: "Copy Cataloging",
+    to: LIBRARY_ROUTE_PATHS.bibliographic.copyCataloging,
+  },
+];
+
+const LIBRARY_GROUPS: SidebarGroup[] = [
+  {
+    id: "bibliographic",
+    label: "Bibliography",
+    to: LIBRARY_ROUTE_PATHS.bibliographic.root,
+    permission: PERMISSIONS.BIBLIOGRAPHIC_READ,
+    items: BIBLIOGRAPHY_GROUPS,
+    collapsible: true,
+  },
+  {
+    id: "circulation",
+    label: "Circulation",
+    to: LIBRARY_ROUTE_PATHS.circulation,
+    permission: PERMISSIONS.CIRCULATION_READ,
+  },
+  {
+    id: "stock-take",
+    label: "Stock Take",
+    to: LIBRARY_ROUTE_PATHS.stockTake,
+    permission: PERMISSIONS.STOCK_TAKE_READ,
+  },
+  {
+    id: "report",
+    label: "Report",
+    to: LIBRARY_ROUTE_PATHS.report,
+    permission: PERMISSIONS.REPORTING_READ,
+  },
+  {
+    id: "book-requests",
+    label: "Book Requests",
+    to: LIBRARY_ROUTE_PATHS.bookRequests.root,
+    permission: PERMISSIONS.BIBLIOGRAPHIC_READ,
+  },
 ];
 
 const AUTHORITY_FILE_ITEMS: SidebarSubItem[] = [
-  { id: "gmd", label: "GMD" },
-  { id: "content-type", label: "Content Type" },
-  { id: "media-type", label: "Media Type" },
-  { id: "carrier-type", label: "Carrier Type" },
-  { id: "publisher", label: "Publisher" },
-  { id: "supplier", label: "Supplier" },
-  { id: "author", label: "Author" },
-  { id: "subject", label: "Subject" },
-  { id: "location", label: "Location" },
+  { id: "gmd", label: "GMD", to: "/master-file/authority-files/gmd" },
+  {
+    id: "content-type",
+    label: "Content Type",
+    to: "/master-file/authority-files/content-type",
+  },
+  {
+    id: "media-type",
+    label: "Media Type",
+    to: "/master-file/authority-files/media-type",
+  },
+  {
+    id: "carrier-type",
+    label: "Carrier Type",
+    to: "/master-file/authority-files/carrier-type",
+  },
+  {
+    id: "publisher",
+    label: "Publisher",
+    to: "/master-file/authority-files/publisher",
+  },
+  {
+    id: "supplier",
+    label: "Supplier",
+    to: "/master-file/authority-files/supplier",
+  },
+  { id: "author", label: "Author", to: "/master-file/authority-files/author" },
+  {
+    id: "subject",
+    label: "Subject",
+    to: "/master-file/authority-files/subject",
+  },
+  {
+    id: "location",
+    label: "Location",
+    to: "/master-file/authority-files/location",
+  },
 ];
 
 const LOOKUP_FILE_ITEMS: SidebarSubItem[] = [
-  { id: "place", label: "Place" },
-  { id: "item-status", label: "Item Status" },
-  { id: "collection-type", label: "Collection Type" },
-  { id: "doc-language", label: "Doc. Language" },
-  { id: "label", label: "Label" },
-  { id: "frequency", label: "Frequency" },
+  { id: "place", label: "Place", to: "/master-file/look-up-files/place" },
+  {
+    id: "item-status",
+    label: "Item Status",
+    to: "/master-file/look-up-files/item-status",
+  },
+  {
+    id: "collection-type",
+    label: "Collection Type",
+    to: "/master-file/look-up-files/collection-type",
+  },
+  {
+    id: "doc-language",
+    label: "Doc. Language",
+    to: "/master-file/look-up-files/doc-language",
+  },
+  { id: "label", label: "Label", to: "/master-file/look-up-files/label" },
+  {
+    id: "frequency",
+    label: "Frequency",
+    to: "/master-file/look-up-files/frequency",
+  },
 ];
 
 const TOOLS_ITEMS: SidebarSubItem[] = [
-  { id: "cataloging-servers", label: "Cataloging Servers" },
-  { id: "item-code-pattern", label: "Item Code Pattern" },
+  {
+    id: "cataloging-servers",
+    label: "Cataloging Servers",
+    to: "/master-file/tools/cataloging-servers",
+  },
+  {
+    id: "item-code-pattern",
+    label: "Item Code Pattern",
+    to: "/master-file/tools/item-code-pattern",
+  },
 ];
 
 const MASTER_FILE_GROUPS: SidebarGroup[] = [
   {
     id: "authority-files",
     label: "Authority Files",
+    to: "/master-file/authority-files",
     items: AUTHORITY_FILE_ITEMS,
     collapsible: true,
   },
   {
     id: "look-up-files",
     label: "Look Up Files",
+    to: "/master-file/look-up-files",
     items: LOOKUP_FILE_ITEMS,
     collapsible: true,
   },
   {
     id: "tools",
     label: "Tools",
+    to: "/master-file/tools",
     items: TOOLS_ITEMS,
     collapsible: true,
   },
@@ -89,20 +186,20 @@ const MASTER_FILE_GROUPS: SidebarGroup[] = [
 
 const SIDEBAR_ITEMS: SidebarItem[] = [
   {
-    id: "bibliographic",
-    label: "Bibliography",
-    to: "/bibliographic",
+    id: "library",
+    label: "Library",
+    to: LIBRARY_ROUTE_PATHS.root,
     icon: BookOpen,
-    permission: PERMISSIONS.BIBLIOGRAPHIC_READ,
-    groups: BIBLIOGRAPHY_GROUPS,
+    groups: LIBRARY_GROUPS,
   },
-  {
-    id: "circulation",
-    label: "Circulation",
-    to: "/circulation",
-    icon: ArrowUpDown,
-    permission: PERMISSIONS.CIRCULATION_READ,
-  },
+  // {
+  //   id: "bibliographic",
+  //   label: "Bibliography",
+  //   to: "/bibliographic",
+  //   icon: BookOpen,
+  //   permission: PERMISSIONS.BIBLIOGRAPHIC_READ,
+  //   groups: BIBLIOGRAPHY_GROUPS,
+  // },
   {
     id: "master-file",
     label: "Master File",
@@ -131,6 +228,16 @@ function normalizePath(pathname: string) {
   return pathname.replace(/\/+$/, "") || "/";
 }
 
+function isPathActive(pathname: string, targetPath: string) {
+  const normalizedPath = normalizePath(pathname);
+  const normalizedTargetPath = normalizePath(targetPath);
+
+  return (
+    normalizedPath === normalizedTargetPath ||
+    normalizedPath.startsWith(`${normalizedTargetPath}/`)
+  );
+}
+
 function getDefaultSubKey(item: SidebarItem) {
   const firstGroup = item.groups?.[0];
   if (!firstGroup) return null;
@@ -138,52 +245,30 @@ function getDefaultSubKey(item: SidebarItem) {
 }
 
 function isItemRouteActive(item: SidebarItem, pathname: string) {
-  return normalizePath(pathname).startsWith(normalizePath(item.to));
+  return isPathActive(pathname, item.to);
 }
 
 function getItemActiveSubKey(item: SidebarItem, pathname: string) {
-  const normalizedPath = normalizePath(pathname);
-  const normalizedBase = normalizePath(item.to);
+  if (!isItemRouteActive(item, pathname)) return null;
 
-  if (!normalizedPath.startsWith(normalizedBase)) return null;
+  for (const group of item.groups ?? []) {
+    const activeSubItem = group.items?.find((subItem) =>
+      isSubItemRouteActive(subItem, pathname),
+    );
 
-  const remainder = normalizedPath
-    .slice(normalizedBase.length)
-    .replace(/^\/+/, "");
-  if (!remainder) return getDefaultSubKey(item);
-
-  const segments = remainder.split("/").filter(Boolean);
-
-  if (segments.length === 1) return segments[0];
-  if (segments.length >= 2) return segments[segments.length - 1];
+    if (activeSubItem) return activeSubItem.id;
+    if (isGroupRouteActive(group, pathname)) return group.id;
+  }
 
   return getDefaultSubKey(item);
 }
 
-function isGroupRouteActive(
-  item: SidebarItem,
-  group: SidebarGroup,
-  pathname: string,
-) {
-  const normalizedPath = normalizePath(pathname);
-  const groupBasePath = `${normalizePath(item.to)}/${group.id}`;
-
-  if (group.items?.length) {
-    return normalizedPath.startsWith(groupBasePath);
-  }
-
-  return normalizedPath === groupBasePath;
+function isGroupRouteActive(group: SidebarGroup, pathname: string) {
+  return isPathActive(pathname, group.to);
 }
 
-function isSubItemRouteActive(
-  item: SidebarItem,
-  group: SidebarGroup,
-  subItem: SidebarSubItem,
-  pathname: string,
-) {
-  const normalizedPath = normalizePath(pathname);
-  const subItemPath = `${normalizePath(item.to)}/${group.id}/${subItem.id}`;
-  return normalizedPath === subItemPath;
+function isSubItemRouteActive(subItem: SidebarSubItem, pathname: string) {
+  return isPathActive(pathname, subItem.to);
 }
 
 function getMainItemClass(isActive: boolean) {
@@ -230,7 +315,15 @@ export function Sidebar() {
     () =>
       SIDEBAR_ITEMS.filter(
         (item) => !item.permission || userPermissions.includes(item.permission),
-      ),
+      )
+        .map((item) => ({
+          ...item,
+          groups: item.groups?.filter(
+            (group) =>
+              !group.permission || userPermissions.includes(group.permission),
+          ),
+        }))
+        .filter((item) => !item.groups || item.groups.length > 0),
     [userPermissions],
   );
 
@@ -287,7 +380,7 @@ export function Sidebar() {
   return (
     <aside
       className={cn(
-        "h-full min-h-0 overflow-y-auto border-r border-border bg-grey-10 transition-all duration-200",
+        "hide-scrollbar h-full min-h-0 overflow-y-auto border-r border-border bg-grey-10 transition-all duration-200",
         sidebarOpen ? "w-screen md:w-68" : "w-screen md:w-20",
       )}
     >
@@ -351,7 +444,7 @@ export function Sidebar() {
 
               {sidebarOpen && hasGroups && isMenuExpanded && (
                 <SidebarGroupsList
-                  item={item}
+                  itemId={item.id}
                   groups={groups}
                   pathname={pathname}
                   activeSubKey={activeSubKey}
@@ -459,10 +552,12 @@ const CollapsedSidebarFlyoutTrigger = memo(
       if (!isOpen) return;
 
       const handleClickOutside = (event: MouseEvent) => {
-        if (!containerRef.current) return;
-        if (!containerRef.current.contains(event.target as Node)) {
-          onCloseFlyout();
-        }
+        const target = event.target as Node;
+
+        if (containerRef.current?.contains(target)) return;
+        if (flyoutRef.current?.contains(target)) return;
+
+        onCloseFlyout();
       };
 
       const handleEscape = (event: KeyboardEvent) => {
@@ -537,48 +632,53 @@ const CollapsedSidebarFlyoutTrigger = memo(
           </div>
         </div>
 
-        <div
-          ref={flyoutRef}
-          className={cn(
-            "fixed z-[60] w-72 rounded-2xl border border-border bg-white p-3 shadow-lg",
-            "origin-left transition-all duration-200 ease-out",
-            isOpen
-              ? "pointer-events-auto translate-x-0 opacity-100"
-              : "pointer-events-none -translate-x-2 opacity-0",
-          )}
-          style={{
-            left: flyoutPosition.left,
-            top: flyoutPosition.top,
-            width: FLYOUT_WIDTH,
-          }}
-          onMouseEnter={onOpenFlyout}
-          onMouseLeave={onScheduleCloseFlyout}
-        >
-          <div className="mb-2 flex items-center gap-2 px-2 py-1">
-            <item.icon className="size-4 shrink-0 text-grey-90" />
-            <span className="text-base font-medium text-grey-100">
-              {item.label}
-            </span>
-          </div>
+        {typeof document !== "undefined"
+          ? createPortal(
+              <div
+                ref={flyoutRef}
+                className={cn(
+                  "fixed z-[45] w-72 rounded-2xl border border-border bg-white p-3 shadow-lg",
+                  "origin-left transition-all duration-200 ease-out",
+                  isOpen
+                    ? "pointer-events-auto translate-x-0 opacity-100"
+                    : "pointer-events-none -translate-x-2 opacity-0",
+                )}
+                style={{
+                  left: flyoutPosition.left,
+                  top: flyoutPosition.top,
+                  width: FLYOUT_WIDTH,
+                }}
+                onMouseEnter={onOpenFlyout}
+                onMouseLeave={onScheduleCloseFlyout}
+              >
+                <div className="mb-2 flex items-center gap-2 px-2 py-1">
+                  <item.icon className="size-4 shrink-0 text-grey-90" />
+                  <span className="text-base font-medium text-grey-100">
+                    {item.label}
+                  </span>
+                </div>
 
-          <SidebarGroupsList
-            item={item}
-            groups={groups}
-            pathname={pathname}
-            activeSubKey={activeSubKey}
-            expandedGroups={expandedGroups}
-            onToggleGroup={onToggleGroup}
-            onNavigate={onCloseFlyout}
-            className="space-y-1"
-          />
-        </div>
+                <SidebarGroupsList
+                  itemId={item.id}
+                  groups={groups}
+                  pathname={pathname}
+                  activeSubKey={activeSubKey}
+                  expandedGroups={expandedGroups}
+                  onToggleGroup={onToggleGroup}
+                  onNavigate={onCloseFlyout}
+                  className="space-y-1"
+                />
+              </div>,
+              document.body,
+            )
+          : null}
       </div>
     );
   },
 );
 
 type SidebarGroupsListProps = {
-  item: SidebarItem;
+  itemId: string;
   groups: SidebarGroup[];
   pathname: string;
   activeSubKey: string | null;
@@ -589,7 +689,7 @@ type SidebarGroupsListProps = {
 };
 
 const SidebarGroupsList = memo(function SidebarGroupsList({
-  item,
+  itemId,
   groups,
   pathname,
   activeSubKey,
@@ -603,7 +703,7 @@ const SidebarGroupsList = memo(function SidebarGroupsList({
       {groups.map((group) => (
         <SidebarGroupRenderer
           key={group.id}
-          item={item}
+          itemId={itemId}
           group={group}
           pathname={pathname}
           activeSubKey={activeSubKey}
@@ -617,7 +717,7 @@ const SidebarGroupsList = memo(function SidebarGroupsList({
 });
 
 type SidebarGroupRendererProps = {
-  item: SidebarItem;
+  itemId: string;
   group: SidebarGroup;
   pathname: string;
   activeSubKey: string | null;
@@ -627,7 +727,7 @@ type SidebarGroupRendererProps = {
 };
 
 const SidebarGroupRenderer = memo(function SidebarGroupRenderer({
-  item,
+  itemId,
   group,
   pathname,
   activeSubKey,
@@ -636,10 +736,10 @@ const SidebarGroupRenderer = memo(function SidebarGroupRenderer({
   onNavigate,
 }: SidebarGroupRendererProps) {
   const groupHasChildren = Boolean(group.items?.length);
-  const groupStateKey = getGroupStateKey(item.id, group.id);
+  const groupStateKey = getGroupStateKey(itemId, group.id);
 
   const groupIsActive = groupHasChildren
-    ? isGroupRouteActive(item, group, pathname)
+    ? isGroupRouteActive(group, pathname)
     : activeSubKey === group.id;
 
   const isGroupExpanded = groupHasChildren
@@ -673,17 +773,12 @@ const SidebarGroupRenderer = memo(function SidebarGroupRenderer({
         >
           <div className="space-y-1 py-1 pl-3">
             {group.items?.map((groupItem) => {
-              const isSubItemActive = isSubItemRouteActive(
-                item,
-                group,
-                groupItem,
-                pathname,
-              );
+              const isSubItemActive = isSubItemRouteActive(groupItem, pathname);
 
               return (
                 <Link
                   key={groupItem.id}
-                  to={`${item.to}/${group.id}/${groupItem.id}`}
+                  to={groupItem.to}
                   onClick={onNavigate}
                   className={cn(
                     "flex items-center rounded-xl px-4 py-2.5 text-base transition-colors",
@@ -702,7 +797,7 @@ const SidebarGroupRenderer = memo(function SidebarGroupRenderer({
 
   return (
     <Link
-      to={`${item.to}/${group.id}`}
+      to={group.to}
       onClick={onNavigate}
       className={cn(
         "flex items-center justify-between rounded-xl px-4 py-2.5 text-base transition-colors",

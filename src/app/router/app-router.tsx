@@ -1,92 +1,93 @@
+import { LIBRARY_ROUTE_PATHS } from "@/app/config/library-route-paths";
 import { PERMISSIONS, type AppPermission } from "@/app/config/permissions";
 import { AuthLayout } from "@/app/layouts/auth-layout";
 import { ProtectedLayout } from "@/app/layouts/protected-layout";
 import { LoginPage } from "@/features/auth/pages/login-page";
-import { BibliographicCopyCatalogingPage } from "@/features/bibliographic/pages/bibliographic-copy-cataloging-page";
-import { BibliographicCreatePage } from "@/features/bibliographic/pages/bibliographic-create-page";
-import { BibliographicDetailPage } from "@/features/bibliographic/pages/bibliographic-detail-page";
-import { BibliographicEditPage } from "@/features/bibliographic/pages/bibliographic-edit-page";
-import { BibliographicItemDetailPage } from "@/features/bibliographic/pages/bibliographic-item-detail-page";
-import { BibliographicItemEditPage } from "@/features/bibliographic/pages/bibliographic-item-edit-page";
-import { BibliographicListPage } from "@/features/bibliographic/pages/bibliographic-list-page";
-import { BibliographicPage } from "@/features/bibliographic/pages/bibliographic-page";
-import { BookRequestDetailPage } from "@/features/bibliographic/pages/book-request-detail-page";
-import BookRequestsPage from "@/features/bibliographic/pages/book-requests-page";
-import { CirculationPage } from "@/features/circulation/pages/circulation-page";
-import { DashboardPage } from "@/features/dashboard/pages/dashboard-page";
-import { AuthorCreatePage } from "@/features/master-file/authority-files/pages/author-create-page";
-import { AuthorDetailPage } from "@/features/master-file/authority-files/pages/author-detail-page";
-import { AuthorEditPage } from "@/features/master-file/authority-files/pages/author-edit-page";
-import { AuthorPage } from "@/features/master-file/authority-files/pages/author-page";
-import { CarrierTypeCreatePage } from "@/features/master-file/authority-files/pages/carrier-type-create-page";
-import { CarrierTypeEditPage } from "@/features/master-file/authority-files/pages/carrier-type-edit-page";
-import { CarrierTypePage } from "@/features/master-file/authority-files/pages/carrier-type-page";
-import { ContentTypeCreatePage } from "@/features/master-file/authority-files/pages/content-type-create-page";
-import { ContentTypeDetailPage } from "@/features/master-file/authority-files/pages/content-type-detail-page";
-import { ContentTypeEditPage } from "@/features/master-file/authority-files/pages/content-type-edit-page";
-import ContentTypePage from "@/features/master-file/authority-files/pages/content-type-page";
-import { CrossReferenceCreatePage } from "@/features/master-file/authority-files/pages/cross-reference-create-page";
-import { CrossReferenceDetailPage } from "@/features/master-file/authority-files/pages/cross-reference-detail-page";
-import { CrossReferenceEditPage } from "@/features/master-file/authority-files/pages/cross-reference-edit-page";
-import { GeneralMaterialDesignationCreatePage } from "@/features/master-file/authority-files/pages/general-material-designation-create-page";
-import { GeneralMaterialDesignationDetailPage } from "@/features/master-file/authority-files/pages/general-material-designation-detail-page";
-import { GeneralMaterialDesignationEditPage } from "@/features/master-file/authority-files/pages/general-material-designation-edit-page";
-import { GeneralMaterialDesignationPage } from "@/features/master-file/authority-files/pages/general-material-designation-page";
-import { LocationCreatePage } from "@/features/master-file/authority-files/pages/location-create-page";
-import { LocationDetailPage } from "@/features/master-file/authority-files/pages/location-detail-page";
-import { LocationEditPage } from "@/features/master-file/authority-files/pages/location-edit-page";
-import LocationPage from "@/features/master-file/authority-files/pages/location-page";
-import { MasterFilePage } from "@/features/master-file/authority-files/pages/master-file-page";
-import { MediaTypeCreatePage } from "@/features/master-file/authority-files/pages/media-type-create-page";
-import { MediaTypeEditPage } from "@/features/master-file/authority-files/pages/media-type-edit-page";
-import { MediaTypePage } from "@/features/master-file/authority-files/pages/media-type-page";
-import { PublisherCreatePage } from "@/features/master-file/authority-files/pages/publisher-create-page";
-import { PublisherDetailPage } from "@/features/master-file/authority-files/pages/publisher-detail-page";
-import { PublisherEditPage } from "@/features/master-file/authority-files/pages/publisher-edit-page";
-import { PublisherPage } from "@/features/master-file/authority-files/pages/publisher-page";
-import { SubjectCreatePage } from "@/features/master-file/authority-files/pages/subject-create-page";
-import { SubjectDetailPage } from "@/features/master-file/authority-files/pages/subject-detail-page";
-import { SubjectEditPage } from "@/features/master-file/authority-files/pages/subject-edit-page";
-import SubjectPage from "@/features/master-file/authority-files/pages/subject-page";
-import { SupplierCreatePage } from "@/features/master-file/authority-files/pages/supplier-create-page";
-import { SupplierDetailPage } from "@/features/master-file/authority-files/pages/supplier-detail-page";
-import { SupplierEditPage } from "@/features/master-file/authority-files/pages/supplier-edit-page";
-import { SupplierPage } from "@/features/master-file/authority-files/pages/supplier-page";
-import { CollectionTypeCreatePage } from "@/features/master-file/lookup-files/pages/collection-type-create-page";
-import { CollectionTypeDetailPage } from "@/features/master-file/lookup-files/pages/collection-type-detail-page";
-import { CollectionTypeEditPage } from "@/features/master-file/lookup-files/pages/collection-type-edit-page";
-import CollectionTypePage from "@/features/master-file/lookup-files/pages/collection-type-page";
-import { DocLanguageCreatePage } from "@/features/master-file/lookup-files/pages/doc-language-create-page";
-import { DocLanguageDetailPage } from "@/features/master-file/lookup-files/pages/doc-language-detail-page";
-import { DocLanguageEditPage } from "@/features/master-file/lookup-files/pages/doc-language-edit-page";
-import DocLanguagePage from "@/features/master-file/lookup-files/pages/doc-language-page";
-import { FrequencyCreatePage } from "@/features/master-file/lookup-files/pages/frequency-create-page";
-import { FrequencyDetailPage } from "@/features/master-file/lookup-files/pages/frequency-detail-page";
-import { FrequencyEditPage } from "@/features/master-file/lookup-files/pages/frequency-edit-page";
-import FrequencyPage from "@/features/master-file/lookup-files/pages/frequency-page";
-import { ItemStatusCreatePage } from "@/features/master-file/lookup-files/pages/item-status-create-page";
-import { ItemStatusDetailPage } from "@/features/master-file/lookup-files/pages/item-status-detail-page";
-import { ItemStatusEditPage } from "@/features/master-file/lookup-files/pages/item-status-edit-page";
-import ItemStatusPage from "@/features/master-file/lookup-files/pages/item-status-page";
-import { LabelCreatePage } from "@/features/master-file/lookup-files/pages/label-create-page";
-import { LabelDetailPage } from "@/features/master-file/lookup-files/pages/label-detail-page";
-import { LabelEditPage } from "@/features/master-file/lookup-files/pages/label-edit-page";
-import LabelPage from "@/features/master-file/lookup-files/pages/label-page";
-import LookupFilesPage from "@/features/master-file/lookup-files/pages/lookup-files-page";
-import { PlaceCreatePage } from "@/features/master-file/lookup-files/pages/place-create-page";
-import { PlaceDetailPage } from "@/features/master-file/lookup-files/pages/place-detail-page";
-import { PlaceEditPage } from "@/features/master-file/lookup-files/pages/place-edit-page";
-import { PlacePage } from "@/features/master-file/lookup-files/pages/place-page";
-import { CatalogingServerCreatePage } from "@/features/master-file/tools/pages/cataloging-server-create-page";
-import { CatalogingServerEditPage } from "@/features/master-file/tools/pages/cataloging-server-edit-page";
-import { CatalogingServersDetailPage } from "@/features/master-file/tools/pages/cataloging-servers-detail-page";
-import CatalogingServersPage from "@/features/master-file/tools/pages/cataloging-servers-page";
-import { ItemCodePatternCreatePage } from "@/features/master-file/tools/pages/item-code-pattern-create-page";
-import { ItemCodePatternDetailPage } from "@/features/master-file/tools/pages/item-code-pattern-detail-page";
-import { ItemCodePatternEditPage } from "@/features/master-file/tools/pages/item-code-pattern-edit-page";
-import ItemCodePatternPage from "@/features/master-file/tools/pages/item-code-pattern-page";
-import { MembershipPage } from "@/features/membership/pages/membership-page";
-import { ReportingPage } from "@/features/reporting/pages/reporting-page";
+import { BibliographicCopyCatalogingPage } from "@/features/protected/library/bibliographic/pages/bibliographic-copy-cataloging-page";
+import { BibliographicCreatePage } from "@/features/protected/library/bibliographic/pages/bibliographic-create-page";
+import { BibliographicDetailPage } from "@/features/protected/library/bibliographic/pages/bibliographic-detail-page";
+import { BibliographicEditPage } from "@/features/protected/library/bibliographic/pages/bibliographic-edit-page";
+import { BibliographicItemDetailPage } from "@/features/protected/library/bibliographic/pages/bibliographic-item-detail-page";
+import { BibliographicItemEditPage } from "@/features/protected/library/bibliographic/pages/bibliographic-item-edit-page";
+import { BibliographicListPage } from "@/features/protected/library/bibliographic/pages/bibliographic-list-page";
+import { BookRequestDetailPage } from "@/features/protected/library/bibliographic/pages/book-request-detail-page";
+import BookRequestsPage from "@/features/protected/library/bibliographic/pages/book-requests-page";
+import { CirculationPage } from "@/features/protected/library/circulation/pages/circulation-page";
+import { DashboardPage } from "@/features/protected/library/dashboard/pages/dashboard-page";
+import { AuthorCreatePage } from "@/features/protected/library/master-file/authority-files/pages/author-create-page";
+import { AuthorDetailPage } from "@/features/protected/library/master-file/authority-files/pages/author-detail-page";
+import { AuthorEditPage } from "@/features/protected/library/master-file/authority-files/pages/author-edit-page";
+import { AuthorPage } from "@/features/protected/library/master-file/authority-files/pages/author-page";
+import { CarrierTypeCreatePage } from "@/features/protected/library/master-file/authority-files/pages/carrier-type-create-page";
+import { CarrierTypeEditPage } from "@/features/protected/library/master-file/authority-files/pages/carrier-type-edit-page";
+import { CarrierTypePage } from "@/features/protected/library/master-file/authority-files/pages/carrier-type-page";
+import { ContentTypeCreatePage } from "@/features/protected/library/master-file/authority-files/pages/content-type-create-page";
+import { ContentTypeDetailPage } from "@/features/protected/library/master-file/authority-files/pages/content-type-detail-page";
+import { ContentTypeEditPage } from "@/features/protected/library/master-file/authority-files/pages/content-type-edit-page";
+import ContentTypePage from "@/features/protected/library/master-file/authority-files/pages/content-type-page";
+import { CrossReferenceCreatePage } from "@/features/protected/library/master-file/authority-files/pages/cross-reference-create-page";
+import { CrossReferenceDetailPage } from "@/features/protected/library/master-file/authority-files/pages/cross-reference-detail-page";
+import { CrossReferenceEditPage } from "@/features/protected/library/master-file/authority-files/pages/cross-reference-edit-page";
+import { GeneralMaterialDesignationCreatePage } from "@/features/protected/library/master-file/authority-files/pages/general-material-designation-create-page";
+import { GeneralMaterialDesignationDetailPage } from "@/features/protected/library/master-file/authority-files/pages/general-material-designation-detail-page";
+import { GeneralMaterialDesignationEditPage } from "@/features/protected/library/master-file/authority-files/pages/general-material-designation-edit-page";
+import { GeneralMaterialDesignationPage } from "@/features/protected/library/master-file/authority-files/pages/general-material-designation-page";
+import { LocationCreatePage } from "@/features/protected/library/master-file/authority-files/pages/location-create-page";
+import { LocationDetailPage } from "@/features/protected/library/master-file/authority-files/pages/location-detail-page";
+import { LocationEditPage } from "@/features/protected/library/master-file/authority-files/pages/location-edit-page";
+import LocationPage from "@/features/protected/library/master-file/authority-files/pages/location-page";
+import { MasterFilePage } from "@/features/protected/library/master-file/authority-files/pages/master-file-page";
+import { MediaTypeCreatePage } from "@/features/protected/library/master-file/authority-files/pages/media-type-create-page";
+import { MediaTypeEditPage } from "@/features/protected/library/master-file/authority-files/pages/media-type-edit-page";
+import { MediaTypePage } from "@/features/protected/library/master-file/authority-files/pages/media-type-page";
+import { PublisherCreatePage } from "@/features/protected/library/master-file/authority-files/pages/publisher-create-page";
+import { PublisherDetailPage } from "@/features/protected/library/master-file/authority-files/pages/publisher-detail-page";
+import { PublisherEditPage } from "@/features/protected/library/master-file/authority-files/pages/publisher-edit-page";
+import { PublisherPage } from "@/features/protected/library/master-file/authority-files/pages/publisher-page";
+import { SubjectCreatePage } from "@/features/protected/library/master-file/authority-files/pages/subject-create-page";
+import { SubjectDetailPage } from "@/features/protected/library/master-file/authority-files/pages/subject-detail-page";
+import { SubjectEditPage } from "@/features/protected/library/master-file/authority-files/pages/subject-edit-page";
+import SubjectPage from "@/features/protected/library/master-file/authority-files/pages/subject-page";
+import { SupplierCreatePage } from "@/features/protected/library/master-file/authority-files/pages/supplier-create-page";
+import { SupplierDetailPage } from "@/features/protected/library/master-file/authority-files/pages/supplier-detail-page";
+import { SupplierEditPage } from "@/features/protected/library/master-file/authority-files/pages/supplier-edit-page";
+import { SupplierPage } from "@/features/protected/library/master-file/authority-files/pages/supplier-page";
+import { CollectionTypeCreatePage } from "@/features/protected/library/master-file/lookup-files/pages/collection-type-create-page";
+import { CollectionTypeDetailPage } from "@/features/protected/library/master-file/lookup-files/pages/collection-type-detail-page";
+import { CollectionTypeEditPage } from "@/features/protected/library/master-file/lookup-files/pages/collection-type-edit-page";
+import CollectionTypePage from "@/features/protected/library/master-file/lookup-files/pages/collection-type-page";
+import { DocLanguageCreatePage } from "@/features/protected/library/master-file/lookup-files/pages/doc-language-create-page";
+import { DocLanguageDetailPage } from "@/features/protected/library/master-file/lookup-files/pages/doc-language-detail-page";
+import { DocLanguageEditPage } from "@/features/protected/library/master-file/lookup-files/pages/doc-language-edit-page";
+import DocLanguagePage from "@/features/protected/library/master-file/lookup-files/pages/doc-language-page";
+import { FrequencyCreatePage } from "@/features/protected/library/master-file/lookup-files/pages/frequency-create-page";
+import { FrequencyDetailPage } from "@/features/protected/library/master-file/lookup-files/pages/frequency-detail-page";
+import { FrequencyEditPage } from "@/features/protected/library/master-file/lookup-files/pages/frequency-edit-page";
+import FrequencyPage from "@/features/protected/library/master-file/lookup-files/pages/frequency-page";
+import { ItemStatusCreatePage } from "@/features/protected/library/master-file/lookup-files/pages/item-status-create-page";
+import { ItemStatusDetailPage } from "@/features/protected/library/master-file/lookup-files/pages/item-status-detail-page";
+import { ItemStatusEditPage } from "@/features/protected/library/master-file/lookup-files/pages/item-status-edit-page";
+import ItemStatusPage from "@/features/protected/library/master-file/lookup-files/pages/item-status-page";
+import { LabelCreatePage } from "@/features/protected/library/master-file/lookup-files/pages/label-create-page";
+import { LabelDetailPage } from "@/features/protected/library/master-file/lookup-files/pages/label-detail-page";
+import { LabelEditPage } from "@/features/protected/library/master-file/lookup-files/pages/label-edit-page";
+import LabelPage from "@/features/protected/library/master-file/lookup-files/pages/label-page";
+import LookupFilesPage from "@/features/protected/library/master-file/lookup-files/pages/lookup-files-page";
+import { PlaceCreatePage } from "@/features/protected/library/master-file/lookup-files/pages/place-create-page";
+import { PlaceDetailPage } from "@/features/protected/library/master-file/lookup-files/pages/place-detail-page";
+import { PlaceEditPage } from "@/features/protected/library/master-file/lookup-files/pages/place-edit-page";
+import { PlacePage } from "@/features/protected/library/master-file/lookup-files/pages/place-page";
+import { CatalogingServerCreatePage } from "@/features/protected/library/master-file/tools/pages/cataloging-server-create-page";
+import { CatalogingServerEditPage } from "@/features/protected/library/master-file/tools/pages/cataloging-server-edit-page";
+import { CatalogingServersDetailPage } from "@/features/protected/library/master-file/tools/pages/cataloging-servers-detail-page";
+import CatalogingServersPage from "@/features/protected/library/master-file/tools/pages/cataloging-servers-page";
+import { ItemCodePatternCreatePage } from "@/features/protected/library/master-file/tools/pages/item-code-pattern-create-page";
+import { ItemCodePatternDetailPage } from "@/features/protected/library/master-file/tools/pages/item-code-pattern-detail-page";
+import { ItemCodePatternEditPage } from "@/features/protected/library/master-file/tools/pages/item-code-pattern-edit-page";
+import ItemCodePatternPage from "@/features/protected/library/master-file/tools/pages/item-code-pattern-page";
+import { MembershipPage } from "@/features/protected/library/membership/pages/membership-page";
+import { ReportingPage } from "@/features/protected/library/reporting/pages/reporting-page";
+import { StockTakePage } from "@/features/protected/library/stock-take/pages/stock-take-page";
 import { NotFoundPage } from "@/shared/components/common/screens/not-found-page";
 import { RouteErrorPage } from "@/shared/components/common/screens/route-error-page";
 import { UnauthorizedPage } from "@/shared/components/common/screens/unauthorized-page";
@@ -96,51 +97,91 @@ import {
   Navigate,
   RouterProvider,
   createBrowserRouter,
+  useLocation,
 } from "react-router-dom";
 import { PermissionGuard } from "./permission-guard";
 import { ProtectedRoute } from "./protected-route";
 import { PublicRoute } from "./public-route";
 
-const bibliographicRoutes = [
+function toRoutePath(pathname: string) {
+  return pathname.replace(/^\//, "");
+}
+
+type ProtectedAppRoute = {
+  path: string;
+  element: ReactElement;
+  permission?: AppPermission;
+};
+
+const libraryRoutes: ProtectedAppRoute[] = [
   {
-    path: "bibliographic",
-    element: <BibliographicPage />,
+    path: toRoutePath(LIBRARY_ROUTE_PATHS.root),
+    element: <LibraryRoute />,
   },
   {
-    path: "bibliographic/list",
+    path: toRoutePath(LIBRARY_ROUTE_PATHS.bibliographic.root),
+    element: <PathRedirect to={LIBRARY_ROUTE_PATHS.bibliographic.list} />,
+    permission: PERMISSIONS.BIBLIOGRAPHIC_READ,
+  },
+  {
+    path: toRoutePath(LIBRARY_ROUTE_PATHS.bibliographic.list),
     element: <BibliographicListPage />,
+    permission: PERMISSIONS.BIBLIOGRAPHIC_READ,
   },
   {
-    path: "bibliographic/detail/:id",
+    path: toRoutePath(LIBRARY_ROUTE_PATHS.bibliographic.detail),
     element: <BibliographicDetailPage />,
+    permission: PERMISSIONS.BIBLIOGRAPHIC_READ,
   },
   {
-    path: "bibliographic/item/detail/:id",
+    path: toRoutePath(LIBRARY_ROUTE_PATHS.bibliographic.itemDetail),
     element: <BibliographicItemDetailPage />,
+    permission: PERMISSIONS.BIBLIOGRAPHIC_READ,
   },
   {
-    path: "bibliographic/item/edit/:id",
+    path: toRoutePath(LIBRARY_ROUTE_PATHS.bibliographic.itemEdit),
     element: <BibliographicItemEditPage />,
+    permission: PERMISSIONS.BIBLIOGRAPHIC_READ,
   },
   {
-    path: "bibliographic/create",
+    path: toRoutePath(LIBRARY_ROUTE_PATHS.bibliographic.create),
     element: <BibliographicCreatePage />,
+    permission: PERMISSIONS.BIBLIOGRAPHIC_READ,
   },
   {
-    path: "bibliographic/edit/:id",
+    path: toRoutePath(LIBRARY_ROUTE_PATHS.bibliographic.edit),
     element: <BibliographicEditPage />,
+    permission: PERMISSIONS.BIBLIOGRAPHIC_READ,
   },
   {
-    path: "bibliographic/copy-cataloging",
+    path: toRoutePath(LIBRARY_ROUTE_PATHS.bibliographic.copyCataloging),
     element: <BibliographicCopyCatalogingPage />,
+    permission: PERMISSIONS.BIBLIOGRAPHIC_READ,
   },
   {
-    path: "bibliographic/book-requests",
+    path: toRoutePath(LIBRARY_ROUTE_PATHS.bookRequests.root),
     element: <BookRequestsPage />,
+    permission: PERMISSIONS.BIBLIOGRAPHIC_READ,
   },
   {
-    path: "bibliographic/book-requests/detail/:id",
+    path: toRoutePath(LIBRARY_ROUTE_PATHS.bookRequests.detail),
     element: <BookRequestDetailPage />,
+    permission: PERMISSIONS.BIBLIOGRAPHIC_READ,
+  },
+  {
+    path: toRoutePath(LIBRARY_ROUTE_PATHS.circulation),
+    element: <CirculationPage />,
+    permission: PERMISSIONS.CIRCULATION_READ,
+  },
+  {
+    path: toRoutePath(LIBRARY_ROUTE_PATHS.stockTake),
+    element: <StockTakePage />,
+    permission: PERMISSIONS.STOCK_TAKE_READ,
+  },
+  {
+    path: toRoutePath(LIBRARY_ROUTE_PATHS.report),
+    element: <ReportingPage />,
+    permission: PERMISSIONS.REPORTING_READ,
   },
 ];
 
@@ -452,6 +493,7 @@ function HomeRoute() {
   const canViewMembership = usePermission(PERMISSIONS.MEMBERSHIP_READ);
   const canViewCirculation = usePermission(PERMISSIONS.CIRCULATION_READ);
   const canViewReporting = usePermission(PERMISSIONS.REPORTING_READ);
+  const canViewStockTake = usePermission(PERMISSIONS.STOCK_TAKE_READ);
   const canViewMasterFile = usePermission(PERMISSIONS.MASTER_FILE_READ);
 
   if (canViewDashboard) {
@@ -459,7 +501,7 @@ function HomeRoute() {
   }
 
   if (canViewBibliographic) {
-    return <Navigate to="/bibliographic/list" replace />;
+    return <Navigate to={LIBRARY_ROUTE_PATHS.bibliographic.list} replace />;
   }
 
   if (canViewMembership) {
@@ -467,11 +509,15 @@ function HomeRoute() {
   }
 
   if (canViewCirculation) {
-    return <Navigate to="/circulation" replace />;
+    return <Navigate to={LIBRARY_ROUTE_PATHS.circulation} replace />;
+  }
+
+  if (canViewStockTake) {
+    return <Navigate to={LIBRARY_ROUTE_PATHS.stockTake} replace />;
   }
 
   if (canViewReporting) {
-    return <Navigate to="/reporting" replace />;
+    return <Navigate to={LIBRARY_ROUTE_PATHS.report} replace />;
   }
 
   if (canViewMasterFile) {
@@ -495,6 +541,53 @@ function ProtectedRouteErrorElement() {
       <RouteErrorPage embedded />
     </ProtectedLayout>
   );
+}
+
+function PathRedirect({ to }: { to: string }) {
+  const { search, hash } = useLocation();
+
+  return <Navigate to={`${to}${search}${hash}`} replace />;
+}
+
+function LegacyBibliographicRedirect() {
+  const { pathname, search, hash } = useLocation();
+
+  const nextPath = pathname.startsWith("/bibliographic/book-requests")
+    ? pathname.replace(
+        "/bibliographic/book-requests",
+        LIBRARY_ROUTE_PATHS.bookRequests.root,
+      )
+    : pathname.replace(
+        "/bibliographic",
+        LIBRARY_ROUTE_PATHS.bibliographic.root,
+      );
+
+  return <Navigate to={`${nextPath}${search}${hash}`} replace />;
+}
+
+function LibraryRoute() {
+  const canViewBibliographic = usePermission(PERMISSIONS.BIBLIOGRAPHIC_READ);
+  const canViewCirculation = usePermission(PERMISSIONS.CIRCULATION_READ);
+  const canViewStockTake = usePermission(PERMISSIONS.STOCK_TAKE_READ);
+  const canViewReporting = usePermission(PERMISSIONS.REPORTING_READ);
+
+  if (canViewBibliographic) {
+    return <Navigate to={LIBRARY_ROUTE_PATHS.bibliographic.list} replace />;
+  }
+
+  if (canViewCirculation) {
+    return <Navigate to={LIBRARY_ROUTE_PATHS.circulation} replace />;
+  }
+
+  if (canViewStockTake) {
+    return <Navigate to={LIBRARY_ROUTE_PATHS.stockTake} replace />;
+  }
+
+  if (canViewReporting) {
+    return <Navigate to={LIBRARY_ROUTE_PATHS.report} replace />;
+  }
+
+  return <Navigate to="/403" replace />;
 }
 
 const router = createBrowserRouter([
@@ -526,13 +619,26 @@ const router = createBrowserRouter([
             index: true,
             element: <HomeRoute />,
           },
-          ...bibliographicRoutes.map((route) => ({
+          ...libraryRoutes.map((route) => ({
             path: route.path,
+            element: route.permission
+              ? withPermission(route.permission, route.element)
+              : route.element,
+          })),
+          {
+            path: "bibliographic",
             element: withPermission(
               PERMISSIONS.BIBLIOGRAPHIC_READ,
-              route.element,
+              <LegacyBibliographicRedirect />,
             ),
-          })),
+          },
+          {
+            path: "bibliographic/*",
+            element: withPermission(
+              PERMISSIONS.BIBLIOGRAPHIC_READ,
+              <LegacyBibliographicRedirect />,
+            ),
+          },
           {
             path: "membership",
             element: withPermission(
@@ -544,14 +650,21 @@ const router = createBrowserRouter([
             path: "circulation",
             element: withPermission(
               PERMISSIONS.CIRCULATION_READ,
-              <CirculationPage />,
+              <PathRedirect to={LIBRARY_ROUTE_PATHS.circulation} />,
             ),
           },
           {
             path: "reporting",
             element: withPermission(
               PERMISSIONS.REPORTING_READ,
-              <ReportingPage />,
+              <PathRedirect to={LIBRARY_ROUTE_PATHS.report} />,
+            ),
+          },
+          {
+            path: "stock-take",
+            element: withPermission(
+              PERMISSIONS.STOCK_TAKE_READ,
+              <PathRedirect to={LIBRARY_ROUTE_PATHS.stockTake} />,
             ),
           },
           ...masterFileRoutes.map((route) => ({
